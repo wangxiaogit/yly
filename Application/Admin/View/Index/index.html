@@ -36,78 +36,6 @@
     };
 </script> 
 
-<php>function get_sub_menu($menus) {</php>
-    <php>foreach($menus as $menu){ </php>
-        <li>
-            <php>$menu_name = $menu['name'];</php>
-            <php>if (empty($menu['items'])) {</php>
-                <a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu_name}',true);">
-                    <i class="fa {$menu.icon|default='fa-desktop'}"></i>
-                    <span class="menu-text">
-                        {$menu_name}
-                    </span>
-                </a>
-            <php>} else {</php>
-                <a href="#" class="dropdown-toggle">
-                    <i class="fa {$menu.icon|default='fa-desktop'} normal"></i>
-                    <span class="menu-text normal">
-                            {$menu_name}
-                    </span>
-                    <b class="arrow fa fa-angle-right normal"></b>
-                    <i class="fa fa-reply back"></i>
-                    <span class="menu-text back">返回</span>
-                </a>
-
-                <ul  class="submenu">
-                    {:get_sub_menu1($menu['items'])}
-                </ul>    
-            <php>}</php>
-        </li>
-    <php>}</php>
-<php>}</php>
-
-<php>function get_sub_menu1($menus) {</php>
-    <php>foreach($menus as $menu){</php>
-        <li>
-            <php>$menu_name = $menu['name'];</php>
-            <php>if(empty($menu['items'])){</php>
-                <a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu_name}',true);">
-                    <i class="fa fa-caret-right"></i>
-                    <span class="menu-text">
-                            {$menu_name}
-                    </span>
-                </a>
-            <php>}else{</php>
-                <a href="#" class="dropdown-toggle">
-                    <i class="fa fa-caret-right"></i>
-                    <span class="menu-text">
-                            {$menu_name}
-                    </span>
-                    <b class="arrow fa fa-angle-right"></b>
-                </a>
-                    <ul  class="submenu">
-                            {:get_sub_menu2($menu['items'])}
-                    </ul>	
-            <php>}</php>
-        </li>
-    <php>}</php>
-<php>}</php>
-
-<php>function get_sub_menu2($menus){</php>
-    <php>foreach($menus as $menu){</php>
-        <li>
-            <php>$menu_name = $menu['name'];</php>
-
-            <a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu_name}',true);">
-                &nbsp;<i class="fa fa-angle-double-right"></i>
-                <span class="menu-text">
-                        {$menu_name}
-                </span>
-            </a>
-        </li>
-    <php>}</php>
-<php>}</php>
-
 </head>
 <body style="min-width:900px;" screen_capture_injected="true">
     <div id="loading"><i class="loadingicon"></i></div>
@@ -131,11 +59,9 @@
                 <ul class="nav simplewind-nav pull-right">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <if condition="$admin['avatar']">
-                                    <img class="nav-user-photo" width="30" height="30" src="{:sp_get_user_avatar_url($admin['avatar'])}" alt="{$admin.user_login}">
-                            <else />
-                                    <img class="nav-user-photo" width="30" height="30" src="__IMG__/logo-18.png" alt="{$admin.user_login}">
-                            </if>
+                           
+                            <img class="nav-user-photo" width="30" height="30" src="__IMG__/logo-18.png">
+                           
                             <span class="user-info">
                                 欢迎, 管理员
                             </span>
@@ -153,7 +79,7 @@
     <div class="main-container container-fluid" >
         <div class="sidebar" id="sidebar">  
             <div id="nav_wraper">
-                <ul class="nav nav-list">{:get_sub_menu($admin_menu)}</ul>
+                <ul class="nav nav-list"></ul>
             </div>    
         </div>
         <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaysidebar(this)"></a></div>
