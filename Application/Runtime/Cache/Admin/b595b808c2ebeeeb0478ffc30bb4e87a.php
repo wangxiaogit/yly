@@ -36,78 +36,6 @@
     };
 </script> 
 
-<?php function get_sub_menu($menus) { ?>
-    <?php foreach($menus as $menu){ ?>
-        <li>
-            <?php $menu_name = $menu['name']; ?>
-            <?php if (empty($menu['items'])) { ?>
-                <a href="javascript:openapp('<?php echo ($menu["url"]); ?>','<?php echo ($menu["id"]); ?>','<?php echo ($menu_name); ?>',true);">
-                    <i class="fa <?php echo ((isset($menu["icon"]) && ($menu["icon"] !== ""))?($menu["icon"]):'fa-desktop'); ?>"></i>
-                    <span class="menu-text">
-                        <?php echo ($menu_name); ?>
-                    </span>
-                </a>
-            <?php } else { ?>
-                <a href="#" class="dropdown-toggle">
-                    <i class="fa <?php echo ((isset($menu["icon"]) && ($menu["icon"] !== ""))?($menu["icon"]):'fa-desktop'); ?> normal"></i>
-                    <span class="menu-text normal">
-                            <?php echo ($menu_name); ?>
-                    </span>
-                    <b class="arrow fa fa-angle-right normal"></b>
-                    <i class="fa fa-reply back"></i>
-                    <span class="menu-text back">返回</span>
-                </a>
-
-                <ul  class="submenu">
-                    <?php echo get_sub_menu1($menu['items']);?>
-                </ul>    
-            <?php } ?>
-        </li>
-    <?php } ?>
-<?php } ?>
-
-<?php function get_sub_menu1($menus) { ?>
-    <?php foreach($menus as $menu){ ?>
-        <li>
-            <?php $menu_name = $menu['name']; ?>
-            <?php if(empty($menu['items'])){ ?>
-                <a href="javascript:openapp('<?php echo ($menu["url"]); ?>','<?php echo ($menu["id"]); ?>','<?php echo ($menu_name); ?>',true);">
-                    <i class="fa fa-caret-right"></i>
-                    <span class="menu-text">
-                            <?php echo ($menu_name); ?>
-                    </span>
-                </a>
-            <?php }else{ ?>
-                <a href="#" class="dropdown-toggle">
-                    <i class="fa fa-caret-right"></i>
-                    <span class="menu-text">
-                            <?php echo ($menu_name); ?>
-                    </span>
-                    <b class="arrow fa fa-angle-right"></b>
-                </a>
-                    <ul  class="submenu">
-                            <?php echo get_sub_menu2($menu['items']);?>
-                    </ul>	
-            <?php } ?>
-        </li>
-    <?php } ?>
-<?php } ?>
-
-<?php function get_sub_menu2($menus){ ?>
-    <?php foreach($menus as $menu){ ?>
-        <li>
-            <?php $menu_name = $menu['name']; ?>
-
-            <a href="javascript:openapp('<?php echo ($menu["url"]); ?>','<?php echo ($menu["id"]); ?>','<?php echo ($menu_name); ?>',true);">
-                &nbsp;<i class="fa fa-angle-double-right"></i>
-                <span class="menu-text">
-                        <?php echo ($menu_name); ?>
-                </span>
-            </a>
-        </li>
-    <?php } ?>
-<?php } ?>
-
 </head>
 <body style="min-width:900px;" screen_capture_injected="true">
     <div id="loading"><i class="loadingicon"></i></div>
@@ -131,9 +59,9 @@
                 <ul class="nav simplewind-nav pull-right">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <?php if($admin['avatar']): ?><img class="nav-user-photo" width="30" height="30" src="<?php echo sp_get_user_avatar_url($admin['avatar']);?>" alt="<?php echo ($admin["user_login"]); ?>">
-                            <?php else: ?>
-                                    <img class="nav-user-photo" width="30" height="30" src="/yly/Public/Admin/img/logo-18.png" alt="<?php echo ($admin["user_login"]); ?>"><?php endif; ?>
+                           
+                            <img class="nav-user-photo" width="30" height="30" src="/yly/Public/Admin/img/logo-18.png">
+                           
                             <span class="user-info">
                                 欢迎, 管理员
                             </span>
@@ -151,7 +79,7 @@
     <div class="main-container container-fluid" >
         <div class="sidebar" id="sidebar">  
             <div id="nav_wraper">
-                <ul class="nav nav-list"><?php echo get_sub_menu($admin_menu);?></ul>
+                <ul class="nav nav-list"></ul>
             </div>    
         </div>
         <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaysidebar(this)"></a></div>
