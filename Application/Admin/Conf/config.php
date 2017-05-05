@@ -20,4 +20,5 @@ return array(
     'LANG_SWITCH_ON'    => true,        //开启多语言支持开关
     'DEFAULT_LANG'        => 'zh-cn',    // 默认语言
     'LANG_AUTO_DETECT'    => true,    // 自动侦测语言
+    'test' =>1
 );
