@@ -4,7 +4,7 @@ return array(
     
     /* 数据库配置 */
     'DB_TYPE'   => 'mysql', // 数据库类型
-    'DB_HOST'   => '59.101.152.101', // 服务器地址
+    'DB_HOST'   => '59.110.152.101', // 服务器地址
     'DB_NAME'   => 'yly', // 数据库名
     'DB_USER'   => 'wangxiao', // 用户名
     'DB_PWD'    => '123456',  // 密码

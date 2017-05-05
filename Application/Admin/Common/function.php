@@ -9,6 +9,6 @@ function _get_level ($id, $array, $i = 0)
         return  $i;
     }else{
         $i++;
-        return get_level($array[$id]['parentid'],$array,$i);
+        return _get_level($array[$id]['parentid'],$array,$i);
     }
 }        
