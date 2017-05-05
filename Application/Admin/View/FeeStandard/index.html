@@ -1,0 +1,50 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('FeeStandard/index')}">{$meta_title}</a></li>
+            <li><a href="{:U('FeeStandard/add')}">增加</a></li>
+        </ul>
+        
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">编号</th>
+                    <th>费用名称</th>
+                    <th>费用类型</th>
+                    <th>收费标准</th>
+                    <th>是否可以选择</th>
+                    <th>是否自定义收费</th>
+                    <th>状态</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="fees" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.fee_name}</td>
+                    <td>{$feeType[$vo['fee_type']]}</td>
+                    <td>{$vo.fee}</td>
+                    <td>{$vo['is_allow_select']?'是':'否'}</td>
+                    <td>{$vo['is_custom']?'是':'否'}</td>
+                    <td>{$vo['isvaild']?'有效':'失效'}</td>
+                    <td>
+                            <a href='{:U("FeeStandard/edit",array("id"=>$vo["id"]))}'>编辑</a> | 
+                            <if condition="$vo['isvalid'] eq 1">
+                                <a href="{:U('FeeStandard/delete',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="确定要转为失效吗">转为失效</a>
+                            <else />
+                                <a href="{:U('FeeStandard/delete',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" data-msg="确定要转为有效吗">转为有效</a>
+                            </if>
+                        </if>
+                    </td>
+                </tr>
+                </foreach>
+            </tbody>
+        </table>
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
