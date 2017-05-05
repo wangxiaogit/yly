@@ -130,7 +130,7 @@ class AdminController extends BaseController
             return false;
         }
         $pk = $model->getPk(); //获取主键名称
-        $ids = $_POST['listorders'];
+        $ids = $_REQUEST['listorders'];
         
         foreach ($ids as $key => $r) {
             $data[$sort_field] = $r;

@@ -1,5 +1,5 @@
 <?php
-namespace Admin\Model;
+namespace Common\Model;
 use Common\Model\AdminModel;
 
 class MenuModel extends AdminModel
@@ -38,10 +38,10 @@ class MenuModel extends AdminModel
         $result = $this->where($where)->find();
          
         if ($result && $result['id'] != $data['id']) {
-            return true;
+            return false;
         }
         
-        return false;
+        return true;
     }
     
 }

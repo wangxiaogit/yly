@@ -3,13 +3,13 @@
 <body>
     <div class="wrap">
         <ul class="nav nav-tabs">
-            <li><a href="{:U('Menu/index')}">{:L('ADMIN_MENU_LIST')}</a></li>
-            <li class="active"><a href="{:U('Menu/add')}">{:L('MENU_ADD')}</a></li>
+            <li><a href="{:U('Menu/index')}">菜单管理</a></li>
+            <li class="active"><a href="{:U('Menu/add')}">菜单添加</a></li>
         </ul>
         <form method="post" class="form-horizontal js-ajax-form" action="{:U('Menu/do_add')}">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label">{:L('PARENTID')}</label>
+                    <label class="control-label">父级菜单</label>
                     <div class="controls">
                         <select name="parentid">
                             <option value="0">作为一级菜单</option>
@@ -19,61 +19,38 @@
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label"><span class="form-required">*</span> {:L('NAME')}</label>
+                    <label class="control-label"><span class="form-required">*</span> 名称</label>
                     <div class="controls">
-                        <input type="text" name="name">
+                        <input type="text" name="title" >
                     </div>
                 </div>
                 
                 <div class="control-group">
-                    <label class="control-label"><span class="form-required">*</span> {:L('APP')}</label>
+                    <label class="control-label"> URL</label>
                     <div class="controls">
-                        <input type="text" name="app" id="app">
+                        <input type="text" name="url">
                     </div>
                 </div>
+               
                 <div class="control-group">
-                        <label class="control-label"><span class="form-required">*</span> {:L('MODEL')}</label>
-                        <div class="controls">
-                            <input type="text" name="model" id="model">
-                        </div>
-                </div>
-                <div class="control-group">
-                        <label class="control-label"><span class="form-required">*</span> {:L('ACTION')}</label>
-                        <div class="controls">
-                            <input type="text" name="action" id="action">
-                        </div>
-                </div>
-                <div class="control-group">
-                        <label class="control-label">{:L('DATA')}</label>
-                        <div class="controls">
-                            <input type="text" name="data">
-                            <small>例:id=3&amp;p=3</small>
-                        </div>
-                </div>
-                <div class="control-group">
-                        <label class="control-label">{:L('ICON')}</label>
+                        <label class="control-label">图标</label>
                         <div class="controls">
                             <input type="text" name="icon">
                             <a href="http://www.thinkcmf.com/font/icons" target="_blank">选择图标</a> <small>不带前缀fa-，如fa-user => user</small>
                         </div>
                 </div>
+                
                 <div class="control-group">
-                        <label class="control-label">{:L('REMARK')}</label>
-                        <div class="controls">
-                            <textarea name="remark" rows="5" cols="57" style="width: 500px;"></textarea>
-                        </div>
-                </div>
-                <div class="control-group">
-                        <label class="control-label">{:L('STATUS')}</label>
+                        <label class="control-label">状态</label>
                         <div class="controls">
                             <select name="status">
-                                    <option value="1">{:L('DISPLAY')}</option>
-                                    <option value="0">{:L('HIDDEN')}</option>
+                                    <option value="1">显示</option>
+                                    <option value="0">隐藏</option>
                             </select>
                         </div>
                 </div>
                 <div class="control-group">
-                        <label class="control-label">{:L('TYPE')}</label>
+                        <label class="control-label">类型</label>
                         <div class="controls">
                             <select name="type">
                                 <option value="1" selected>权限认证+菜单</option>
@@ -84,8 +61,8 @@
                 </div>
             </fieldset>
             <div class="form-actions">
-                    <button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
-                    <a class="btn" href="{:U('menu/index')}">{:L('BACK')}</a>
+                    <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                    <a class="btn" href="{:U('menu/index')}">返回</a>
             </div>
         </form>
     </div>

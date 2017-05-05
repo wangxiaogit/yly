@@ -29,7 +29,7 @@ class MenuController extends AdminController
             $menu_lists[$n]['level'] = _get_level($r['id'], $menus);
             $menu_lists[$n]['parentid_node'] = ($r['parentid']) ? ' class="child-of-node-' . $r['parentid'] . '"' : '';
 
-            $menu_lists[$n]['str_manage'] = '<a href="' . U("Menu/add", array("parentid" => $r['id'], "menuid" => I("get.menuid"))) . '">添加子菜单</a> | <a href="' . U("Menu/edit", array("id" => $r['id'], "menuid" => I("get.menuid"))) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Menu/delete", array("id" => $r['id'], "menuid" => I("get.menuid")) ). '">删除</a> ';
+            $menu_lists[$n]['str_manage'] = '<a href="' . U("Menu/add", array("parentid" => $r['id'], "menuid" => I("get.menuid"))) . '">添加子菜单</a> | <a href="' . U("Menu/edit", array("id" => $r['id'], "menuid" => I("get.menuid"))) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Menu/del", array("id" => $r['id'], "menuid" => I("get.menuid")) ). '">删除</a> ';
             $menu_lists[$n]['is_display'] = $r['is_display'] ? '显示' : '隐藏';
         }
         
@@ -40,8 +40,8 @@ class MenuController extends AdminController
         $str = "<tr id='node-\$id' \$parentid_node>
                     <td style='padding-left:20px;'><input name='listorders[\$id]' type='text' size='3' value='\$sort' class='input input-order'></td>
                     <td>\$id</td>
-                    <td>\$url</td>
                     <td>\$spacer\$title</td>
+                    <td>\$url</td>
                     <td>\$is_display</td>
                     <td>\$str_manage</td>
 		</tr>";
@@ -62,7 +62,8 @@ class MenuController extends AdminController
         $menu_lists = $this->menuModel->where(array('status'=>1))->order("sort asc")->select();
         
         foreach ($menu_lists as &$list) {
-            $list['selected'] = ($list['parentid'] == $parentid) ? 'selected':'';
+            
+            $list['selected'] = (($list['id'] == $parentid) && $parentid) ? 'selected':'';
         }
         
         $str = "<option value='\$id' \$selected>\$spacer \$title</option>";
@@ -105,7 +106,7 @@ class MenuController extends AdminController
         $menu_lists = $this->menuModel->where(array('status'=>1))->order("sort asc")->select();
         
         foreach ($menu_lists as &$list) {
-            $list['selected'] = ($list['parentid'] == $menu['parentid']) ? 'selected':'';
+            $list['selected'] = (($list['id'] == $parentid) && $parentid) ? 'selected':'';
         }
         
         $str = "<option value='\$id' \$selected>\$spacer \$title</option>";
@@ -161,7 +162,7 @@ class MenuController extends AdminController
      */
     public function sort () 
     {
-        if (parent::_listorders($this->menuModel, 'listorder')) {
+        if (parent::_listorders($this->menuModel, 'sort')) {
            $this->success('排序成功！');
         }
     }
