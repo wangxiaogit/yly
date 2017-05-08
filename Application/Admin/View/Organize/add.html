@@ -1,0 +1,57 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <foreach name="organize_types" item="value">
+                <li><a href="{:U('Organize/index',array('type'=>$key))}">{$value}</a></li>
+            </foreach> 
+            <li class="active"><a href="{:U('Organize/add')}">机构添加</a></li>
+        </ul>
+        
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Organize/do_add')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 类型</label>
+                    <div class="controls">
+                        <select name="type">
+                            <option value="0">请选择</option>
+                            <foreach name="organize_types" item="val">
+                                <option value="{$key}">{$val}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"> 法人</label>
+                    <div class="controls">
+                        <input type="text" name="legal_person" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"> 联系电话</label>
+                    <div class="controls">
+                        <input type="text" name="contact_num" />
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$organize.id}">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('Organize/index',array('type'=>$type))}">返回</a>
+            </div>
+        </form>    
+    </div> 
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
