@@ -1,0 +1,45 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('Group/index')}">组管理</a></li>
+            <li><a href="{:U('Group/add')}">组添加</a></li>
+        </ul>
+        
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th width="200">组名称</th>
+                    <th>描述</th>
+                    <th width="180">授权</th>
+                    <th width="180">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="group_lists" item="list">
+                    <tr>
+                        <td>{$list.id}</td>
+                        <td>{$list.name}</td>
+                        <td>{$list.description}</td>
+                        <td>
+                            <a href="">访问授权</a> 
+                            | 
+                            <a href="">成员授权</a> 
+                        </td>
+                        <td>
+                            <a href="{:U('Group/edit',array('id'=>$list['id']))}">编辑</a> 
+                            |
+                            <a class="js-ajax-delete" href="{:U('Group/del',array('id'=>$list['id']))}">删除</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

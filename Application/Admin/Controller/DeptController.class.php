@@ -29,16 +29,16 @@ class DeptController extends AdminController
         }
         
         foreach ($dept_lists as $n => $r) {
-            $dept_lists[$n]['level'] = _get_level($r['id'], $menus);
+            $dept_lists[$n]['level'] = _get_level($r['id'], $depts);
             $dept_lists[$n]['parentid_node'] = ($r['parentid']) ? ' class="child-of-node-' . $r['parentid'] . '"' : '';
 
-            $dept_lists[$n]['str_manage'] = '<a href="' . U("Dept/add", array("parentid" => $r['id'], "org_id" => $organize_id)) . '">添加子部门</a> | <a href="' . U("Dept/edit", array("id" => $r['id'], "org_id" => $organize_id)) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Dept/del", array("id" => $r['id'], "org_id" => $organize_id) ). '">删除</a> ';
+            $dept_lists[$n]['str_manage'] = '<a href="' . U("Dept/add", array("parentid" => $r['id'], "org_id" => $this->organize_id)) . '">添加子部门</a> | <a href="' . U("Dept/edit", array("id" => $r['id'], "org_id" => $this->organize_id)) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Dept/del", array("id" => $r['id'], "org_id" => $this->organize_id) ). '">删除</a> ';
         }
         
         $this->treeModel->icon = array('&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ ');
         $this->treeModel->nbsp = '&nbsp;&nbsp;&nbsp;';
         
-        $this->treeModel->init($menu_lists);
+        $this->treeModel->init($dept_lists);
         $str = "<tr id='node-\$id' \$parentid_node>
                     <td style='padding-left:20px;'><input name='listorders[\$id]' type='text' size='3' value='\$sort' class='input input-order'></td>
                     <td>\$id</td>
@@ -47,6 +47,7 @@ class DeptController extends AdminController
 		</tr>";
         $categorys = $this->treeModel->get_tree(0, $str);
         
+        $this->assign("organize_id", $this->organize_id);
         $this->assign('categorys', $categorys);
         $this->assign('meta-title', '部门列表');
         $this->display();
@@ -59,7 +60,7 @@ class DeptController extends AdminController
     {
         $parentid = I('get.parentid', 0, 'intval');
         
-        $dept_lists = $this->menuModel->where(array('status'=>1, 'org_id'=>$this->organize_id))->order("sort asc")->select();
+        $dept_lists = $this->deptModel->where(array('status'=>1, 'org_id'=>$this->organize_id))->order("sort asc")->select();
         
         foreach ($dept_lists as &$list) {
             $list['selected'] = (($list['id'] == $parentid) && $parentid) ? 'selected':'';
@@ -69,6 +70,8 @@ class DeptController extends AdminController
         $this->treeModel->init($dept_lists);
         $select_categorys = $this->treeModel->get_tree(0, $str);
         
+        
+        $this->assign("org_id", $this->organize_id);
         $this->assign("select_categorys", $select_categorys);
         $this->assign("meta-title", "部门添加");
         $this->display();
@@ -105,7 +108,7 @@ class DeptController extends AdminController
         $dept_lists = $this->deptModel->where(array('status'=>1, 'org_id'=>$this->organize_id))->order("sort asc")->select();
         
         foreach ($dept_lists as &$list) {
-            $list['selected'] = (($list['id'] == $parentid) && $parentid) ? 'selected':'';
+            $list['selected'] = (($list['id'] == $dept['parentid']) && $dept['parentid']) ? 'selected':'';
         }
         
         $str = "<option value='\$id' \$selected>\$spacer \$name</option>";
@@ -113,6 +116,7 @@ class DeptController extends AdminController
         $select_categorys = $this->treeModel->get_tree(0, $str);
         
         $this->assign("dept", $dept);
+        $this->assign("org_id", $this->organize_id);
         $this->assign("select_categorys", $select_categorys);
         $this->assign("meta-title", "部门编辑");
         $this->display();
@@ -148,5 +152,15 @@ class DeptController extends AdminController
         } else {
             $this->error("删除失败！");
         } 
+    }
+    
+    /**
+     * 排序
+     */
+    public function sort() 
+    {
+        if (parent::_listorders($this->deptModel, 'sort')) {
+           $this->success('排序成功！');
+        }
     }
 }

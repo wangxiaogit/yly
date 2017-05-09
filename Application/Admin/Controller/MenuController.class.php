@@ -106,7 +106,7 @@ class MenuController extends AdminController
         $menu_lists = $this->menuModel->where(array('status'=>1))->order("sort asc")->select();
         
         foreach ($menu_lists as &$list) {
-            $list['selected'] = (($list['id'] == $parentid) && $parentid) ? 'selected':'';
+            $list['selected'] = (($list['id'] == $menu['parentid']) && $menu['parentid']) ? 'selected':'';
         }
         
         $str = "<option value='\$id' \$selected>\$spacer \$title</option>";

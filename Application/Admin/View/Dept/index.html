@@ -1,0 +1,42 @@
+<include file = "Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('Dept/index', array('org_id'=>$organize_id))}">部门管理</a></li>
+            <li><a href="{:U('Dept/add', array('org_id'=>$organize_id))}">部门添加</a></li>
+        </ul>
+        
+        <form method="post" class="js-ajax-form">
+            <div class="table-actions">
+                <button class="btn btn-primary btn-small js-ajax-submit" type="submit" data-action="{:U('Dept/sort',array('org_id'=>$organize_id))}">排序</button>   
+            </div>
+            <table class="table table-hover table-bordered table-list" id="dept-table">
+                <thead>
+                    <tr>
+                        <th width="80">排序</th>
+                        <th width="50">ID</th>
+                        <th>名称</th>
+                        <th width="180">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {$categorys}
+                </tbody>
+            </table>    
+        </form> 
+    </div>    
+<script src="__STATIC__/common.js"></script>
+<script>
+    ;(function(){
+        Wind.css('treeTable');
+        Wind.use('treeTable', function(e){  
+            $("#dept-table").treeTable({
+                indent : 20
+            });    
+        });
+    })();
+</script>
+</body>
+</html>
+
