@@ -17,12 +17,20 @@ class OrganizeController extends AdminController
      */
     public function index() 
     {
-        $organize_type = I('get.type', 1, 'intval');
+        $organize_type = I('get.type', 1, 'intval');//机构类型
+        if ($organize_type) {
+            $where['organize.type'] = $organize_type;
+        }
         
-        $organize_lists = $this->lists($this->organizeModel, array('type'=>$organize_type, 'status'=>1), 'id desc');
+        $where['organize.status'] = 1;
         
+        $model = $this->organizeModel->join('user on organize.create_uid=user.id', 'LEFT');
+        
+        $organize_lists = $this->lists($model, $where, 'id desc', 'organize.*, user.user_name create_name');
+        
+        $this->assign("type", $organize_type);
         $this->assign("organize_lists", $organize_lists);
-        $this->assign("organize_type", $this->organizeModel->ORGANIZE_TYPE);
+        $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
         $this->assign("meta-title", "机构列表");
         $this->display();
     }
@@ -32,7 +40,8 @@ class OrganizeController extends AdminController
      */
     public function add ()
     {
-        $this->assign("organize_type", $this->organizeModel->ORGANIZE_TYPE);
+        $this->assign("type", I('get.type'));
+        $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
         $this->assign("meta-title", "机构添加");
         $this->display();
     }  
@@ -58,12 +67,15 @@ class OrganizeController extends AdminController
     /**
      * 编辑
      */
-    public function edit ($id)
+    public function edit ()
     {
-        $organize = $this->organizeModel->find($id);
+        $organize_id = I('get.id', 0, 'intval');
         
-        $this->assign("$organize", $organize);
-        $this->assign("organize_type", $this->organizeModel->ORGANIZE_TYPE);
+        $organize = $this->organizeModel->find($organize_id);
+        
+        $this->assign("type", I('get.type'));
+        $this->assign("organize", $organize);
+        $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
         $this->assign("meta-title", "机构编辑");
         $this->display();
     }   
@@ -99,6 +111,6 @@ class OrganizeController extends AdminController
         } else {
             $this->error("删除失败！");
         } 
-    }
+    }       
 }
 
