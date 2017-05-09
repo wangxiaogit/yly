@@ -63,18 +63,20 @@ class FeeStandardController extends AdminController
     
     
     /**
-     * 编辑角色
+     * 编辑费用
      */
     public function edit($id)
     {
         $feeInfo = $this->feeStandardModel->find($id);
+        $feeType = $this->feeStandardModel->getFeeType();
         
         if (false === $feeInfo) {
             $this->error('未查询到收费项目');
         }
-        
+        $this->assign('id', $id);
         $this->assign('feeInfo', $feeInfo);
-        $this->assign('meta_title', '');
+        $this->assign('feeType', $feeType);
+        $this->assign('meta_title', '修改费用');
         $this->display();
     }        
     
@@ -84,32 +86,15 @@ class FeeStandardController extends AdminController
     public function do_edit()
     {
         if (IS_POST) {
-            if ($this->roleModel->create()) {
-                if ($this->roleModel->save() !== false) {
-                    $this->success(L('EDIT_SUCCESS'), U('Rbac/index'));
+            if ($this->feeStandardModel->create()) {
+                if ($this->feeStandardModel->save() !== false) {
+                    $this->success('修改成功！', U('FeeStandard/index'));
                 } else {
-                    $this->error(L('EDIT_FAILED'));
+                    $this->error('修改失败！');
                 }
             } else {
-                $this->error($this->roleModel->getError());
+                $this->error($this->feeStandardModel->getError());
             }
         } 
-    }
-    
-    /**
-     * 删除角色
-     */
-    public function delete()
-    {
-        $id = intval(I("get.id"));
-        if ($id == 1) {
-            $this->error("超级管理员角色不能被删除！");
-        }
-        
-        if ($this->roleModel->delete($id) !== false) {
-            $this->success(L('DEL_SUCCESS'));
-        } else {
-            $this->error(L('DEL_FAILED'));
-        }
     }
 }

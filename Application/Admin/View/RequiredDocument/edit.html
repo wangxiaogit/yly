@@ -1,0 +1,45 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('RequiredDocument/index')}">收件资料列表</a></li>
+            <li><a href="{:U('RequiredDocument/add')}">新增</a></li>
+            <li><a href="{:U('RequiredDocument/edit', array('id'=>$id))}">编辑</a></li>
+        </ul>
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('RequiredDocument/do_edit')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">资料名称</label>
+                    <div class="controls">
+                        <input type="text" name="document_name" value="{$documentInfo['document_name']}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">资料类型</label>
+                    <div class="controls">
+                        <select name='document_type'>
+                            <foreach name='documentType' item='vo' key='k'>
+                                <option value='{$k}'<if condition="$k eq $documentInfo['document_type']">selected</if>>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否有效</label>
+                    <div class="controls">
+                        <label class="radio inline" for="isvalid_true"><input type="radio" name="isvalid" value="1"  id="isvalid_true"  <if condition="1 eq $documentInfo['isvalid']">checked</if>/>有效</label>
+                        <label class="radio inline" for="isvalid_false"><input type="radio" name="isvalid" value="0" id="isvalid_false" <if condition="0 eq $documentInfo['isvalid']">checked</if>>无效</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$id}" />
+                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                <a class="btn" href="{:U('RequiredDocument/index')}">后退</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

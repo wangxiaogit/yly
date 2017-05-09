@@ -1,0 +1,286 @@
+[ 2017-05-06T12:47:41+08:00 ] ::1 /yly/
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000081s ]
+INFO: [ app_init ] --END-- [ RunTime:0.003185s ]
+
+[ 2017-05-06T12:47:41+08:00 ] ::1 /yly/index.php?s=/Main/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000569s ]
+
+[ 2017-05-06T12:48:00+08:00 ] ::1 /yly/index.php?s=/Main/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000038s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000677s ]
+
+[ 2017-05-06T12:48:01+08:00 ] ::1 /yly/index.php?s=/Main/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000596s ]
+
+[ 2017-05-06T12:48:04+08:00 ] ::1 /yly/index.php?s=/index/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000038s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000663s ]
+
+[ 2017-05-06T12:48:04+08:00 ] ::1 /yly/index.php?s=/Main/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000072s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001465s ]
+
+[ 2017-05-06T12:48:27+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000562s ]
+
+[ 2017-05-06T12:48:47+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/3
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000616s ]
+
+[ 2017-05-06T12:52:10+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000064s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000925s ]
+
+[ 2017-05-06T12:52:13+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000038s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000624s ]
+
+[ 2017-05-06T12:52:29+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000586s ]
+
+[ 2017-05-06T12:52:52+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000606s ]
+
+[ 2017-05-06T12:53:27+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000599s ]
+
+[ 2017-05-06T12:55:28+08:00 ] ::1 /yly/index.php?s=/feeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000037s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000618s ]
+
+[ 2017-05-06T12:55:31+08:00 ] ::1 /yly/index.php?s=/FeeStandard/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000050s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000798s ]
+
+[ 2017-05-06T12:55:55+08:00 ] ::1 /yly/index.php?s=/FeeStandard/do_add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000037s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000642s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000750s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.002771s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.003842s ]
+SQL: SHOW COLUMNS FROM `fee_standard` [ RunTime:0.0347s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+NOTIC: [8] Undefined index: auto E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1128 行.
+NOTIC: [8] Undefined index: org_id E:\wamp\www\yly\Application\Common\Model\FeeStandardModel.class.php 第 48 行.
+SQL: INSERT INTO `fee_standard` (`fee_name`,`fee_type`,`fee`,`is_allow_select`,`is_custom`,`isvalid`,`org_id`) VALUES ('小面积','2','2500','1','0','1','1') [ RunTime:0.0360s ]
+
+[ 2017-05-06T12:55:55+08:00 ] ::1 /yly/index.php?s=/FeeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000049s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000873s ]
+
+[ 2017-05-06T12:56:18+08:00 ] ::1 /yly/index.php?s=/FeeStandard/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000047s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000777s ]
+
+[ 2017-05-06T12:56:20+08:00 ] ::1 /yly/index.php?s=/FeeStandard/do_add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000039s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000704s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000784s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001833s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002875s ]
+SQL: SHOW COLUMNS FROM `fee_standard` [ RunTime:0.0362s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+
+[ 2017-05-06T13:16:40+08:00 ] ::1 /yly/index.php?s=/FeeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000622s ]
+
+[ 2017-05-06T13:16:45+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/3
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000575s ]
+
+[ 2017-05-06T13:16:54+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/5
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000613s ]
+
+[ 2017-05-06T13:18:32+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/5
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000608s ]
+
+[ 2017-05-06T13:18:39+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit_post
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000640s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000857s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001784s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002872s ]
+SQL: SHOW COLUMNS FROM `fee_standard` [ RunTime:0.0375s ]
+ERR: 非法操作:edit_post
+
+[ 2017-05-06T13:18:48+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit_post
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000032s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000518s ]
+ERR: 非法操作:edit_post
+
+[ 2017-05-06T13:19:23+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/5
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000037s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000589s ]
+
+[ 2017-05-06T13:19:27+08:00 ] ::1 /yly/index.php?s=/FeeStandard/do_edit
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000059s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000664s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000703s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001482s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002383s ]
+SQL: SHOW COLUMNS FROM `fee_standard` [ RunTime:0.0361s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+NOTIC: [8] Undefined index: auto E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1128 行.
+NOTIC: [8] Undefined index: org_id E:\wamp\www\yly\Application\Common\Model\FeeStandardModel.class.php 第 48 行.
+SQL: UPDATE `fee_standard` SET `fee_name`='基础服务费（邮储）',`fee_type`='1',`fee`='0',`is_allow_select`='1',`is_custom`='0',`isvalid`='1',`org_id`='1' WHERE `id` = 5 [ RunTime:0.0364s ]
+
+[ 2017-05-06T13:19:27+08:00 ] ::1 /yly/index.php?s=/FeeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000073s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001237s ]
+
+[ 2017-05-06T13:20:26+08:00 ] ::1 /yly/index.php?s=/FeeStandard/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000749s ]
+
+[ 2017-05-06T13:20:28+08:00 ] ::1 /yly/index.php?s=/FeeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000038s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000649s ]
+
+[ 2017-05-06T13:20:33+08:00 ] ::1 /yly/index.php?s=/FeeStandard/edit/id/3
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000587s ]
+
+[ 2017-05-06T13:20:36+08:00 ] ::1 /yly/index.php?s=/FeeStandard/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000036s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000587s ]
+
+[ 2017-05-06T13:20:38+08:00 ] ::1 /yly/index.php?s=/FeeStandard/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000059s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000901s ]
+
+[ 2017-05-06T13:48:24+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000566s ]
+
+[ 2017-05-06T13:48:28+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000032s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000502s ]
+ERR: Think\Model:getFeeType方法不存在！
+
+[ 2017-05-06T13:49:15+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000027s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000458s ]
+
+[ 2017-05-06T13:49:30+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/do_add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000030s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000502s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000688s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001397s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002264s ]
+SQL: SHOW COLUMNS FROM `required_document` [ RunTime:0.0348s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+NOTIC: [8] Undefined index: auto E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1128 行.
+SQL: INSERT INTO `required_document` (`document_name`,`document_type`,`isvalid`,`create_time`) VALUES ('身份证','1','1','1494049770') [ RunTime:0.0348s ]
+
+[ 2017-05-06T13:49:30+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000032s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000564s ]
+
+[ 2017-05-06T13:49:33+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/edit/id/1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000583s ]
+
+[ 2017-05-06T13:49:35+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/do_edit
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000565s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000734s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001493s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002423s ]
+SQL: SHOW COLUMNS FROM `required_document` [ RunTime:0.0358s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+NOTIC: [8] Undefined index: auto E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1128 行.
+SQL: UPDATE `required_document` SET `document_name`='身份证',`document_type`='1',`isvalid`='0',`create_time`='1494049775' WHERE `id` = 1 [ RunTime:0.0355s ]
+
+[ 2017-05-06T13:49:35+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000031s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000501s ]
+
+[ 2017-05-06T13:49:38+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/edit/id/1
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000035s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000563s ]
+
+[ 2017-05-06T13:49:39+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/do_edit
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000060s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000958s ]
+INFO: [ app_begin ] --START--
+INFO: Run Behavior\ReadHtmlCacheBehavior [ RunTime:0.000742s ]
+INFO: Run Behavior\CheckLangBehavior [ RunTime:0.001516s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.002460s ]
+SQL: SHOW COLUMNS FROM `required_document` [ RunTime:0.0353s ]
+NOTIC: [8] Undefined index: validate E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1185 行.
+NOTIC: [8] Undefined index: auto E:\wamp\www\yly\ThinkPHP\Library\Think\Model.class.php 第 1128 行.
+SQL: UPDATE `required_document` SET `document_name`='身份证',`document_type`='1',`isvalid`='1',`create_time`='1494049779' WHERE `id` = 1 [ RunTime:0.0358s ]
+
+[ 2017-05-06T13:49:40+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000058s ]
+INFO: [ app_init ] --END-- [ RunTime:0.001008s ]
+
+[ 2017-05-06T13:51:06+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/add
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000034s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000571s ]
+
+[ 2017-05-06T13:51:15+08:00 ] ::1 /yly/index.php?s=/RequiredDocument/index
+INFO: [ app_init ] --START--
+INFO: Run Behavior\BuildLiteBehavior [ RunTime:0.000037s ]
+INFO: [ app_init ] --END-- [ RunTime:0.000670s ]
+

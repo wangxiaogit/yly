@@ -3,35 +3,29 @@
 <body>
     <div class="wrap js-check-wrap">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="{:U('FeeStandard/index')}">{$meta_title}</a></li>
-            <li><a href="{:U('FeeStandard/add')}">增加</a></li>
+            <li class="active"><a href="{:U('RequiredDocument/index')}">{$meta_title}</a></li>
+            <li><a href="{:U('RequiredDocument/add')}">增加</a></li>
         </ul>
         
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th width="50">编号</th>
-                    <th>费用名称</th>
-                    <th>费用类型</th>
-                    <th>收费标准</th>
-                    <th>是否可以选择</th>
-                    <th>是否自定义收费</th>
+                    <th>资料名称</th>
+                    <th>资料类型</th>
                     <th>状态</th>
                     <th width="120">操作</th>
                 </tr>
             </thead>
             <tbody>
-                <foreach name="fees" item="vo">
+                <foreach name="documents" item="vo">
                 <tr>
                     <td>{$vo.id}</td>
-                    <td>{$vo.fee_name}</td>
-                    <td>{$feeType[$vo['fee_type']]}</td>
-                    <td>{$vo.fee}</td>
-                    <td>{$vo['is_allow_select']?'是':'否'}</td>
-                    <td>{$vo['is_custom']?'是':'否'}</td>
+                    <td>{$vo.document_name}</td>
+                    <td>{$documentType[$vo['document_type']]}</td>
                     <td>{$vo['isvalid']?'有效':'失效'}</td>
                     <td>
-                            <a href='{:U("FeeStandard/edit",array("id"=>$vo["id"]))}'>编辑</a>
+                            <a href='{:U("RequiredDocument/edit",array("id"=>$vo["id"]))}'>编辑</a>
                         </if>
                     </td>
                 </tr>

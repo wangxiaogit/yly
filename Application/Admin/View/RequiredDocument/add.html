@@ -1,0 +1,43 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('RequiredDocument/index')}">{$meta_title}</a></li>
+            <li class="active"><a href="{:U('RequiredDocument/add')}">新增</a></li>
+        </ul>
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('RequiredDocument/do_add')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">资料名称</label>
+                    <div class="controls">
+                        <input type="text" name="document_name">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">资料类型</label>
+                    <div class="controls">
+                        <select name='document_type'>
+                            <foreach name='documentType' item='vo' key='k'>
+                                <option value='{$k}'>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否有效</label>
+                    <div class="controls">
+                        <label class="radio inline" for="isvalid_true"><input type="radio" name="isvalid" value="1" checked id="isvalid_true" />有效</label>
+                        <label class="radio inline" for="isvalid_false"><input type="radio" name="isvalid" value="0" id="isvalid_false">无效</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('RequiredDocument/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
