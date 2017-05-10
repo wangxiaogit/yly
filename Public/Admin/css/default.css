@@ -27,5 +27,24 @@ form .input-order{
     color:red;
 }
 
+.permission-list {
+    border: solid 1px #eee;
+}
+
+.permission-list dt {
+    background-color: #efefef;
+    padding: 5px 10px;
+}
+
+.permission-list dd {
+    padding: 10px;
+    padding-left: 30px;
+}
+
+.permission-list dd label {
+    padding-right: 10px;
+    display:inline-block;
+}
+
 
 

@@ -1,0 +1,40 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('Group/index')}">组管理</a></li>
+            <li class="active"><a href="{:U('Group/visited',array('id'=>$group_id))}">访问授权</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('Group/do_add')}" method="post">
+            <fieldset>
+                <div class="control-group" style="margin-bottom: 0px;">
+                    <label class="control-label" style="padding-top: 20px;"><span class="form-required">*</span> 权限节点</label>
+                    <div class="controls">
+                        <foreach name="rules" item="value">
+                            <dl class="permission-list">
+                                <dt>
+                                    <label><input type="checkbox" value="{$value.id}" name="rule_id[]" {$value.checked} style="line-height:normal;margin-top: -2px;">&nbsp;{$value.title}</label>
+                                </dt>
+                                <dd> 
+                                    <if condition="!empty($value['child']) and is_array($value['child'])">
+                                        <foreach name="value.child" item="vo">
+                                            <label><input type="checkbox" value="{$vo.id}" name="rule_id[]" {$vo.checked} style="line-height:normal;margin-top: -2px;">&nbsp;{$vo.title}</label>
+                                        </foreach>
+                                    </if>     
+                                </dd>
+                            </dl>
+                        </foreach>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">授权</button>
+                <a class="btn" href="{:U('Group/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

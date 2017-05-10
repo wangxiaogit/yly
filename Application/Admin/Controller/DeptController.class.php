@@ -147,6 +147,13 @@ class DeptController extends AdminController
     {
         $dept_id = I('get.id', 0, 'intval');
         
+        //子部门
+        $count = $this->deptModel->where(array("parentid"=>$dept_id, 'status'=>1))->count();
+        
+        if ($count > 0) {
+            $this->error("该部门下还有自部门,无法删除！");
+        }
+        
         if ($this->deptModel->where(array("id"=>$dept_id))->setField("status", 2)) {
             $this->success("删除成功！");
         } else {
