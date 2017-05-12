@@ -2,14 +2,14 @@
 namespace Admin\Controller;
 use Common\Controller\AdminController;
 
-class PositionController extends AdminController
+class FlowTypeController extends AdminController
 {
-    protected $positionModel;
-    
+    protected $flowTypeModel;
+
     public function _initialize() {
         parent::_initialize();
         
-        $this->positionModel = D('Common/Position');
+        $this->flowTypeModel = D('Common/WorkflowType');
     }
     
     /**
@@ -17,10 +17,10 @@ class PositionController extends AdminController
      */
     public function index() 
     {
-        $position_lists = $this->lists($this->positionModel, array('status'=>1), 'id desc');
+        $flowType_lists = $this->lists($this->flowTypeModel, array('status'=>1), 'id desc');
         
-        $this->assign("position_lists", $position_lists);
-        $this->assign("meta-title", "职位列表");
+        $this->assign("flowType_lists", $flowType_lists);
+        $this->assign("meta-title", "流程类型列表");
         $this->display();
     }
     
@@ -29,7 +29,7 @@ class PositionController extends AdminController
      */
     public function add ()
     {
-        $this->assign("meta-title", "职位添加");
+        $this->assign("meta-title", "流程类型添加");
         $this->display();
     }  
     
@@ -39,14 +39,14 @@ class PositionController extends AdminController
     public function do_add ()
     {
         if (IS_POST) {
-            if ($this->positionModel->create()) {
-                if (false !== $this->positionModel->add()) {
-                    $this->success('添加成功！', U('Position/index'));
+            if ($this->flowTypeModel->create()) {
+                if (false !== $this->flowTypeModel->add()) {
+                    $this->success('添加成功！', U('FlowType/index'));
                 } else {
                     $this->error('添加失败！');
                 }
             } else {
-                $this->error($this->positionModel->getError());
+                $this->error($this->flowTypeModel->getError());
             }
         } 
     }   
@@ -56,12 +56,12 @@ class PositionController extends AdminController
      */
     public function edit ()
     {
-        $position_id = I('get.id', 0, 'intval');
+        $id = I('get.id', 0, 'intval');
         
-        $position = $this->positionModel->find($organize_id);
+        $flowType = $this->flowTypeModel->find($id);
         
-        $this->assign("position", $position);
-        $this->assign("meta-title", "职位编辑");
+        $this->assign("flowType", $flowType);
+        $this->assign("meta-title", "流程类型编辑");
         $this->display();
     }   
     
@@ -71,14 +71,14 @@ class PositionController extends AdminController
     public function do_edit ()
     {
         if (IS_POST) {
-            if ($this->positionModel->create()) {
-                if (false !== $this->positionModel->save()) {
+            if ($this->flowTypeModel->create()) {
+                if (false !== $this->flowTypeModel->save()) {
                     $this->success('编辑成功！');
                 } else {
                     $this->error('编辑失败！');
                 }
             } else {
-                $this->error($this->positionModel->getError());
+                $this->error($this->flowTypeModel->getError());
             }
         } 
     }  
@@ -89,9 +89,9 @@ class PositionController extends AdminController
      */
     public function del ()
     {
-        $position_id = I('get.id', 0, 'intval');
+        $id = I('get.id', 0, 'intval');
         
-        if ($this->positionModel->where(array("id"=>$position_id))->setField("status", 2)) {
+        if ($this->flowTypeModel->where(array("id"=>$id))->setField("status", 2)) {
             $this->success("删除成功！");
         } else {
             $this->error("删除失败！");
