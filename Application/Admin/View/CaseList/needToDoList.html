@@ -1,0 +1,54 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('CaseList/needToDoList')}">待办案件</a></li>
+            <li ><a href="{:U('CaseList/doneList')}">已办案件</a></li>
+            <li ><a href="{:U('CaseList/endList')}">归档案件</a></li>
+        </ul>
+        <form class="well form-search" method="get" action="{:U('CaseList/needToDoList')}">
+            <select class="select_2" name="group">
+                <option value='debtor'>主贷人姓名</option>
+                <option value='caseId'>案件编号</option>
+                <option value='bank'>贷款银行</option>
+                <option value='borker'>中介公司</option>
+                <option value='location'>房屋地址</option>
+            </select>
+            <input type="text" name="keywords" style="width: 200px;" value="{$formget.keywords}" placeholder="请输入关键字">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+        </form>
+        <div class="table-actions">
+            <button class="btn btn-primary" type="submit" data-action="{:U('CaseList/caseAdd')}">新增案件</button>
+        </div>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="20"></th>
+                    <th>案件编号</th>
+                    <th>主贷人</th>
+                    <th>房屋坐落</th>
+                    <th>业务类型</th>
+                    <th>办理流程</th>
+                    <th>当前节点</th>
+                    <th>案例状态</th>
+                    <th>借款金额</th>
+                    <th>中介公司</th>
+                    <th>贷款银行</th>
+                    <th>受理部门</th>
+                    <th>业务员</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="caseList" item="vo">
+                <tr>
+                </tr>
+                </foreach>
+            </tbody>
+        </table>
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
