@@ -6,8 +6,28 @@ class AdminController extends BaseController
 {
     public function _initialize() 
     {
-        parent::_initialize();   
+        parent::_initialize();
     }
+    
+    /**
+     * 左侧菜单
+     */
+    public function menus ()
+    {
+        $menu_lists = D('Common/Menu')->where(array("status"=>1))->order("sort asc")->select();
+        
+        foreach($menu_lists as &$list) {
+            $list['url'] = U("{$list['url']}", array('menuid'=>$list['id']));
+        }
+        
+        $treeModel = new \Org\Util\Tree();  
+        
+        $treeModel->init($menu_lists);
+        $menus = $treeModel->get_tree_array(0, '');
+        
+        return $menus;
+    }        
+    
     
     /**
      * 消息提示

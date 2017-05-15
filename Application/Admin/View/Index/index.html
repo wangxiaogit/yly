@@ -59,16 +59,13 @@
                 <ul class="nav simplewind-nav pull-right">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                           
                             <img class="nav-user-photo" width="30" height="30" src="__IMG__/logo-18.png">
-                           
                             <span class="user-info">
                                 欢迎, 管理员
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-   
                             <li><a href="{:U('Login/out')}"><i class="fa fa-sign-out"></i> {:L('LOGOUT')}</a></li>
                         </ul>
                     </li>
@@ -79,7 +76,62 @@
     <div class="main-container container-fluid" >
         <div class="sidebar" id="sidebar">  
             <div id="nav_wraper">
-                <ul class="nav nav-list"></ul>
+                <ul class="nav nav-list">
+                    <foreach name="menus" item="menu">
+                        <li>
+                            <eq name="menu.is_display" value="1">
+                                <empty name="menu.child">
+                                    <a href="javascript:openapp('{$menu.url}','{$menu.id}','{$menu.title}',true);">
+                                        <i class="fa {$menu.icon|default='fa-desktop'}"></i>
+                                        <span class="menu-text">{$menu.title}</span>
+                                    </a>
+                                <else />
+                                    <a href="#" class="dropdown-toggle">
+                                        <i class="fa {$menu.icon|default='fa-desktop'} normal"></i>
+                                        <span class="menu-text normal">{$menu.title}</span>
+                                        <b class="arrow fa fa-angle-right normal"></b>
+                                        <i class="fa fa-reply back"></i>
+                                        <span class="menu-text back">返回</span>
+                                    </a>
+
+                                    <ul  class="submenu">
+                                        <foreach name="menu.child" item="submenu">
+                                            <li>
+                                                <eq name="submenu.is_display" value="1">
+                                                    <empty name="submenu.child">
+                                                        <a href="javascript:openapp('{$submenu.url}','{$submenu.id}','{$submenu.title}',true);">
+                                                            <i class="fa fa-caret-right"></i>
+                                                            <span class="menu-text">{$submenu.title}</span>
+                                                        </a>
+                                                    <else />
+                                                        <a href="#" class="dropdown-toggle">
+                                                            <i class="fa fa-caret-right"></i>
+                                                            <span class="menu-text">{$submenu.title}</span>
+                                                            <b class="arrow fa fa-angle-right"></b>
+                                                        </a>
+
+                                                        <ul  class="submenu">
+                                                            <foreach name="submenu.child" item="item">
+                                                                <li>
+                                                                    <if condition="item.url && item.is_display">
+                                                                        <a href="javascript:openapp('{$item.url}','{$item.id}','{$item.title}',true);">
+                                                                            <i class="fa fa-angle-double-right"></i>
+                                                                            <span class="menu-text">{$item.title}</span>
+                                                                        </a>
+                                                                    </if> 
+                                                                </li>
+                                                            </foreach>    
+                                                        </ul>
+                                                    </empty>    
+                                                </eq>
+                                            </li>    
+                                        </foreach>
+                                    </ul>
+                                </empty>    
+                            </eq>
+                        </li>    
+                    </foreach>
+                </ul>
             </div>    
         </div>
         <div class="dislpayArrow"><a class="pngfix" href="javascript:void(0);" onClick="displaysidebar(this)"></a></div>

@@ -54,7 +54,7 @@ class OrganizeController extends AdminController
         if (IS_POST) {
             if ($this->organizeModel->create()) {
                 if (false !== $this->organizeModel->add()) {
-                    $this->success('添加成功！', U('Organize/index'));
+                    $this->success('添加成功！', U('Organize/index',array('type'=>I('get.type'))));
                 } else {
                     $this->error('添加失败！');
                 }

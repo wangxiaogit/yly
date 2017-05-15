@@ -18,6 +18,12 @@ class OrganizeModel extends AdminModel
         array('id,type,name', 'checkOrganize', '该机构名称已存在！', self::MUST_VALIDATE, 'callback', AdminModel::MODEL_BOTH)
     );
     
+    //自动完成
+    protected $_auto = array(
+        array('create_time', 'time', self::MODEL_INSERT, 'function'),
+        array('create_uid', 'get_current_user_id', self::MODEL_INSERT, 'function')
+    );
+
     public function checkOrganize($data) 
     {
         if ($data['id']) {

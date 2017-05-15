@@ -109,14 +109,28 @@
                             //返回带跳转地址
                             if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
                                 //iframe弹出页
-                                window.parent.location.href = data.referer;
+                                var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
+                                
+                                if (isdialog) {
+                                    window.location.href = data.referer;
+                                } else {
+                                    window.parent.location.href = data.referer;
+                                }
+                                
                             }else{
                                 window.location.href = data.referer;
                             }
                         } else {
                             if (data.state === 'success') {
                                 if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
-                                    reloadPage(window.parent);
+                                    
+                                    var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
+                                    
+                                    if (isdialog) {
+                                        reloadPage(window);
+                                    } else {
+                                        reloadPage(window.parent);
+                                    }
                                 }else{
                                     //刷新当前页
                                     reloadPage(window);

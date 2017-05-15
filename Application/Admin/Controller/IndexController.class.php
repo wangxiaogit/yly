@@ -10,7 +10,10 @@ class IndexController extends AdminController
     
     public function index ()
     {
-
+        //菜单
+        $menus = $this->menus();
+        
+        $this->assign('menus', $menus);
         $this->display();
     }
 }

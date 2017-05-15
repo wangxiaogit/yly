@@ -5,7 +5,7 @@ use Think\Controller;
 class BaseController extends Controller
 {
     public function _initialize() {
-        
+        //print_r($_REQUEST);exit;
     }
     
     /**

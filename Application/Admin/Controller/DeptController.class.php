@@ -22,6 +22,8 @@ class DeptController extends AdminController
      */
     public function index ()
     { 
+        $org_type = get_organize_type($this->organize_id);
+        
         $dept_lists = $this->deptModel->where(array('status'=>1, 'org_id'=>$this->organize_id))->order("sort asc")->select();
         
         foreach ($dept_lists as $list) {
@@ -31,8 +33,15 @@ class DeptController extends AdminController
         foreach ($dept_lists as $n => $r) {
             $dept_lists[$n]['level'] = _get_level($r['id'], $depts);
             $dept_lists[$n]['parentid_node'] = ($r['parentid']) ? ' class="child-of-node-' . $r['parentid'] . '"' : '';
-
-            $dept_lists[$n]['str_manage'] = '<a href="' . U("Dept/add", array("parentid" => $r['id'], "org_id" => $this->organize_id)) . '">添加子部门</a> | <a href="' . U("Dept/edit", array("id" => $r['id'], "org_id" => $this->organize_id)) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Dept/del", array("id" => $r['id'], "org_id" => $this->organize_id) ). '">删除</a> ';
+            
+            $str = '<a href="' . U("Dept/edit", array("id" => $r['id'], "org_id" => $this->organize_id)) . '">编辑</a> | <a class="js-ajax-delete" href="' . U("Dept/del", array("id" => $r['id'], "org_id" => $this->organize_id) ). '">删除</a> ';
+            
+            if ($org_type == 1) {
+                $dept_lists[$n]['str_manage'] =  '<a href="' . U("Dept/add", array("parentid" => $r['id'], "org_id" => $this->organize_id)) . '">添加子部门</a> | '.$str;
+            } else {
+                $dept_lists[$n]['str_manage'] = $str;
+            }
+            
         }
         
         $this->treeModel->icon = array('&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ ');
@@ -130,7 +139,7 @@ class DeptController extends AdminController
         if (IS_POST) {
             if ($this->deptModel->create()) {
                 if (false !== $this->deptModel->save()) {
-                    $this->success('编辑成功！');
+                    $this->success('编辑成功！', U('Dept/index',array('org_id'=>$this->organize_id)));
                 } else {
                     $this->error('编辑失败！');
                 }
@@ -151,7 +160,7 @@ class DeptController extends AdminController
         $count = $this->deptModel->where(array("parentid"=>$dept_id, 'status'=>1))->count();
         
         if ($count > 0) {
-            $this->error("该部门下还有自部门,无法删除！");
+            $this->error("该部门下还有子部门,无法删除！");
         }
         
         if ($this->deptModel->where(array("id"=>$dept_id))->setField("status", 2)) {
