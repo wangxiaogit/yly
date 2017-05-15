@@ -681,7 +681,7 @@ Wind.ready(function() {
 		ver = '',
 		//定义常用JS组件别名，使用别名加载
 		alias = {
-                    //datePicker         : 'datePicker/datePicker',
+                    datePicker         : 'datePicker/datePicker',
                     jquery             : 'jquery',
                     //colorPicker        : 'colorPicker/colorPicker',
                     tabs               : 'tabs/tabs',
@@ -712,7 +712,7 @@ Wind.ready(function() {
 		alias_css = {
 //                    colorPicker : 'colorPicker/style',
 //                    artDialog   : 'artDialog/skins/default',
-//                    datePicker	: 'datePicker/style',
+                    datePicker	: 'datePicker/style',
                     treeTable   : 'treeTable/treeTable',
                     layer             : 'layer/skin/layer' 
 //                    jcrop       : 'jcrop/css/jquery.Jcrop.min'

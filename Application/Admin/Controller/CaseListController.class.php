@@ -21,7 +21,10 @@ class CaseListController extends AdminController
     public function needToDoList()
     {   
         //model
-        
+        $action = I('get.action_type');
+        if($action) {
+            dump(I());die;
+        }
         $this->assign('meta_title','待办案件');
         $this->display();
     }

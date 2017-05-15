@@ -8,15 +8,43 @@
             <li ><a href="{:U('CaseList/endList')}">归档案件</a></li>
         </ul>
         <form class="well form-search" method="get" action="{:U('CaseList/needToDoList')}">
-            <select class="select_2" name="group">
-                <option value='debtor'>主贷人姓名</option>
-                <option value='caseId'>案件编号</option>
-                <option value='bank'>贷款银行</option>
-                <option value='borker'>中介公司</option>
-                <option value='location'>房屋地址</option>
+            <select class="select_2" name="group" style="width: 120px;">
+                <option value='debtor'<if condition = "$_GET.case_type eq 'debtor'"> selected </if>>主贷人姓名</option>
+                <option value='caseId'<if condition = "$_GET.case_type eq 'caseId'"> selected </if>>案件编号</option>
+                <option value='bank'<if condition = "$_GET.case_type eq 'bank'"> selected </if>>贷款银行</option>
+                <option value='borker'<if condition = "$_GET.case_type eq 'borker'"> selected </if>>中介公司</option>
+                <option value='location'<if condition = "$_GET.case_type eq 'location'"> selected </if>>房屋地址</option>
             </select>
-            <input type="text" name="keywords" style="width: 200px;" value="{$formget.keywords}" placeholder="请输入关键字">
-            <input type="submit" class="btn btn-primary" value="搜索" />
+            <input type="text" name="keywords" style="width: 90px;" value="{$_GET.keywords}" placeholder="请输入关键字">
+            &nbsp;&nbsp;
+            业务: <select name='case_type' style="width: 120px;">
+                    <option value="0">请选择</option>
+                    <volist name="confBusinessType" id="case_type_name">
+                        <option value='{$key}' <if condition = "$_GET.case_type eq $key"> selected </if>>{$case_type_name}</option>
+                    </volist>
+                </select>
+            &nbsp;&nbsp;
+            节点:
+                <select name='node_step'  class="select_2" style="width: 120px;">
+                    <option value="0">请选择</option>
+                    <volist name="confFlowNode" id="node_name">
+                        <option value='{$key}' <if condition = "$_GET.node_step eq $key"> selected </if>>{$node_name}</option>
+                    </volist>
+                </select>
+                &nbsp;&nbsp;
+                <select name = 'search_node_time_type' class="select_2" style="width: 120px;">
+                    <option value='submit_time' <if condition = "$_GET.search_node_time_type eq 'submit_time'"> selected </if> >节点结束时间</option>
+                    <option value='start_time' <if condition = "$_GET.search_node_time_type eq 'start_time'"> selected </if> >节点开始时间</option>
+                </select>
+                &nbsp;&nbsp;
+                <input class = "js-date" style = "width: 90px;" type="text" value= "{$_GET.fromdate}" id = "date_min"  name="fromdate">
+                至
+                <input class = "js-date" style = "width: 90px;" type="text" value= "{$_GET.enddate}" id = "date_max"  name="enddate">
+                &nbsp;&nbsp;
+                <input type = 'hidden' name = 'action_type' value = 'search'>
+            </select>
+            <button class="btn btn-primary">搜索</button>
+            <a class="btn btn-danger" href="{:U('CaseList/needToDoList')}">清空</a>
         </form>
         <div class="table-actions">
             <button class="btn btn-primary" type="submit" data-action="{:U('CaseList/caseAdd')}">新增案件</button>
