@@ -18,12 +18,21 @@
             </select>
             <input type="text" name="keywords" style="width: 90px;" value="{$_POST.keywords}" placeholder="请输入关键字">
             &nbsp;&nbsp;
+            <if condition="$tab_type eq 'end'">
+                案例状态: <select name='case_status' style="width: 120px;">
+                    <option value="0">请选择</option>
+                    <option value='3' <if condition = "$_POST.case_status eq 3"> selected </if>>撤案</option>
+                    <option value='4' <if condition = "$_POST.case_status eq 4"> selected </if>>完成</option>
+                </select>
+            </if>
+            &nbsp;&nbsp;
             业务: <select name='case_type' style="width: 120px;">
                     <option value="0">请选择</option>
                     <volist name="confBusinessType" id="case_type_name">
                         <option value='{$key}' <if condition = "$_POST.case_type eq $key"> selected </if>>{$case_type_name}</option>
                     </volist>
                 </select>
+            <if condition="$tab_action neq 'all'">
             &nbsp;&nbsp;
             节点:
                 <select name='node_step'  class="select_2" style="width: 120px;">
@@ -43,7 +52,7 @@
                 <input class = "js-date" style = "width: 90px;" type="text" value= "{$_POST.enddate}" id = "date_max"  name="enddate">
                 &nbsp;&nbsp;
                 <input type = 'hidden' name = 'action_type' value = 'search'>
-            </select>
+            </if>
             <button class="btn btn-primary">搜索</button>
             <a class="btn btn-danger" href="{:U('CaseList/index')}">清空</a>
         </form>
@@ -71,10 +80,18 @@
                 </tr>
             </thead>
             <tbody>
-                <foreach name="caseList" item="vo">
-                <tr>
-                </tr>
-                </foreach>
+                <if condition='$caseList'>
+                    <foreach name="caseList" item="vo">
+                        <tr>
+                        </tr>
+                    </foreach>
+                <else/>
+                    <tr>
+                        <td colspan="15" style="text-align: center;">
+                            未查询到符合条件的案件
+                        </td>
+                    </tr>
+                </if>    
             </tbody>
         </table>
         {$_Page}
