@@ -24,4 +24,36 @@ class DeptModel extends AdminModel
         return $dept ? false : true;
     }
     
+    private $dept_id = array();
+    
+     /*
+     * 根据部门编号获取最小层级部门信息
+     * @param int $deptId 部门编号
+     * @return array 部门数组列表
+     */
+    public function getChildDeptIdsByDeptid($deptId)
+    {
+        $childDeptIdarr = array();
+        $dept_info = $this->getInfoById($deptId);
+        $this->dept_id = array();
+        if(is_array($dept_info) && !empty($dept_info))
+        {
+            $allDeptList = M('organize')->where('org_id='.$dept_info['org_id'])->field('id, pid')->select();
+            $childDeptIdarr = self::getChildNode($allDeptList, $dept_info['id']);
+        }
+        return $childDeptIdarr;
+    }
+    
+    
+    private function getChildNode(&$data, $pid)
+    {    
+        foreach ($data as $key => $value) {
+            if($value['pid'] == $pid) {
+                $this->dept_id[] = $value['id'];
+                //unset($data[$key]);
+                self::getChildNode($data, $value['id']);
+            }
+        }
+        return $this->dept_id;
+    }
 }
