@@ -2,7 +2,7 @@
 namespace Admin\Controller;
 use Common\Controller\AdminController;
 
-class FlowVeisionController extends AdminController
+class FlowVersionController extends AdminController
 {
     protected $flowVersionModel;
 
@@ -17,7 +17,9 @@ class FlowVeisionController extends AdminController
      */
     public function index() 
     {
-        $flowVersion_lists = $this->lists($this->flowVersionModel, array('status'=>1), 'id desc');
+        $model = $this->flowVersionModel->alias('a')->join("workflow_type b on a.workflow_type_id = b.id");
+        
+        $flowVersion_lists = $this->lists($model, array('a.status'=>1), 'workflow_type_id desc, is_active desc', "a.*, b.name flowType_name");
         
         $this->assign("flowVersion_lists", $flowVersion_lists);
         $this->assign("meta-title", "流程版本列表");
@@ -29,6 +31,9 @@ class FlowVeisionController extends AdminController
      */
     public function add ()
     {
+        $flowType_lists = D('Common/WorkflowType')->where(array("status"=>1))->select();
+        
+        $this->assign("flowType_lists", $flowType_lists);
         $this->assign("meta-title", "流程版本添加");
         $this->display();
     }  
@@ -60,6 +65,9 @@ class FlowVeisionController extends AdminController
         
         $flowVersion = $this->flowVersionModel->find($id);
         
+        $flowType_lists = D('Common/WorkflowType')->where(array("status"=>1))->select();
+        
+        $this->assign("flowType_lists", $flowType_lists);
         $this->assign("flowVersion", $flowVersion);
         $this->assign("meta-title", "流程版本编辑");
         $this->display();
@@ -83,13 +91,17 @@ class FlowVeisionController extends AdminController
         } 
     }  
     
-    
     /**
      * 删除
      */
     public function del ()
     {
         $id = I('get.id', 0, 'intval');
+        
+        $flowVersions = D('Common/WorkflowConf')->where(array("workflow_version_id"=>$id))->count();
+        if ($flowVersions) {
+            $this->error("该流程版本下还有流程配置！暂不能删除");
+        }
         
         if ($this->flowVersionModel->where(array("id"=>$id))->setField("status", 2)) {
             $this->success("删除成功！");

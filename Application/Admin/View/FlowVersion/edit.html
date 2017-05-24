@@ -1,0 +1,52 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FlowVersion/index')}">流程版本管理</a></li>
+            <li class="active"><a href="{:U('FlowVersion/edit')}">版本编辑</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowVersion/do_edit')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">流程类型</label>
+                    <div class="controls">
+                        <select name="workflow_type_id">
+                            <option value="0">请选择</option>
+                            <foreach name="flowType_lists" item="type">
+                                <php>$workflow_type_selected=($type['id']==$flowVersion['workflow_type_id'])?"selected":"";</php>
+                                <option value="{$type.id}" {$workflow_type_selected}>{$type.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>版本</label>
+                    <div class="controls">
+                        <input type="text" name="version" value="{$flowVersion.version}" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+                    <div class="controls">
+                        <select name="is_active">
+                            <option value="1">使用中</option>
+                            <php>$is_active_selected=($flowVersion['is_active']==0)?"selected":"";</php>
+                            <option value="0" {$is_active_selected}>旧版本</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input type="hidden" value="{$flowVersion.id}" name="id">
+                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
+                <a class="btn" href="{:U('FlowVersion/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
