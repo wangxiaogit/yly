@@ -19,4 +19,4 @@ function _get_level ($id, $array, $i = 0)
 function get_organize_type ($org_id)
 {
     return D('Common/Organize')->where(array('id'=>$org_id))->getField('type');
-}        
+}

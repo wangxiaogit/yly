@@ -1,0 +1,65 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FeeStandard/index')}">费用标准</a></li>
+            <li><a href="{:U('FeeStandard/add')}">新增</a></li>
+            <li><a href="{:U('FeeStandard/edit', array('id'=>$id))}">编辑</a></li>
+        </ul>
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('FeeStandard/do_edit')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">费用名称</label>
+                    <div class="controls">
+                        <input type="text" name="fee_name" value="{$feeInfo['fee_name']}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">费用类型</label>
+                    <div class="controls">
+                        <select name='fee_type'>
+                            <foreach name='feeType' item='vo' key='k'>
+                                <option value='{$k}'<if condition="$k eq $feeInfo['fee_type']">selected</if>>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">费用标准</label>
+                    <div class="controls">
+                        <input type="text" name="fee" value="{$feeInfo['fee']}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否允许选择</label>
+                    <div class="controls">
+                        <label class="radio inline" for="allow_select_true"><input type="radio" name="is_allow_select" value="1" id="allow_select_true" <if condition="1 eq $feeInfo['is_allow_select']">checked</if> />允许</label>
+                        <label class="radio inline" for="allow_select_false"><input type="radio" name="is_allow_select" value="0" id="allow_select_false" <if condition="0 eq $feeInfo['is_allow_select']">checked</if>/>不允许</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否自定义费用</label>
+                    <div class="controls">
+                        <label class="radio inline" for="is_custom_false"><input type="radio" name="is_custom" value="1" id="is_custom_false" <if condition="1 eq $feeInfo['is_custom']">checked</if>>是</label>
+                        <label class="radio inline" for="is_custom_true"><input type="radio" name="is_custom" value="0"  id="is_custom_true"  <if condition="0 eq $feeInfo['is_custom']">checked</if>/>否</label>  
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否有效</label>
+                    <div class="controls">
+                        <label class="radio inline" for="isvalid_true"><input type="radio" name="isvalid" value="1"  id="isvalid_true"  <if condition="1 eq $feeInfo['isvalid']">checked</if>/>有效</label>
+                        <label class="radio inline" for="isvalid_false"><input type="radio" name="isvalid" value="0" id="isvalid_false" <if condition="0 eq $feeInfo['isvalid']">checked</if>>无效</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$id}" />
+                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                <a class="btn" href="{:U('FeeStandard/index')}">后退</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
