@@ -18,6 +18,7 @@ class DeptModel extends AdminModel
         } else {
             unset($data['id']);
         }
+        $data['status'] = 1;
         
         $dept = $this->where($data)->find();
         

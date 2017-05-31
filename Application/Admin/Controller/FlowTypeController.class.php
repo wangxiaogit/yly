@@ -111,4 +111,5 @@ class FlowTypeController extends AdminController
             $this->error("删除失败！");
         } 
     } 
+   
 }

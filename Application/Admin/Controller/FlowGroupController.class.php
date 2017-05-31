@@ -96,5 +96,15 @@ class FlowGroupController extends AdminController
         } else {
             $this->error("删除失败！");
         } 
-    } 
+    }
+    
+    /**
+     * ajax 流程组
+     */
+    public function ajax_get_group ()
+    {
+        $flowGroup_lists = $this->flowGroupModel->field("id, name")->where(array('status'=>1))->select();
+        
+        $this->ajaxReturn(['data'=>$flowGroup_lists, 'status'=>1]);
+    }        
 }

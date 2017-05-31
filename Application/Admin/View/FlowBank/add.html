@@ -1,0 +1,121 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FlowBank/index')}">银行对接管理</a></li>
+            <li class="active"><a href="{:U('FlowBank/add')}">对接添加</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowBank/do_add')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>总行</label>
+                    <div class="controls">
+                        <select name="org_id" id="org_id">
+                            <option value="0">请选择总行</option>
+                            <foreach name="organize_lists" item="list">
+                                <option value="{$list.id}">{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>支行</label>
+                    <div class="controls">
+                        <select name="dept_id" id="dept_id">
+                            <option value="0">请选择支行</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>对接类型</label>
+                    <div class="controls">
+                        <select name="handle_type" id="handle_type">
+                            <option value="0">请选择对接类型</option>
+                            <option value="1">个人</option>
+                            <option value="2">流程组</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>对接角色</label>
+                    <div class="controls">
+                        <select name="handle_id" id="handle_id">
+                            <option value="0">请选择对接角色</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('FlowBank/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function(){
+        
+        $("#org_id").bind('change', function() {
+            var _this = $(this),
+                organize_id = _this.val(),
+                html = "<option value='0'>请选择支行</option>";
+            
+            if (organize_id > 0) {
+                $.getJSON("{:U('Dept/ajax_get_dept')}", {org_id: organize_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#dept_id").html(html);
+                }   
+            } else {
+                $("#dept_id option:gt(0)").remove();
+            }
+        });
+        
+        $("#handle_type").bind('change', function() {
+            var apiUrl,
+                _this = $(this),
+                handle_type = _this.val(),
+                html = "<option value='0'>请选择支行</option>";
+                
+            if (handle_type == 1)  {
+                apiUrl = "{:U('User/ajax_get_user')}";
+            } else if (handle_type == 2) {
+                apiUrl = "{:U('FlowGroup/ajax_get_group')}";
+            }
+            
+            if (handle_type > 0) {
+                $.getJSON(apiUrl, success);
+                return false;
+                
+                function success (obJect) 
+                {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#handle_id").html(html);
+                }
+            } else {
+                $("#handle_id option:gt(0)").remove();
+            }
+        });
+        
+    });
+</script>
+</body>
+</html>

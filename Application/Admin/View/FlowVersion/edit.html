@@ -4,7 +4,7 @@
     <div class="wrap">
         <ul class="nav nav-tabs">
             <li><a href="{:U('FlowVersion/index')}">流程版本管理</a></li>
-            <li class="active"><a href="{:U('FlowVersion/edit')}">版本编辑</a></li>
+            <li class="active"><a href="{:U('FlowVersion/edit',array('id'=>$flowVersion['id']))}">版本编辑</a></li>
         </ul>
         <form class="form-horizontal js-ajax-form" action="{:U('FlowVersion/do_edit')}" method="post">
             <fieldset>

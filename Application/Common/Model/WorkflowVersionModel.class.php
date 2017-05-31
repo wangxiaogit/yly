@@ -18,6 +18,7 @@ class WorkflowVersionModel extends AdminModel
         } else {
             unset($data['id']);
         }
+        $data['status'] = 1;
         
         $result = $this->where($data)->find();
         

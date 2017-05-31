@@ -18,6 +18,7 @@ class PositionModel extends AdminModel
         } else {
             unset($data['id']);
         }
+        $data['status'] = 1;
         
         $position = $this->where($data)->find();
         

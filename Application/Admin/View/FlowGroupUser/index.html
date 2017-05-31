@@ -1,0 +1,41 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('FlowGroupUser/index',array('group_id'=>$group_id))}">流程组人员管理</a></li>
+            <li><a href="{:U('FlowGroupUser/add',array('group_id'=>$group_id))}">人员添加</a></li>
+        </ul>
+        
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th width="200">流程组</th>
+                    <th >成员</th>     
+                    <th width="180">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="flowGroupUser_Lists" item="list">
+                    <tr>
+                        <td>{$list.id}</td>
+                        <td>{$list.group_name}</td>
+                        <td>{$list.user_name}</td>
+                        <td>
+                            <a href="{:U('FlowGroupUser/edit',array('id'=>$list['id'],'group_id'=>$group_id))}">编辑</a> 
+                            |
+                            <a class="js-ajax-delete" href="{:U('FlowGroupUser/del',array('id'=>$list['id'],'group_id'=>$group_id))}">删除</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
+
+

@@ -21,6 +21,8 @@ class MenuModel extends AdminModel
             $where['_logic'] = 'OR';
         }
         
+        $where['status'] = 1;
+        
         $result = $this->where($where)->find();
         
         return $result ? false : true;

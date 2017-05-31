@@ -179,4 +179,20 @@ class DeptController extends AdminController
            $this->success('排序成功！');
         }
     }
+    
+    /**
+     * 获取部门
+     */
+    public function ajax_get_dept ()
+    {
+        $organize_id = I('request.org_id', 0, 'intval');
+        
+        if (!$organize_id) {
+            $this->error("参数错误！");
+        }
+        
+        $dept_lists = $this->deptModel->field("id, name")->where(array("org_id"=> $organize_id, 'status'=>1))->select();
+        
+        $this->ajaxReturn(['data'=>$dept_lists, 'status'=>1]);
+    }        
 }

@@ -17,7 +17,7 @@ class FlowNodeController extends AdminController
      */
     public function index() 
     {
-        $flowNode_lists = $this->lists($this->flowNodeModel, array('a.status'=>1), 'id asc');
+        $flowNode_lists = $this->lists($this->flowNodeModel, array('status'=>1), 'id asc');
         
         $this->assign("flowNode_lists", $flowNode_lists);
         $this->assign("meta-title", "流程节点列表");
