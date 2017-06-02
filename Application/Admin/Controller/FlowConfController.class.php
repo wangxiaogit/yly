@@ -5,11 +5,17 @@ use Common\Controller\AdminController;
 class FlowConfController extends AdminController
 {
     protected $flowConfModel;
+    protected $flowTypeModel;
+    protected $flowVersionModel;
+    protected $flowNodeModel;
 
     public function _initialize() {
         parent::_initialize();
         
         $this->flowConfModel = D('Common/WorkflowConf');
+        $this->flowTypeModel = D('Common/WorkflowType');
+        $this->flowVersionModel = D('Common/WorkflowVersion');
+        $this->flowNodeModel = D('Common/WorkflowNode');
     }
     
     /**
@@ -17,9 +23,24 @@ class FlowConfController extends AdminController
      */
     public function index() 
     {
-        $flowConf_lists = $this->lists($this->flowConfModel, array('status'=>1), 'id desc');
+        $flowType_id = I('post.type_id', 0, 'intval');
+        if ($flowType_id) {
+            $where['a.workflow_type_id'] = $flowType_id;
+        }
+        
+        $where['a.status'] = 1;    
+        
+        $model = $this->flowConfModel
+                      ->alias('a')
+                      ->join('workflow_type b on a.workflow_type_id = b.id')
+                      ->join('workflow_version c on a.workflow_version_id = c.id')
+                      ->join('workflow_node_id d on a.workflow_node_id = d.id');
+        
+        $flowConf_lists = $this->lists($model, $where, "a.*, b.name workflow_type_name, b.version workflow_version, c.name workflow_node_name");
         
         $this->assign("flowConf_lists", $flowConf_lists);
+        $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
+        $this->assign("search", I('request.'));
         $this->assign("meta-title", "流程配置列表");
         $this->display();
     }
@@ -29,6 +50,7 @@ class FlowConfController extends AdminController
      */
     public function add ()
     {
+        $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
         $this->assign("meta-title", "流程配置添加");
         $this->display();
     }  
