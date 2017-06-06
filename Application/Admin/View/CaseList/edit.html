@@ -1,0 +1,46 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('Dept/index', array('org_id'=>$org_id))}">部门管理</a></li>
+            <li class="active"><a href="{:U('Dept/edit', array('org_id'=>$org_id))}">部门编辑</a></li>
+        </ul>
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Dept/do_edit', array('org_id'=>$org_id))}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">父级部门</label>
+                    <div class="controls">
+                        <select name="parentid">
+                            <option value="0">作为一级部门</option>
+                            {$select_categorys}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" value="{$dept.name}">
+                    </div>
+                </div>
+               
+                <div class="control-group">
+                    <label class="control-label">排序</label>
+                    <div class="controls">
+                        <input type="text" name="sort" value="{$dept.sort}">
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$dept.id}">
+                <button type="submit" class="btn btn-primary js-ajax-submit" data-isdialog="1">编辑</button>
+                <a class="btn" href="{:U('Dept/index', array('org_id'=>$org_id))}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>
+

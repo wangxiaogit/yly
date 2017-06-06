@@ -283,4 +283,222 @@ function reloadPage(win) {
     redirect.href = redirect.pathname + redirect.search;   
 }
 
+function myclose() {
+	parent.layer.close(parent.layer.getFrameIndex(window.name));
+}
+function send_form(from_id, post_url, return_url, callback) {
+    check_form(from_id, function (ret) {
+        if (ret.status) {
+            if ($("#ajax").val() == 1) {
+                var vars = $("#" + from_id).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: post_url,
+                    data: vars,
+                    dataType: "json",
+                    success: function (data) {
+                        if (typeof (callback) == 'function') {
+                            callback(data);
+                        } else {
+                            if (data.status) {
+                                layer.msg(data.info, {
+                                    time: 1200
+                                }, function () {
+                                    if (return_url) {
+                                        location.href = return_url;
+                                    } else {
+                                        location.reload(true);
+                                    }
+                                });
+                            } else {
+                                layer.msg(data.info);
+                                return false;
+                            }
+                            ;
+                        }
+                    }
+                });
+            } else {
+                //取消beforeunload事件
+                if (return_url) {
+                    set_return_url(return_url);
+                }
+                $(window).unbind('beforeunload', null);
+                $("#" + from_id).attr("action", post_url);
+                $("#" + from_id).submit();
+            }
+        } else {
+            layer.msg(ret.info);
+            ret.dom.focus();
+            return false;
+        }
+    });
+}
+    function send_ajax(url, vars, callback) {
+                    return $.ajax({
+                            type : "POST",
+                            url : url,
+                            data : vars + "&ajax=1",
+                            dataType : "json",
+                            success : callback
+                    });
+            }
+    function check_form(form_id, callback) {
+	var form = document.getElementById(form_id);
+	if ( typeof (tinyMCE) != 'undefined') {
+		tinyMCE.triggerSave(true);
+	}
 
+	var check_flag = true;
+	for (var i = 0; i < form.elements.length; i++) {
+		var el = form.elements[i];
+		if ("INPUT" == el.tagName || "TEXTAREA" == el.tagName) {
+			var check = get_attr(el, 'check');
+			if (check != null) {
+				if (!validate(el.value, check)) {
+					var ret = {};
+					ret.status = 0;
+					ret.info = get_attr(el, 'info');
+					ret.dom = el;
+					callback(ret);
+					return false;
+				}
+			}
+		}
+		if ("SELECT" == el.tagName) {
+			var check = get_attr(el, 'check');
+			if (check != null) {
+				if (el.selectedIndex == 0 && el.value == '') {
+					var ret = {};
+					ret.status = 0;
+					ret.info = get_attr(el, 'info');
+					ret.dom = el;
+					callback(ret);
+					return false;
+				}
+			}
+		}
+	};
+
+	last_submit = get_attr(form, 'last_submit');
+	var now = new Date().getTime();
+	if (last_submit == null) {
+		set_attr(form, 'last_submit', now);
+	} else {
+		if (now - last_submit > 5000) {
+			set_attr(form, 'last_submit', now);
+			last_submit = get_attr(form, 'last_submit');
+			console.log(last_submit);
+		} else {
+			return false;
+		}
+	};
+	var ret = {};
+	ret.status = 1;
+	ret.info = '通过验证';
+	callback(ret);
+}
+
+/* 验证数据类型*/
+function validate(data, datatype) {
+	if (datatype.indexOf("|")) {
+		tmp = datatype.split("|");
+		datatype = tmp[0];
+		data2 = tmp[1];
+	}
+	switch (datatype) {
+		case "required":
+			if (data == "") {
+				return false;
+			} else {
+				return true;
+			}
+			break;
+		case "email":
+			var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+			return reg.test(data);
+			break;
+		case "number":
+			var reg = /^[0-9]+\.{0,1}[0-9]{0,3}$/;
+			return reg.test(data);
+			break;
+		case "html":
+			var reg = /<...>/;
+			return reg.test(data);
+			break;
+		case "eqt":
+			data2 = $("#" + data2).val();
+			return data >= data2;
+			break;
+	}
+}
+function set_cookie(key, value, exp, path, domain, secure) {
+	key = cookie_prefix + key;
+	path = "/";
+	var cookie_string = key + "=" + escape(value);
+	if (exp) {
+		cookie_string += "; expires=" + exp.toGMTString();
+	}
+	if (path)
+		cookie_string += "; path=" + escape(path);
+	if (domain)
+		cookie_string += "; domain=" + escape(domain);
+	if (secure)
+		cookie_string += "; secure";
+	document.cookie = cookie_string;
+}
+
+/*读取 cookie*/
+function get_cookie(cookie_name) {
+	cookie_name = cookie_prefix + cookie_name;
+	var results = document.cookie.match('(^|;) ?' + cookie_name + '=([^;]*)(;|$)');
+	if (results)
+		return (unescape(results[2]));
+	else
+		return null;
+}
+
+/*设置要返回的URL*/
+function set_return_url(url) {
+	var return_url = get_cookie('return_url');
+	if (return_url == null || url === null) {
+		arr_return_url = [];
+	} else {
+		arr_return_url = return_url.split('$');
+	}
+	if (url == undefined || url == null) {
+		url = document.location.pathname + location.search;
+	}
+	if (arr_return_url.slice(-1) != url) {
+		arr_return_url.push(url);
+	}
+	console.log(arr_return_url);
+	set_cookie("return_url", arr_return_url.join('$'));
+}
+
+
+/*返回到上一页*/
+function go_return_url() {
+	var return_url = get_cookie('return_url');
+	if (return_url == null) {
+		return false;
+	} else {
+		arr_return_url = return_url.split('$');
+	}
+
+	go_url = arr_return_url.pop();
+	if (go_url == document.location.pathname + location.search) {
+		go_url = arr_return_url.pop();
+	}
+	console.log(go_url);
+	set_cookie("return_url", arr_return_url.join('$'));
+	if (go_url != undefined) {
+		location.href = go_url;
+	}
+	return false;
+}
+
+/* 删除左右两端的空格*/
+function trim(str) {
+	return str.replace(/(^\s*)|(\s*$)/g, "");
+}

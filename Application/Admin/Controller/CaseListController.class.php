@@ -411,9 +411,7 @@ class CaseListController extends AdminController
      */
     public function add()
     {   
-        $feeType = $this->feeStandardModel->getFeeType();
-        $this->assign('meta_title', '费用标准');
-        $this->assign('feeType', $feeType);
+        
         $this->display();
     }
     

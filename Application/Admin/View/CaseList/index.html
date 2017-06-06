@@ -57,7 +57,7 @@
             <a class="btn btn-danger" href="{:U('CaseList/index')}">清空</a>
         </form>
         <div class="table-actions">
-            <button class="btn btn-primary" type="submit" data-action="{:U('CaseList/caseAdd')}">新增案件</button>
+            <a class="btn btn-primary js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
         </div>
         <table class="table table-hover table-bordered">
             <thead>
@@ -97,5 +97,6 @@
         {$_Page}
     </div>
 <script src="__STATIC__/common.js"></script>
+
 </body>
 </html>
