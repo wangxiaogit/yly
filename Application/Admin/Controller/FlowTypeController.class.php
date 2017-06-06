@@ -5,11 +5,13 @@ use Common\Controller\AdminController;
 class FlowTypeController extends AdminController
 {
     protected $flowTypeModel;
+    protected $caseTypeModel;
 
     public function _initialize() {
         parent::_initialize();
         
         $this->flowTypeModel = D('Common/WorkflowType');
+        $this->caseTypeModel = M('TypeList');
     }
     
     /**
@@ -17,7 +19,9 @@ class FlowTypeController extends AdminController
      */
     public function index() 
     {
-        $flowType_lists = $this->lists($this->flowTypeModel, array('status'=>1), 'id desc');
+        $model = $this->flowTypeModel->alias('a')->join("type_list b on a.case_type_id = b.id");
+        
+        $flowType_lists = $this->lists($model, array('a.status'=>1), 'case_type_id asc', "a.*,b.type_name case_type_name");
         
         $this->assign("flowType_lists", $flowType_lists);
         $this->assign("meta-title", "流程类型列表");
@@ -29,6 +33,9 @@ class FlowTypeController extends AdminController
      */
     public function add ()
     {
+        $caseType_lists = $this->caseTypeModel->where(array("isvalid"=>1))->select();
+        
+        $this->assign("caseType_lists", $caseType_lists);
         $this->assign("meta-title", "流程类型添加");
         $this->display();
     }  
@@ -60,6 +67,9 @@ class FlowTypeController extends AdminController
         
         $flowType = $this->flowTypeModel->find($id);
         
+        $caseType_lists = $this->caseTypeModel->where(array("isvalid"=>1))->select();
+        
+        $this->assign("caseType_lists", $caseType_lists);
         $this->assign("flowType", $flowType);
         $this->assign("meta-title", "流程类型编辑");
         $this->display();
@@ -83,7 +93,6 @@ class FlowTypeController extends AdminController
         } 
     }  
     
-    
     /**
      * 删除
      */
@@ -91,10 +100,16 @@ class FlowTypeController extends AdminController
     {
         $id = I('get.id', 0, 'intval');
         
+        $flowVersions = D('Common/WorkflowVersion')->where(array("workflow_type_id"=>$id))->count();
+        if ($flowVersions) {
+            $this->error("该流程类型下还有流程版本！暂不能删除");
+        } 
+        
         if ($this->flowTypeModel->where(array("id"=>$id))->setField("status", 2)) {
             $this->success("删除成功！");
         } else {
             $this->error("删除失败！");
         } 
     } 
+   
 }

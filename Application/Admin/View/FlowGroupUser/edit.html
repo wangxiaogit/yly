@@ -1,0 +1,44 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FlowGroupUser/index',array('group_id'=>$group_id))}">流程组人员管理</a></li>
+            <li class="active"><a href="{:U('FlowGroupUser/edit',array('id'=>$flowGroupUser['id'],'group_id'=>$group_id))}">人员添加</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowGroupUser/do_edit')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>流程组</label>
+                    <div class="controls">
+                        <select name="group_id" disabled>
+                            <foreach name="group_lists" item="list">
+                                <php>$flowGroup_selected=($flowGroupUser['group_id']==$list['group_id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$flowGroup_selected}>{$list.name}</option>
+                            </foreach>    
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>人员</label>
+                    <div class="controls">
+                        <select name="user_id">
+                            <foreach name="user_lists" item="list">
+                                <php>$user_selected=($flowGroupUser['user_id']==$list['user_id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$user_selected}>{$list.true_name}</option>
+                            </foreach>    
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
+                <a class="btn" href="{:U('FlowGroupUser/index',array('group_id'=>$group_id))}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('CaseTag/index')}">{$meta_title}</a></li>
+            <li><a href="{:U('CaseTag/add')}">增加</a></li>
+        </ul>
+        
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">编号</th>
+                    <th>标签名称</th>
+                    <th>标签颜色</th>
+                    <th>标签展示</th>
+                    <th>状态</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="tags" item="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.tag_name}</td>
+                    <td>{$colorType[$vo['tag_color']]}</td>
+                    <td><span class="btn_dingzhi {$vo['tag_color']}">{$vo.tag_show}</span></td>
+                    <td>{$vo['isvalid']?'有效':'失效'}</td>
+                    <td>
+                            <a href='{:U("CaseTag/edit",array("id"=>$vo["id"]))}'>编辑</a>
+                        </if>
+                    </td>
+                </tr>
+                </foreach>
+            </tbody>
+        </table>
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('CaseTag/index')}">标签列表</a></li>
+            <li><a href="{:U('CaseTag/add')}">新增</a></li>
+            <li><a href="{:U('CaseTag/edit', array('id'=>$id))}">编辑</a></li>
+        </ul>
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('CaseTag/do_edit')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">标签名称</label>
+                    <div class="controls">
+                        <input type="text" name="tag_name" value="{$tagInfo['tag_name']}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">标签颜色</label>
+                    <div class="controls">
+                        <select name='tag_color'>
+                            <foreach name='colorType' item='vo' key='k'>
+                                <option value='{$k}'<if condition="$k eq $tagInfo['tag_color']">selected</if>>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">标签展示字样</label>
+                    <div class="controls">
+                        <input type="text" name="fee" value="{$tagInfo['tag_show']}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否有效</label>
+                    <div class="controls">
+                        <label class="radio inline" for="isvalid_true"><input type="radio" name="isvalid" value="1"  id="isvalid_true"  <if condition="1 eq $tagInfo['isvalid']">checked</if>/>有效</label>
+                        <label class="radio inline" for="isvalid_false"><input type="radio" name="isvalid" value="0" id="isvalid_false" <if condition="0 eq $tagInfo['isvalid']">checked</if>>无效</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$id}" />
+                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                <a class="btn" href="{:U('CaseTag/index')}">后退</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

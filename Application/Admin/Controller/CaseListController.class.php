@@ -435,39 +435,5 @@ class CaseListController extends AdminController
     }
     
     
-    /**
-     * 编辑费用
-     */
-    public function edit($id)
-    {
-        $feeInfo = $this->feeStandardModel->find($id);
-        $feeType = $this->feeStandardModel->getFeeType();
-        
-        if (false === $feeInfo) {
-            $this->error('未查询到收费项目');
-        }
-        $this->assign('id', $id);
-        $this->assign('feeInfo', $feeInfo);
-        $this->assign('feeType', $feeType);
-        $this->assign('meta_title', '修改费用');
-        $this->display();
-    }        
     
-    /**
-     * 提交编辑
-     */
-    public function do_edit()
-    {
-        if (IS_POST) {
-            if ($this->feeStandardModel->create()) {
-                if ($this->feeStandardModel->save() !== false) {
-                    $this->success('修改成功！', U('FeeStandard/index'));
-                } else {
-                    $this->error('修改失败！');
-                }
-            } else {
-                $this->error($this->feeStandardModel->getError());
-            }
-        } 
-    }
 }

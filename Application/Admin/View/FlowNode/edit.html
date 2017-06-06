@@ -1,0 +1,35 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FlowNode/index')}">流程节点管理</a></li>
+            <li class="active"><a href="{:U('FlowNode/edit', array('id'=>$flowNode['id']))}">节点编辑</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowNode/do_edit')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>节点名称</label>
+                    <div class="controls">
+                        <input type="text" name="name" value="{$flowNode.name}" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"> 描述</label>
+                    <div class="controls">
+                        <textarea name="description">{$flowNode.description}</textarea>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$flowNode.id}">
+                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
+                <a class="btn" href="{:U('FlowNode/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

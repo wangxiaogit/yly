@@ -1,2 +1,30 @@
+.btn_dingzhi {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0 5px;
+    text-align: center;
+}
 
+ .btn_dingzhi {
+    border: 0 none;
+    border-radius: 2px;
+    color: #fff;
+    cursor: auto;
+    display: inline-block;
+    height: 18px;
+    line-height: 18px;
+    margin-right: 6px;
+    padding: 0 4px;
+}
+ .gray1 {background: #96ca73 none repeat scroll 0 0;}
+.gray1 {background: #96ca73 none repeat scroll 0 0;}
+.red1 { background: #FF1493 none repeat scroll 0 0;}
+.red2 { background: #E3170D none repeat scroll 0 0;}
+.blue { background: #00FF00 none repeat scroll 0 0;}
+.blue2 { background: #33A1C9 none repeat scroll 0 0;}
+.purple { background: #A020F0 none repeat scroll 0 0;}
+.orange1 {background: #f4a766 none repeat scroll 0 0;}
+.orange2 {background: #FA8072 none repeat scroll 0 0;}
 

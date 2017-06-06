@@ -57,7 +57,9 @@
             <a class="btn btn-danger" href="{:U('CaseList/index')}">清空</a>
         </form>
         <div class="table-actions">
-            <a class="btn btn-primary js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
+            <if condition="$tab_type eq 'needToDo'">
+                <a class="btn btn-primary js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
+            </if>
         </div>
         <table class="table table-hover table-bordered">
             <thead>

@@ -19,4 +19,22 @@ function _get_level ($id, $array, $i = 0)
 function get_organize_type ($org_id)
 {
     return D('Common/Organize')->where(array('id'=>$org_id))->getField('type');
+}
+
+/**
+ * 获取对接用户
+ * 
+ * @param int $handle_type 类型 1 个人 2 组 3 其他
+ * @param int $handle_id 
+ */
+function get_handle_name ($handle_type, $handle_id)
+{
+    if ($handle_type == 1) {
+        return D('User')->where(array("id"=>$handle_id))->getField("true_name");
+    }
+    else if($handle_type ==2) {
+        return D("WorkflowGroup")->where(array("id"=>$handle_id))->getField("name");
+    } else {
+        return '';
+    }
 }        

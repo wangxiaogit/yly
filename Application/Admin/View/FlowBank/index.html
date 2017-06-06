@@ -1,0 +1,92 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('FlowBank/index')}">银行对接管理</a></li>
+            <li><a href="{:U('FlowBank/add')}">对接添加</a></li>
+        </ul>
+        
+        <form class="well form-search" method="post" action="{:U('FlowBank/index')}">
+            总行：
+            <select name="org_id" id="org_id">
+                <option value="0">请选择总行</option>
+                <foreach name="organize_lists" item="list">
+                    <option value="{$list.id}">{$list.name}</option>
+                </foreach>
+            </select>
+            
+            支行：
+            <select name="dept_id" id="dept_id">
+                <option value="0">请选择支行</option>
+            </select>
+            
+            <input type="submit" class="btn btn-primary" value="搜索" />
+            <a href="{:U('FlowBank/index')}" class="btn btn-danger">清空</a>
+        </form>
+            
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th width="200">总行</th>
+                    <th>支行</th>     
+                    <th>对接类型</th>     
+                    <th>对接角色</th>     
+                    <th width="180">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="flowGroup_lists" item="list">
+                    <tr>
+                        <td>{$list.id}</td>
+                        <td>{$list.organize_name}</td>
+                        <td>{$list.dept_name}</td>
+                        <td>
+                            <php>$handle_type_text=($list['handle_type']==1)?"个人":"流程组";</php>
+                            {$handle_type_text}
+                        </td>
+                        <td>{$handle_name}</td>
+                        <td>
+                            <a href="{:U('FlowBank/edit',array('id'=>$list['id']))}">编辑</a> 
+                            |
+                            <a class="js-ajax-delete" href="{:U('FlowBank/del',array('id'=>$list['id']))}">删除</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function(){
+        $("#org_id").bind('change', function() {
+            var _this = $(this),
+                organize_id = _this.val(),
+                html = "<option value='0'>请选择支行</option>";
+            
+            if (organize_id > 0) {
+                $.getJSON("{:U('Dept/ajax_get_dept')}", {org_id: organize_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#dept_id").html(html);
+                }   
+            } else {
+                $("#dept_id option:gt(0)").remove();
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
