@@ -46,7 +46,7 @@
                             <php>$handle_type_text=($list['handle_type']==1)?"个人":"流程组";</php>
                             {$handle_type_text}
                         </td>
-                        <td>{$handle_name}</td>
+                        <td>{:get_handle_name($list['handle_type'], $list['handle_id'])}</td>
                         <td>
                             <a href="{:U('FlowBank/edit',array('id'=>$list['id']))}">编辑</a> 
                             |

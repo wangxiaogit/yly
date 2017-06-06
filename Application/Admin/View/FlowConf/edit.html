@@ -1,0 +1,164 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li><a href="{:U('FlowConf/index')}">流程配置管理</a></li>
+            <li class="active"><a href="{:U('FlowConf/edit', array('id'=>$flowConf['id']))}">配置编辑</a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowConf/do_add')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>流程类型</label>
+                    <div class="controls">
+                        <select name="workflow_type_id" id="workflow_type_id">
+                            <option value="0">请选择流程类型</option>
+                            <foreach name="flowType_lists" item="list">
+                                <php>$flowType_selected=($flowConf['workflow_type_id']==$list['id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$flowType_selected}>{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>流程版本</label>
+                    <div class="controls">
+                        <select name="workflow_version_id" id="workflow_version_id">
+                            <option value="0">请选择流程版本</option>
+                            <foreach name="flowVersion_lists" item="list">
+                                <php>$flowVersion_selected=($flowConf['workflow_version_id']==$list['id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$flowVersion_selected}>{$list.version}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>流程节点</label>
+                    <div class="controls">
+                        <select name="workflow_node_id" id="workflow_node_id">
+                            <option value="0">请选择流程节点</option>
+                            <foreach name="flowNode_lists" item="list">
+                                <php>$flowNode_selected=($list['id']==$flowConf['workflow_node_id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$flowNode_selected}>{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>步骤</label>
+                    <div class="controls">
+                        <input type="text" name="step" value="{$flowConf.step}" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>对接类型</label>
+                    <div class="controls">
+                        <select name="handle_type" id="handle_type">
+                            <option value="0">请选择对接类型</option>
+                            <php>$handle_type_personal=($flowConf['id']==1)?"selected":"";</php>
+                            <option value="1" {$handle_type_personal}>个人</option>
+                            <php>$handle_type_group=($flowConf['id']==2)?"selected":"";</php>
+                            <option value="2" {$handle_type_group}>流程组</option>
+                            <php>$handle_type_other=($flowConf['id']==3)?"selected":"";</php>
+                            <option value="3" {$handle_type_other}>其它</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">对接角色</label>
+                    <div class="controls">
+                        <select name="handle_id" id="handle_id">
+                            <option value="0">请选择对接角色</option>
+                            <foreach name="handle_lists" item="list">
+                                <php>$handle_selected=($list['id']==$flowConf['handle_id'])?"selected":"";</php>
+                                <option value="{$list.id}" {$handle_selected}>{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">SQL</label>
+                    <div class="controls">
+                        <textarea name="handle_sql" style="width: 300px;">{$flowConf.handle_sql}</textarea>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input type="hidden" name="id" value="{$flowConf.id}">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('FlowConf/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function(){
+        
+        $("#workflow_type_id").bind('change', function() {
+            var _this = $(this),
+                type_id = _this.val(),
+                html = "<option value='0'>请选择流程版本</option>";
+            
+            if (type_id > 0) {
+                $.getJSON("{:U('FlowVersion/ajax_get_version')}", {type_id: type_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.version+"</option>";
+                        });
+                    }
+                    
+                    $("#workflow_version_id").html(html);
+                }   
+            } else {
+                $("#workflow_version_id option:gt(0)").remove();
+            }
+        });
+        
+        $("#handle_type").bind('change', function() {
+            var apiUrl,
+                _this = $(this),
+                handle_type = _this.val(),
+                html = "<option value='0'>请选择角色</option>";
+                
+            if (handle_type == 1)  {
+                apiUrl = "{:U('User/ajax_get_user')}";
+            } else if (handle_type == 2) {
+                apiUrl = "{:U('FlowGroup/ajax_get_group')}";
+            } else {
+                apiUrl = '';
+            }
+            
+            if (apiUrl) {
+                $.getJSON(apiUrl, success);
+                return false;
+                
+                function success (obJect) 
+                {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#handle_id").html(html);
+                }
+            } else {
+                $("#handle_id option:gt(0)").remove();
+            }
+        });
+        
+    });
+</script>
+</body>
+</html>

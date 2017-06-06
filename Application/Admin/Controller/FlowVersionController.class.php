@@ -118,8 +118,8 @@ class FlowVersionController extends AdminController
             $this->error("参数错误！");
         }
         
-        $flowVersion_lists = $this->deptModel->where(array("workflow_type_id"=> $type_id, 'status'=>1))->select();
+        $flowVersion_lists = $this->flowVersionModel->where(array("workflow_type_id"=> $type_id, 'status'=>1))->select();
         
-        $this->ajaxReturn($flowVersion_lists);
+        $this->ajaxReturn(['data'=>$flowVersion_lists, 'status'=>1]);
     }
 }

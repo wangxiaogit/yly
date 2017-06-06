@@ -23,9 +23,16 @@ class FlowConfController extends AdminController
      */
     public function index() 
     {
-        $flowType_id = I('post.type_id', 0, 'intval');
+        $flowType_id = I('post.workflow_type_id', 0, 'intval');
         if ($flowType_id) {
             $where['a.workflow_type_id'] = $flowType_id;
+            
+            $this->assign("flowVersion_lists", $this->flowVersionModel->where(array('status'=>1, 'workflow_type_id'=>$flowType_id))->select());
+        }
+        
+        $flowVersion_id = I('post.workflow_version_id', 0, 'intval');
+        if ($flowVersion_id) {
+            $where['a.workflow_version_id'] = $flowVersion_id;
         }
         
         $where['a.status'] = 1;    
@@ -34,13 +41,13 @@ class FlowConfController extends AdminController
                       ->alias('a')
                       ->join('workflow_type b on a.workflow_type_id = b.id')
                       ->join('workflow_version c on a.workflow_version_id = c.id')
-                      ->join('workflow_node_id d on a.workflow_node_id = d.id');
+                      ->join('workflow_node d on a.workflow_node_id = d.id');
         
-        $flowConf_lists = $this->lists($model, $where, "a.*, b.name workflow_type_name, b.version workflow_version, c.name workflow_node_name");
+        $flowConf_lists = $this->lists($model, $where, "a.workflow_type_id desc, a.workflow_version_id desc, a.step asc", "a.*, b.name workflow_type_name, c.version workflow_version, d.name workflow_node_name");
         
         $this->assign("flowConf_lists", $flowConf_lists);
         $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
-        $this->assign("search", I('request.'));
+        $this->assign("search", I('post.'));
         $this->assign("meta-title", "流程配置列表");
         $this->display();
     }
@@ -51,6 +58,7 @@ class FlowConfController extends AdminController
     public function add ()
     {
         $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
+        $this->assign("flowNode_lists", $this->flowNodeModel->where(array("status"=>1))->select());
         $this->assign("meta-title", "流程配置添加");
         $this->display();
     }  
@@ -82,7 +90,20 @@ class FlowConfController extends AdminController
         
         $flowConf = $this->flowConfModel->find($id);
         
+        if ($flowConf['handle_type'] == 1) {
+            $handle_lists = D('Common/User')->field("id, true_name as name")->where(array("org_id"=>1, 'status'=>1))->select();  
+        }
+        elseif ($flowConf['handle_type'] == 2) {
+            $handle_lists = D('Common/WorkflowGroup')->field("id, name")->where(array('status'=>1))->select();
+        } 
+        else {
+            $handle_lists = array();
+        }  
+        
         $this->assign("flowConf", $flowConf);
+        $this->assign("handle_lists", $handle_lists);
+        $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
+        $this->assign("flowVersion_lists", $this->flowVersionModel->where(array("status"=>1, "workflow_type_id"=>$flowConf['workflow_type_id']))->select());
         $this->assign("meta-title", "流程配置编辑");
         $this->display();
     }   
