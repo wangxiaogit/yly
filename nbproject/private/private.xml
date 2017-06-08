@@ -2,6 +2,18 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/View/FlowConf/edit.html</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/UserController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/FlowVersionController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/FlowConfController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/View/FlowConf/add.html</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Common/function.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/FlowGroupController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/View/FlowGroup/add.html</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/GroupController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Common/Model/WorkflowConfModel.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/View/FlowConf/index.html</file>
+        </group>
     </open-files>
 </project-private>
