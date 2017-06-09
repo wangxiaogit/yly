@@ -11,11 +11,12 @@
                 <div class="control-group">
                     <label class="control-label"><span class="form-required">*</span>流程组</label>
                     <div class="controls">
-                        <select name="group_id" disabled>
-                            <foreach name="group_lists" item="list">
-                                <php>$flowGroup_selected=($flowGroupUser['group_id']==$list['group_id'])?"selected":"";</php>
-                                <option value="{$list.id}" {$flowGroup_selected}>{$list.name}</option>
-                            </foreach>    
+                        <select name="group_id">
+                           <foreach name="group_lists" item="list">
+                                <if condition="$group_id eq $list['id']">
+                                    <option value="{$list.id}" selected>{$list.name}</option>
+                                </if>    
+                            </foreach>     
                         </select>
                     </div>
                 </div>
@@ -34,7 +35,7 @@
             </fieldset>
             
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
+                <button type="submit" class="btn btn-primary js-ajax-submit" data-isdialog="1">编辑</button>
                 <a class="btn" href="{:U('FlowGroupUser/index',array('group_id'=>$group_id))}">返回</a>
             </div>
         </form>

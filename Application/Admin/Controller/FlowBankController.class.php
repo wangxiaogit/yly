@@ -22,21 +22,17 @@ class FlowBankController extends AdminController
     public function index() 
     {
         //总行
-        $organize_id = I('request.org_id', 0, 'intval');
+        $organize_id = I('post.org_id', 0, 'intval');
         if ($organize_id) {
-            $where['a.org_id'] = $organize_id;
+            $where['a.organize_id'] = $organize_id;
+            
+            $this->assign('dept_lists', $this->deptModel->where(array("org_id"=>$organize_id, "status"=>1))->select());
         }
         
         //支行
-        $dept_id = I('request.dept_id', 0, 'intval');
+        $dept_id = I('post.dept_id', 0, 'intval');
         if ($dept_id) {
             $where['a.dept_id'] = $dept_id;
-        }
-        
-        //用户
-        $user_id = I('request.user_id', 0, 'intval');
-        if ($user_id) {
-            $where['a.user_id'] = $user_id;
         }
         
         $where['a.status'] = 1;
@@ -49,6 +45,7 @@ class FlowBankController extends AdminController
         
         $this->assign("flowBank_lists", $flowBank_lists);
         $this->assign("organize_lists", $organize_lists);
+        $this->assign("search", I('post.'));
         $this->assign("meta-title", "流程银行列表");
         $this->display();
     }
@@ -97,9 +94,12 @@ class FlowBankController extends AdminController
         $dept_lists = $this->deptModel->where(array("org_id"=>$flowBank['organize_id'], "status"=>1))->select();
         
         if ($flowBank['handle_type'] == 1) {
-            $hanle_lists = $this->userModel->field("id, true_name as name")->where(array("org_id"=>1, 'status'=>1))->select(); 
+            
+            $hanle_lists = D('Common/User')->field("id, true_name as name")->where(array("org_id"=>1, 'status'=>1))->select(); 
+            
         } elseif ($flowBank['handle_type'] == 2) {
-            $hanle_lists = $this->flowGroupModel->field("id, name")->where(array('status'=>1))->select();;
+            
+            $hanle_lists = D('Common/WorkflowGroup')->field("id, name")->where(array('status'=>1))->select();;
         }
         
         $this->assign("organize_lists", $organize_lists);

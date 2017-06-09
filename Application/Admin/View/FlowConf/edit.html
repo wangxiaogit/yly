@@ -6,7 +6,7 @@
             <li><a href="{:U('FlowConf/index')}">流程配置管理</a></li>
             <li class="active"><a href="{:U('FlowConf/edit', array('id'=>$flowConf['id']))}">配置编辑</a></li>
         </ul>
-        <form class="form-horizontal js-ajax-form" action="{:U('FlowConf/do_add')}" method="post">
+        <form class="form-horizontal js-ajax-form" action="{:U('FlowConf/do_edit')}" method="post">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label"><span class="form-required">*</span>流程类型</label>
@@ -92,7 +92,7 @@
             
             <div class="form-actions">
                 <input type="hidden" name="id" value="{$flowConf.id}">
-                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
                 <a class="btn" href="{:U('FlowConf/index')}">返回</a>
             </div>
         </form>

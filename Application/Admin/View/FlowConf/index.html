@@ -34,14 +34,14 @@
             <thead>
                 <tr>
                     <th width="50">ID</th>
-                    <th width="150">流程类型</th>
+                    <th width="120">流程类型</th>
                     <th width="100">流程版本</th>     
                     <th width="80">流程节点</th>     
                     <th width="60">步骤</th>     
                     <th width="60">对接类型</th>     
                     <th width="100">对接角色</th>     
                     <th>SQL</th>     
-                    <th width="180">操作</th>
+                    <th width="150">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,7 +53,7 @@
                         <td>{$list.workflow_node_name}</td>
                         <td>{$list.step}</td>
                         <td>
-                            <php>$handle_type_text=($list['handle_type']==1)?"个人":(($list['hanle_type']==2)?"流程组":"其它");</php>
+                            <php>$handle_type_text=(($list['handle_type']==1)?"个人":(($list['handle_type']==2)?"流程组":"其它"));</php>
                             {$handle_type_text}
                         </td>
                         <td>{:get_handle_name($list['handle_type'], $list['handle_id'])}</td>

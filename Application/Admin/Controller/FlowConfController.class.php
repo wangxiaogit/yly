@@ -39,9 +39,9 @@ class FlowConfController extends AdminController
         
         $model = $this->flowConfModel
                       ->alias('a')
-                      ->join('workflow_type b on a.workflow_type_id = b.id')
-                      ->join('workflow_version c on a.workflow_version_id = c.id')
-                      ->join('workflow_node d on a.workflow_node_id = d.id');
+                      ->join('workflow_type b on a.workflow_type_id = b.id', 'LEFT')
+                      ->join('workflow_version c on a.workflow_version_id = c.id', 'LEFT')
+                      ->join('workflow_node d on a.workflow_node_id = d.id', 'LEFT');
         
         $flowConf_lists = $this->lists($model, $where, "a.workflow_type_id desc, a.workflow_version_id desc, a.step asc", "a.*, b.name workflow_type_name, c.version workflow_version, d.name workflow_node_name");
         
@@ -104,6 +104,7 @@ class FlowConfController extends AdminController
         $this->assign("handle_lists", $handle_lists);
         $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
         $this->assign("flowVersion_lists", $this->flowVersionModel->where(array("status"=>1, "workflow_type_id"=>$flowConf['workflow_type_id']))->select());
+        $this->assign("flowNode_lists", $this->flowNodeModel->where(array("status"=>1))->select());
         $this->assign("meta-title", "流程配置编辑");
         $this->display();
     }   
@@ -116,7 +117,7 @@ class FlowConfController extends AdminController
         if (IS_POST) {
             if ($this->flowConfModel->create()) {
                 if (false !== $this->flowConfModel->save()) {
-                    $this->success('编辑成功！');
+                    $this->success('编辑成功！', U('FlowConf/index'));
                 } else {
                     $this->error('编辑失败！');
                 }

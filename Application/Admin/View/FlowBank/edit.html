@@ -11,10 +11,10 @@
                 <div class="control-group">
                     <label class="control-label"><span class="form-required">*</span>总行</label>
                     <div class="controls">
-                        <select name="org_id">
+                        <select name="organize_id">
                             <option value="0">请选择总行</option>
                             <foreach name="organize_lists" item="list">
-                                <php>$organize_selected=($list['id']==$flowBank['org_id'])?"selected":"";</php>
+                                <php>$organize_selected=($list['id']==$flowBank['organize_id'])?"selected":"";</php>
                                 <option value="{$list.id}" {$organize_selected}>{$list.name}</option>
                             </foreach>
                         </select>
@@ -62,8 +62,8 @@
             </fieldset>
             
             <div class="form-actions">
-                <input type="text" name="id" value="{$flowBank.id}" />
-                <button type="submit" class="btn btn-primary js-ajax-submit">编辑button>
+                <input type="hidden" name="id" value="{$flowBank.id}" />
+                <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
                 <a class="btn" href="{:U('FlowBank/index')}">返回</a>
             </div>
         </form>
@@ -100,7 +100,7 @@
             var apiUrl,
                 _this = $(this),
                 handle_type = _this.val(),
-                html = "<option value='0'>请选择支行</option>";
+                html = "<option value='0'>请选择角色</option>";
                 
             if (handle_type == 1)  {
                 apiUrl = "{:U('User/ajax_get_user')}";
