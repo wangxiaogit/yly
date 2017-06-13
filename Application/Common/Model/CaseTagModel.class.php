@@ -40,4 +40,10 @@ class CaseTagModel extends AdminModel
         array('tag_name', 'require', '标签名称不能为空！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ),
         array('tag_show', 'require', '标签展示字样不能为空！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ) 
     );
+    
+    function  getCaseTag()
+    {
+        $list = $this->where('isvaild=1')->getField('id,tag_name');
+        return $list;
+    }
 }

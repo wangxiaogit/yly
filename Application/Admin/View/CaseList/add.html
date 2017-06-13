@@ -1,42 +1,74 @@
-
 <include file="Public/header" />
+<link rel="stylesheet" href="__STATIC__/select2/css/select2.min.css">
 </head>
 <body>
     <div class="wrap">
-        <form  class="form-horizonta" method='post' id="form_data">
+        <form  class="form-horizontal" method='post' id="form_data">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label">父级部门</label>
+                    <label class="control-label"><span class="form-required">*</span> 中介公司名称</label>
                     <div class="controls">
-                        <select name="parentid">
-                            <option value="0">作为一级部门</option>
-                            {$select_categorys}
-                        </select>
+                        <select  class="js-example-basic-multiple form-control" name="broker" id="broker">
+                        </select>   
+                        <input type='hidden' name='broker_dept_name' id="broker_dept_name">
+                        <input type='hidden' name='broker_dept_id' id="broker_dept_id">
+                        <input type='hidden' name='broker_org_id' id="broker_org_id">
+                        <input type='hidden' name='ajax' value="1" id="ajax">
                     </div>
                 </div>
-                
-                <div class="control-group">
-                    <label class="control-label"><span class="form-required">*</span> 名称</label>
+                <div class="control-group">    
+                    <label class="control-label"> 经济人姓名</label>
                     <div class="controls">
-                        <input type="text" name="name" >
+                        <input type="text" name="broker_name" >
                     </div>
                 </div>
-               
-                <div class="control-group">
-                    <label class="control-label">排序</label>
+                <div class="control-group">    
+                    <label class="control-label"> 经济人电话号码</label>
                     <div class="controls">
-                        <input type="text" name="sort">
+                        <input type="text" name="broker_phone" check="number" info="电话号码格式不正确" >
                     </div>
                 </div>
-            </fieldset>
-            
+                <div class="control-group">    
+                    <label class="control-label"> 案例业务类型</label>
+                    <div class="controls">
+                        <input type="checkbox" name="case_type[]" value='1' disabled=“disabled” checked>按揭业务&nbsp;&nbsp;
+                        <input type="checkbox" name="case_type[]" value='2' >赎楼业务&nbsp;&nbsp;
+                        <input type="checkbox" name="case_type[]" value='3' >提放业务&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="control-group">    
+                    <label class="control-label"> 案例标签</label>
+                    <div class="controls">
+                        <foreach name='case_tag' key='k' item='name'>
+                            <input type="checkbox" name="case_tag[]" value='{$k}'>{$name}&nbsp;&nbsp;
+                        </foreach>
+                    </div>
+                </div>
+            </fieldset>    
             <div class="form-actions">
-                <input type="hidden" name="org_id" value="{$org_id}">
-                <button type="submit" class="btn btn-primary js-ajax-submit" data-isdialog="1">添加</button>
+                <a type="button" class="btn btn-primary ajax-submit" isdialog="1">添加</a>
                 <a class="btn" onclick="myclose()">取消</a>
             </div>
         </form>
     </div>
 <script src="__STATIC__/common.js"></script>
+<script src="__STATIC__/select2/js/select2.min.js"></script>
+<script type="text/javascript">
+    var dept_list = '{$dept_list}';
+    var data = JSON.parse(dept_list);
+$(".js-example-basic-multiple").select2({
+    data: data,
+    placeholder:'请选择'    
+    });
+//提交    
+$(".ajax-submit").click(function(){
+    var res=$("#broker").select2("data")[0] ;
+    $("#broker_dept_name").val(trim(res.text));
+    var broker_info = get_dept_org_id(trim(res.id));
+    $("#broker_dept_id").val(trim(broker_info.dept));
+    $("#broker_org_id").val(trim(broker_info.org));
+    send_form("form_data","{:U('do_add')}");
+});
+</script>
 </body>
 </html>

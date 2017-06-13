@@ -1,46 +1,78 @@
 <include file="Public/header" />
+<link rel="stylesheet" href="__STATIC__/select2/css/select2.min.css">
 </head>
 <body>
     <div class="wrap">
-        <ul class="nav nav-tabs">
-            <li><a href="{:U('Dept/index', array('org_id'=>$org_id))}">部门管理</a></li>
-            <li class="active"><a href="{:U('Dept/edit', array('org_id'=>$org_id))}">部门编辑</a></li>
-        </ul>
-        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Dept/do_edit', array('org_id'=>$org_id))}">
+        <form  class="form-horizontal" method='post' id="form_data">
             <fieldset>
                 <div class="control-group">
-                    <label class="control-label">父级部门</label>
+                    <label class="control-label"><span class="form-required">*</span> 中介公司名称</label>
                     <div class="controls">
-                        <select name="parentid">
-                            <option value="0">作为一级部门</option>
-                            {$select_categorys}
+                        <select  class="js-example-basic-multiple form-control" name="broker" id="broker">
                         </select>
+                        <input type='hidden' name='broker_id' id="broker_id" value="{$case_info.broker_id}" >
+                        <input type='hidden' name='broker_dept_name' id="broker_dept_name" value="{$case_info.broker_dept_name}">
+                        <input type='hidden' name='broker_dept_id' id="broker_dept_id" value="{$case_info.broker_dept_id}">
+                        <input type='hidden' name='broker_org_id' id="broker_org_id" value="{$case_info.broker_org_id}">
+                        <input type='hidden' name='ajax' value="1" id="ajax">
                     </div>
                 </div>
-                
-                <div class="control-group">
-                    <label class="control-label"><span class="form-required">*</span> 名称</label>
+                <div class="control-group">    
+                    <label class="control-label"> 经济人姓名</label>
                     <div class="controls">
-                        <input type="text" name="name" value="{$dept.name}">
+                        <input type="text" name="broker_name" value="{$case_info.broker_name}">
                     </div>
                 </div>
-               
-                <div class="control-group">
-                    <label class="control-label">排序</label>
+                <div class="control-group">    
+                    <label class="control-label"> 经济人电话号码</label>
                     <div class="controls">
-                        <input type="text" name="sort" value="{$dept.sort}">
+                        <input type="text" name="broker_phone" check="number" info="电话号码格式不正确" value="{$case_info.broker_phone}">
+                    </div>
+                </div>
+                <div class="control-group">    
+                    <label class="control-label"> 案例业务类型</label>
+                    <div class="controls">
+                        <input type="checkbox" name="case_type[]" value='1' disabled=“disabled” checked>按揭业务&nbsp;&nbsp;
+                        <input type="checkbox" name="case_type[]" value='2' <php>if(in_array('2', $case_type_arr)){echo"checked disabled='disabled'";}</php>>赎楼业务&nbsp;&nbsp;
+                        <input type="checkbox" name="case_type[]" value='3' <php>if(in_array('3', $case_type_arr)){echo"checked disabled='disabled'";}</php>>提放业务&nbsp;&nbsp;
+                    </div>
+                </div>
+                <div class="control-group">    
+                    <label class="control-label"> 案例标签</label>
+                    <div class="controls">
+                        <foreach name='case_tag' key='k' item='name'>
+                            <input type="checkbox" name="case_tag[]" value='{$k}' <php> if(strpos($case_info['case_tag'], strval($k))!== false){echo "checked";}</php>>{$name}&nbsp;&nbsp;
+                        </foreach>
                     </div>
                 </div>
             </fieldset>
-            
             <div class="form-actions">
-                <input type="hidden" name="id" value="{$dept.id}">
-                <button type="submit" class="btn btn-primary js-ajax-submit" data-isdialog="1">编辑</button>
-                <a class="btn" href="{:U('Dept/index', array('org_id'=>$org_id))}">返回</a>
+                <input type='hidden' name='id'  value="{$case_info.id}">
+                <a type="button" class="btn btn-primary ajax-submit">保存</a>
+                <a class="btn" onclick="myclose()">取消</a>
             </div>
         </form>
     </div>
 <script src="__STATIC__/common.js"></script>
+<script src="__STATIC__/select2/js/select2.min.js"></script>
+<script type="text/javascript">
+    var dept_list = '{$dept_list}';
+    var data = JSON.parse(dept_list);
+$(".js-example-basic-multiple").select2({
+    data: data,
+    placeholder:'请选择'    
+    });
+    var broker_id = $('#broker_id').val();
+$(".js-example-basic-multiple").select2('val',broker_id);
+//提交    
+$(".ajax-submit").click(function(){
+    var res=$("#broker").select2("data")[0] ;
+    $("#broker_dept_name").val(trim(res.text));
+    var broker_info = get_dept_org_id(trim(res.id));
+    $("#broker_dept_id").val(trim(broker_info.dept));
+    $("#broker_org_id").val(trim(broker_info.org));
+    send_form("form_data","{:U('do_edit')}");
+});
+</script>
 </body>
 </html>
-

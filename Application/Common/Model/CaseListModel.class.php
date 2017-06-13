@@ -353,24 +353,36 @@ class CaseListModel extends AdminModel
     }
     
     
-    
-    
      //自动验证
     protected $_validate = array(
         //array(验证字段,验证规则,错误提示,验证条件,附加规则,验证时间)
-        array('fee_name', 'require', '费用名称不能为空！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ),
-        array('fee', 'require', '费用金额不能为空！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ),
-        array('fee', 'currency', '费用金额数值填写不正确！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ),
+        array('broker_phone', 'number', '电话号码格式不正确！', AdminModel::VALUE_VALIDATE, 'regex', AdminModel:: MODEL_BOTH ),
+        array('id', 'require', '案件编号不存在，请重试！', AdminModel::MUST_VALIDATE, 'regex', AdminModel:: MODEL_UPDATE ),
     );
     
-    //自动完成
-    protected $_auto = array(
-        //array(完成字段1,完成规则,[完成条件,附加规则])
-        array('org_id', 'return_org_id', AdminModel::MODEL_BOTH, 'callback')
-    );
-    
-    public function return_org_id() {
-        return $_SESSION['org_id']?$_SESSION['org_id']:1;
+    function _before_insert(&$data,$options){
+        if(!empty($data['case_tag'])) {
+            $data['case_tag'] = implode(',', $data['case_tag']);
+        }
+        $data['creat_time'] = time();
+        $data['case_no'] = $this->buildOrderNo();
+        $data['accept_uid'] = session('user_info.uid');
+        $data['accept_dept_id'] = session('user_info.dept_id');
+        $data['accept_name'] = session('user_info.name');
     }
     
+    function _before_update(&$data,$options){
+        if(!empty($data['case_tag'])) {
+            $data['case_tag'] = implode(',', $data['case_tag']);
+        }
+        $data['update_time'] = time();
+    }
+    
+    function _after_insert($data, $options) {
+        
+    }
+    
+    function _after_update($data, $options) {
+
+    }
 }

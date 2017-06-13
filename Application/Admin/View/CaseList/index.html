@@ -28,7 +28,7 @@
             &nbsp;&nbsp;
             业务: <select name='case_type' style="width: 120px;">
                     <option value="0">请选择</option>
-                    <volist name="confBusinessType" id="case_type_name">
+                    <volist name="caseType" id="case_type_name">
                         <option value='{$key}' <if condition = "$_POST.case_type eq $key"> selected </if>>{$case_type_name}</option>
                     </volist>
                 </select>
@@ -82,9 +82,24 @@
                 </tr>
             </thead>
             <tbody>
-                <if condition='$caseList'>
+                <if condition='caseList'>
                     <foreach name="caseList" item="vo">
                         <tr>
+                            <td><input type="checkbox" name="case" id="case" case_id="{$vo.id}" flow_id ={$vo.wfid} case_type="$vo.case_type_id"></td>
+                            <td><a href="{:U('CasePerson/index',array('case_id'=>$vo['id']))}">{$vo.case_no}</a></td>
+                            <td>{$vo.debtor}</td>
+                            <td>{$vo.location}{:get_case_tag_text($vo['case_tag'])}</td>
+                            <td>{$caseType[$vo['case_type_id']]}</td>
+                            <td></td>
+                            <td></td>
+                            <td>{$confCaseStatus[$vo['status']]}</td>
+                            <td>{$loanType[$vo['loan_type']]}</td>
+                            <td>{$vo.loan_amount}</td>
+                            <td>{$vo.broker_dept_name}</td>
+                            <td>{$vo.bank_branch_name}</td>
+                            <td>{$deptList[$vo['accept_dept_id']]}</td>
+                            <td>{$vo.accept_name}</td>
+                            <td><a href="{:U('CaseList/edit',array('id'=>$vo['id']))}" class="js-ajax-dialog-btn" title="编辑案例">编辑</a></td>
                         </tr>
                     </foreach>
                 <else/>

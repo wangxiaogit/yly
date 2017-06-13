@@ -1,0 +1,95 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <form method="post" class="form-horizontal" id="form_data">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>姓名</label>
+                    <div class="controls">
+                        <input type="text" name="name" check="required" info="姓名必须填写">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>权属类型</label>
+                    <div class="controls">
+                        <select name='right_type' id='right_type'>
+                            <option value='1'>买方</option>
+                            <option value='2'>卖方</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>电话号码</label>
+                    <div class="controls">
+                            <input type="text" name="telno" check="required,phone" info="电话号码填写不正确">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">工作单位</label>
+                    <div class="controls">
+                            <input type="text" name="company">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">工作单位性质</label>
+                    <div class="controls">
+                        <select name='company_type'>
+                            <option value=''>请选择</option>
+                            <foreach name='company_type' item='vo' key='k'>
+                                <option value='{$k}'>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">工作单位电话</label>
+                    <div class="controls">
+                            <input type="text" name="company_telno" check="phone" info="工作单位电话号码填写不正确">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>证件号码</label>
+                    <div class="controls">
+                            <input type="text" name="card_no" check="required,cardno" info="证件号码填写不正确">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否主贷人</label>
+                    <div class="controls">
+                        <label class="radio inline" for="is_main_loan_true"><input type="radio" name="is_main_loan" value="1" checked id="is_main_loan_true" />是</label>
+                        <label class="radio inline" for="is_main_loan_false"><input type="radio" name="is_main_loan" value="0" id="is_main_loan_false">否</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否本地户口</label>
+                    <div class="controls">
+                        <label class="radio inline" for="is_local_true"><input type="radio" name="is_local" value="1" checked id="is_local_true" />是</label>
+                        <label class="radio inline" for="is_local_false"><input type="radio" name="is_local" value="0" id="is_local_false">否</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <input type='hidden' value='{$case_id}' name='case_id'>
+                <a type="button" class="btn btn-primary ajax-submit">添加</a>
+                <a class="btn" onclick="myclose()">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+<script type="text/javascript">
+//提交
+$(function(){
+    $(".ajax-submit").click(function(){
+    var is_main_loan = $("input[name='is_main_loan']:checked").val();
+    var right_type = $("#right_type").val();
+    if(right_type==2 && is_main_loan==1) {
+        layer.msg('卖方不能为主贷人，输入错误！');
+        return false;
+    }
+        send_form("form_data","{:U('do_add')}","","");
+    });
+})
+</script>
+</body>
+</html>

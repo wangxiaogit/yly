@@ -123,9 +123,7 @@
                         } else {
                             if (data.state === 'success') {
                                 if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
-                                    
                                     var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
-                                    
                                     if (isdialog) {
                                         reloadPage(window);
                                     } else {
@@ -287,7 +285,12 @@ function myclose() {
 	parent.layer.close(parent.layer.getFrameIndex(window.name));
 }
 function send_form(from_id, post_url, return_url, callback) {
+    
+    var btn = $(".ajax-submit");
+    var text = btn.text();
+    $(this).text( text +'中...').prop('disabled', true).addClass('disabled');
     check_form(from_id, function (ret) {
+        $('span').remove('.tips_error');
         if (ret.status) {
             if ($("#ajax").val() == 1) {
                 var vars = $("#" + from_id).serialize();
@@ -300,21 +303,42 @@ function send_form(from_id, post_url, return_url, callback) {
                         if (typeof (callback) == 'function') {
                             callback(data);
                         } else {
-                            if (data.status) {
-                                layer.msg(data.info, {
-                                    time: 1200
-                                }, function () {
-                                    if (return_url) {
-                                        location.href = return_url;
-                                    } else {
-                                        location.reload(true);
+                            if (data.status == 1) {
+                                $('<span class="tips_success">' + data.info + '</span>').appendTo(btn.parent()).fadeIn('slow').delay(1000).fadeOut(function () {
+                                if (data.referer) {
+                                    //返回带跳转地址
+                                    if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
+                                        //iframe弹出页
+                                        var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
+
+                                        if (isdialog) {
+                                            window.location.href = data.referer;
+                                        } else {
+                                            window.parent.location.href = data.referer;
+                                        }
+
+                                    }else{
+                                        window.location.href = data.referer;
+                                    }
+                                } else {
+                                        if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
+                                            var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
+                                            if (isdialog) {
+                                                reloadPage(window);
+                                            } else {
+                                                reloadPage(window.parent);
+                                            }
+                                        }else{
+                                            //刷新当前页
+                                            reloadPage(window.parent);
+                                        }
                                     }
                                 });
                             } else {
-                                layer.msg(data.info);
+                                $('<span class="tips_error">' + data.info + '</span>').appendTo(btn.parent()).fadeIn('fast');
+                                $(this).text(text).prop('disabled', false).removeClass('disabled');
                                 return false;
                             }
-                            ;
                         }
                     }
                 });
@@ -328,7 +352,7 @@ function send_form(from_id, post_url, return_url, callback) {
                 $("#" + from_id).submit();
             }
         } else {
-            layer.msg(ret.info);
+            $('<span class="tips_error">' + ret.info + '</span>').appendTo(btn.parent()).fadeIn('fast');
             ret.dom.focus();
             return false;
         }
@@ -401,36 +425,50 @@ function send_form(from_id, post_url, return_url, callback) {
 
 /* 验证数据类型*/
 function validate(data, datatype) {
-	if (datatype.indexOf("|")) {
+            var typeArr = [];
+        if (datatype.indexOf(",")) {
+            typeArr = datatype.split(",");
+	} else {
+            typeArr[0] = datatype;
+        }
+        for(var i=0;i<typeArr.length;i++) {
+            if (typeArr[i].indexOf("|")) {
 		tmp = datatype.split("|");
 		datatype = tmp[0];
 		data2 = tmp[1];
-	}
-	switch (datatype) {
-		case "required":
-			if (data == "") {
-				return false;
-			} else {
-				return true;
-			}
-			break;
-		case "email":
-			var reg = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-			return reg.test(data);
-			break;
-		case "number":
-			var reg = /^[0-9]+\.{0,1}[0-9]{0,3}$/;
-			return reg.test(data);
-			break;
-		case "html":
-			var reg = /<...>/;
-			return reg.test(data);
-			break;
-		case "eqt":
-			data2 = $("#" + data2).val();
-			return data >= data2;
-			break;
-	}
+            }
+            switch (datatype) {
+                    case "required":
+                            if (data == "") {
+                                return false;
+                            }
+                            break;
+                    case "number":
+                            var reg = /^[0-9]+\.{0,1}[0-9]{0,3}$/;
+                            if(data != "" && reg.test(data) === false){
+                                return false;
+                            }
+                            break;
+                    case "eqt":
+                            if(data != "" && data >= data2){
+                                return false;
+                            }
+                            break;
+                    case "phone":
+                            var reg = /^1\d{10}$/;
+                            if(data != "" && reg.test(data) === false){
+                                return false;
+                            }
+                            break;
+                    case "cardno":
+                            var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                            if(data != "" && reg.test(data) === false){
+                                return false;
+                            }
+                            break;    
+            }
+        }
+    return true;
 }
 function set_cookie(key, value, exp, path, domain, secure) {
 	key = cookie_prefix + key;
@@ -501,4 +539,44 @@ function go_return_url() {
 /* 删除左右两端的空格*/
 function trim(str) {
 	return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+function get_attr(dom, attr) {
+	if ( typeof (dom) == 'object') {
+		var d = dom;
+	}
+	if ( typeof (dom) == 'string') {
+		var d = document.getElementById(dom);
+	}
+	//获取该节点
+	if ((d !== null) && (undefined !== d.attributes[attr])) {
+		return d.attributes[attr].value;
+	}
+
+	//获取该原生属性的值。
+	return null;
+}
+
+function set_attr(dom, attr, val) {
+	if ( typeof (dom) == 'object') {
+		var d = dom;
+	}
+	if ( typeof (dom) == 'string') {
+		var d = document.getElementById(dom);
+	}
+	var node = document.createAttribute(attr);
+	node.nodeValue = val;
+	d.attributes.setNamedItem(node);
+}
+
+/*切割公司及部门 */
+function get_dept_org_id(res)
+{
+    var result = [];
+    var arr = res.split('|');
+    for(var i=0;i<arr.length;i++){
+        var obj = arr[i].split('_');
+        result[obj[0]] = obj[1];
+    }
+    return result;
 }

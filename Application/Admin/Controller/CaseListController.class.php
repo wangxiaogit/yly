@@ -22,7 +22,7 @@ class CaseListController extends AdminController
     {   
         //model
         $dept_model = D('Common/Dept');
-        $uid = session('uid')?session('uid'):0;
+        $uid = session('uid')?session('uid'):1;
         
         //搜索
         $action = I('post.action_type');
@@ -52,15 +52,17 @@ class CaseListController extends AdminController
         $limit = !empty($page_show_num) ? $page_show_num : C('LIST_ROWS');
         
         $tabType = I('tab_type','needToDo');
+        $dept_id = session('user_info.dept_id')?session('user_info.dept_id'):1;
+        $manage_privilege = session('user_info.manage_privilege')?session('user_info.manage_privilege'):0;
         switch ($tabType)
         {   
             //待办
             case 'needToDo':{
                 $cond_where['type.status'] = array('IN', '1,2');
                 //搜索部门，并且是部门管理员
-                if (session('manage_privilege') == 1 && session('dept_id') > 0) {
-                    $childDeptIds = $dept_model->getChildDeptIdsByDeptid(session('dept_id'));
-                    $childDeptIds = array_merge($childDeptIds, array(0 => session('dept_id')));
+                if ($manage_privilege == 1 && $dept_id > 0) {
+                    $childDeptIds = $dept_model->getChildDeptIdsByDeptid($dept_id);
+                    $childDeptIds = array_merge($childDeptIds, array(0 => $dept_id));
                     $childDeptIds_str = !empty($childDeptIds) ? implode(',', $childDeptIds) : '-1';
                     $cond_where['_string'] = " (case_list.accept_deptid IN (".$childDeptIds_str.") AND "
                             . " ( type.wfid is NULL OR type.wfid = 0) ) OR type.dept_id IN (".$childDeptIds_str.")";
@@ -123,7 +125,7 @@ class CaseListController extends AdminController
                                 'type.handle_roleid',
                                 'type.handle_uid',
                                 'type.handle_time',
-                                'type.creattime',
+                                'type.creat_time',
                                 'type.status',
                             );
                 $cond_order = array('type.handle_time' => 'desc');
@@ -141,6 +143,7 @@ class CaseListController extends AdminController
                     ->limit($Page->firstRow, $Page->listRows)
                     ->select();
                 }
+//                dump($this->caseListModel->_sql());
                 $metaTitle = '待办案件';
             } break;
         
@@ -172,10 +175,10 @@ class CaseListController extends AdminController
                     $cond_where['type.wfnode'] = $node_step;
                 }
             //没有搜索条件，并且是部门管理权限
-            if (session('manage_privilege') == 1 && session('dept_id') > 0) {
+            if ($manage_privilege == 1 && $dept_id > 0) {
                 $uid_str = '';
-                $childDeptIds = $dept_model->getChildDeptIdsByDeptid(session('dept_id'));
-                $childDeptIds = array_merge($childDeptIds, array(0 => session('dept_id')));
+                $childDeptIds = $dept_model->getChildDeptIdsByDeptid($dept_id);
+                $childDeptIds = array_merge($childDeptIds, array(0 => $dept_id));
                 $cond_user_where['dept_id'] = array('in', $childDeptIds);
                 $user_ids = M('user')->field('id')->where($cond_user_where)->select();
                 if (is_array($user_ids) && !empty($user_ids)) {
@@ -263,10 +266,10 @@ class CaseListController extends AdminController
                 }
 
             //没有搜索条件，并且是部门管理权限
-            if (session('manage_privilege') == 1 && session('dept_id') > 0) {
+            if ($manage_privilege == 1 && $dept_id > 0) {
                 $uid_str = '';
-                $childDeptIds = $dept_model->getChildDeptIdsByDeptid(session('dept_id'));
-                $childDeptIds = array_merge($childDeptIds, array(0 => session('dept_id')));
+                $childDeptIds = $dept_model->getChildDeptIdsByDeptid($dept_id);
+                $childDeptIds = array_merge($childDeptIds, array(0 => $dept_id));
                 $cond_user_where['dept_id'] = array('in', $childDeptIds);
                 $user_ids = M('user')->field('id')->where($cond_user_where)->select();
                 if (is_array($user_ids) && !empty($user_ids)) {
@@ -360,6 +363,8 @@ class CaseListController extends AdminController
         $confLoanType = $this->caseListModel->getLoanType();
         //案例状态
         $confCaseStatus = $this->caseListModel->getConfCaseStatus();
+        //部门
+        $deptList = M('dept')->where('org_id = 1')->getField('id, name');
 //        /***流程类型***/
 //        $flowType = new \Admin\Model\FlowTypeModel();
 //        $conf_where['category'] = 1;
@@ -394,9 +399,11 @@ class CaseListController extends AdminController
         }
         $show = $Page->show();
         $this->assign('_Page', $show ? $show : '');
+        $this->assign('caseList', $case_list_info);
+        $this->assign('caseType', $this->caseListModel->getCaseType());
         $this->assign('_Total',$total_num);
-        $this->assign('confBusinessType',$confBusinessType);
         $this->assign('confLoanType',$confLoanType);
+        $this->assign('deptList',$deptList);
         $this->assign('confCaseStatus',$confCaseStatus);
         $this->assign('tab_type', $tabType);
         $this->assign('meta_title', $metaTitle);
@@ -411,7 +418,10 @@ class CaseListController extends AdminController
      */
     public function add()
     {   
-        
+        $dept_list = get_dept_list(3);
+        $case_tag = D('CaseTag')->where('isvalid=1')->getField('id, tag_name');
+        $this->assign('dept_list', json_encode($dept_list));
+        $this->assign('case_tag',$case_tag);
         $this->display();
     }
     
@@ -420,20 +430,74 @@ class CaseListController extends AdminController
      * 新增提交
      */
     public function do_add()
-    {
+    {   
+        $model = M('CaseType');
         if (IS_POST) {
-            if ($this->feeStandardModel->create()) {
-                if ($this->feeStandardModel->add()!==false) {
-                    $this->success('添加成功', U('FeeStandard/index'));
+            if ($this->caseListModel->create()) {
+                $res = $this->caseListModel->add();
+                if ($res !==false) {
+                    $case_type = I('case_type');
+                    $case_type[] = '1';
+                    foreach ($case_type as $val) {
+                        $data['case_id'] = $res;
+                        $data['case_type_id'] = $val;
+                        $data['creat_time'] = time();
+                        $data['status'] = 1;
+                        $model->add($data);
+                    }
+                    $this->ajaxReturn(array('status'=>1, 'info'=>'添加成功'));
                 } else {
-                    $this->error('添加失败');
+                    $this->ajaxReturn(array('status'=>0, 'info'=>'添加失败'));
                 }
             } else {
-                $this->error($this->feeStandardModel->getError());
+                $this->ajaxReturn(array('status'=>0,'info'=>$this->caseListModel->getError()));
             }
         }
     }
     
-    
-    
+    /*
+     * 修改
+     */
+    public function edit($id)
+    {   
+        if($id) {
+            $case_info = D('Common/CaseList')->find($id);
+            $case_info['broker_id'] = 'org_'.$case_info['broker_org_id'].'|'.'dept_'.$case_info['broker_dept_id'];
+            $case_type_arr = M('case_type')->where('status <>3 and case_id = '.$id)->getField('case_type_id', TRUE);
+        }
+        $dept_list = get_dept_list(3);
+        $case_tag = D('CaseTag')->where('isvalid=1')->getField('id, tag_name');
+        $this->assign('dept_list', json_encode($dept_list));
+        $this->assign('case_tag',$case_tag);
+        $this->assign('case_type_arr', $case_type_arr);
+        $this->assign('case_info', $case_info);
+        $this->display();
+    }
+
+    /**
+     * 提交编辑
+     */
+    public function do_edit()
+    {
+        $model = M('CaseType');
+        if (IS_POST) {
+            if ($this->caseListModel->create()) {
+                $res = $this->caseListModel->save();
+                    $case_type = I('case_type');
+                    if(!empty($case_type)){
+                        foreach ($case_type as $val) {
+                            $data['case_id'] = I('id');
+                            $data['case_type_id'] = $val;
+                            $data['creat_time'] = time();
+                            $data['status'] = 1;
+                            $model->add($data);
+                        }
+                    }
+                    $this->ajaxReturn(array('status'=>1, 'info'=>'保存成功'));
+            } else {
+                $this->ajaxReturn(array('status'=>0,'info'=>$this->caseListModel->getError()));
+            }
+        }
+    }
+         
 }
