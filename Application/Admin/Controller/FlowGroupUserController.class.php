@@ -20,9 +20,9 @@ class FlowGroupUserController extends AdminController
      */
     public function index () 
     {
-        $model = $this->flowGroupUserModel->alias('a')->join("WorkflowGroup b on a.group_id=b.id")->join("user c on a.user_id=c.id");
+        $model = $this->flowGroupUserModel->alias('a')->join("workflow_group b on a.group_id=b.id")->join("user c on a.user_id=c.id");
         
-        $flowGroupUser_Lists = $this->lists($model, array("a.group_id"=>$this->flowGroupId, 'a.status'=>1), "id desc", "a.*, b.name group_name,c.name user_name");
+        $flowGroupUser_Lists = $this->lists($model, array("a.group_id"=>$this->flowGroupId, 'a.status'=>1), "id desc", "a.*, b.name group_name,c.true_name user_name");
         
         $this->assign("flowGroupUser_Lists", $flowGroupUser_Lists);
         $this->assign("group_id", $this->flowGroupId);

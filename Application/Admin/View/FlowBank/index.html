@@ -12,13 +12,18 @@
             <select name="org_id" id="org_id">
                 <option value="0">请选择总行</option>
                 <foreach name="organize_lists" item="list">
-                    <option value="{$list.id}">{$list.name}</option>
+                    <php>$organize_selected=($list['id']==$search['org_id'])?"selected":"";</php>
+                    <option value="{$list.id}" {$organize_selected}>{$list.name}</option>
                 </foreach>
             </select>
             
             支行：
             <select name="dept_id" id="dept_id">
                 <option value="0">请选择支行</option>
+                <foreach name="dept_lists" item="list">
+                    <php>$dept_selected=($list['id']==$search['dept_id'])?"selected":"";</php>
+                    <option value="{$list.id}" {$dept_selected}>{$list.name}</option>
+                </foreach>
             </select>
             
             <input type="submit" class="btn btn-primary" value="搜索" />
@@ -37,7 +42,7 @@
                 </tr>
             </thead>
             <tbody>
-                <foreach name="flowGroup_lists" item="list">
+                <foreach name="flowBank_lists" item="list">
                     <tr>
                         <td>{$list.id}</td>
                         <td>{$list.organize_name}</td>
@@ -46,7 +51,7 @@
                             <php>$handle_type_text=($list['handle_type']==1)?"个人":"流程组";</php>
                             {$handle_type_text}
                         </td>
-                        <td>{$handle_name}</td>
+                        <td>{:get_handle_name($list['handle_type'], $list['handle_id'])}</td>
                         <td>
                             <a href="{:U('FlowBank/edit',array('id'=>$list['id']))}">编辑</a> 
                             |

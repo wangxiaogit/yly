@@ -25,7 +25,7 @@
                         <td>{$list.version}</td>
                         <td>
                             <php>$active_text=$list['is_active']?"使用中":"旧版本";</php>
-                            <a href="#">{$active_text}</a>
+                            {$active_text}
                         </td>
                         <td>
                             <a href="{:U('FlowVersion/edit',array('id'=>$list['id']))}">编辑</a> 

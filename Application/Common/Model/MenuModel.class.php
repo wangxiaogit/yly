@@ -37,6 +37,8 @@ class MenuModel extends AdminModel
             $where['_logic'] = 'OR';
         }
         
+        $where['status'] = 1;
+        
         $result = $this->where($where)->find();
          
         if ($result && $result['id'] != $data['id']) {

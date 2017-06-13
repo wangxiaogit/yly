@@ -15,4 +15,18 @@ class WorkflowConfModel extends AdminModel
         array('handle_id', 'require', '对接类型不能为空！', self::MUST_VALIDATE, 'regex', AdminModel:: MODEL_BOTH), 
         array('id,org_id,dept_id,handle_type,handle_id', 'checkAction', '该行该对接人已存在！', self::MUST_VALIDATE, 'callback', AdminModel:: MODEL_BOTH), 
     );
+    
+    public function checkAction($data) 
+    {
+        if ($data['id']) {
+            $data['id'] = array('neq', $data['id']);
+        } else {
+            unset($data['id']);
+        }
+        $data['status'] = 1;
+        
+        $result = $this->where($data)->find();
+        
+        return $result ? false : true;
+    }
 }

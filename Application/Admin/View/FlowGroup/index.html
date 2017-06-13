@@ -23,6 +23,8 @@
                         <td>{$list.name}</td>
                         <td>{$list.description}</td>
                         <td>
+                            <a href="{:U('FlowGroupUser/index',array('group_id'=>$list['id']))}" class="js-ajax-dialog-btn" title="查看组成员">查看组成员</a> 
+                            |
                             <a href="{:U('FlowGroup/edit',array('id'=>$list['id']))}">编辑</a> 
                             |
                             <a class="js-ajax-delete" href="{:U('FlowGroup/del',array('id'=>$list['id']))}">删除</a>

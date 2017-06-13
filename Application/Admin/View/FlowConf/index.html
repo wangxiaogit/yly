@@ -1,0 +1,103 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="{:U('FlowConf/index')}">流程配置管理</a></li>
+            <li><a href="{:U('FlowConf/add')}">配置添加</a></li>
+        </ul>
+        
+        <form class="well form-search" method="post" action="{:U('FlowConf/index')}">
+            流程类型：
+            <select name="workflow_type_id" id="workflow_type_id">
+                <option value="0">请选择流程类型</option>
+                <foreach name="flowType_lists" item="list">
+                    <php>$workflow_type_selected=$search['workflow_type_id']==$list['id']?"selected":"";</php>
+                    <option value="{$list.id}" {$workflow_type_selected}>{$list.name}</option>
+                </foreach>
+            </select>
+            &nbsp;&nbsp;
+            流程版本：
+            <select name="workflow_version_id" id="workflow_version_id">
+                <option value="0">请选择流程版本</option>
+                <foreach name="flowVersion_lists" item="list">
+                    <php>$workflow_version_selected=$search['workflow_version_id']==$list['id']?"selected":"";</php>
+                    <option value="{$list.id}" {$workflow_version_selected}>{$list.version}</option>
+                </foreach>
+            </select>
+            
+            <input type="submit" class="btn btn-primary" value="搜索" />
+            <a href="{:U('FlowConf/index')}" class="btn btn-danger">清空</a>
+        </form>
+            
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th width="120">流程类型</th>
+                    <th width="100">流程版本</th>     
+                    <th width="80">流程节点</th>     
+                    <th width="60">步骤</th>     
+                    <th width="60">对接类型</th>     
+                    <th width="100">对接角色</th>     
+                    <th>SQL</th>     
+                    <th width="150">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <foreach name="flowConf_lists" item="list">
+                    <tr>
+                        <td>{$list.id}</td>
+                        <td>{$list.workflow_type_name}</td>
+                        <td>{$list.workflow_version}</td>
+                        <td>{$list.workflow_node_name}</td>
+                        <td>{$list.step}</td>
+                        <td>
+                            <php>$handle_type_text=(($list['handle_type']==1)?"个人":(($list['handle_type']==2)?"流程组":"其它"));</php>
+                            {$handle_type_text}
+                        </td>
+                        <td>{:get_handle_name($list['handle_type'], $list['handle_id'])}</td>
+                        <td>{$list.handle_sql}</td>
+                        <td>
+                            <a href="{:U('FlowConf/edit',array('id'=>$list['id']))}">编辑</a> 
+                            |
+                            <a class="js-ajax-delete" href="{:U('FlowConf/del',array('id'=>$list['id']))}">删除</a>
+                        </td>
+                    </tr>
+                </foreach>
+            </tbody>
+        </table>
+        
+        {$_Page}
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function(){
+        $("#workflow_type_id").bind('change', function() {
+            var _this = $(this),
+                workflow_type_id = _this.val(),
+                html = "<option value='0'>请选择流程版本</option>";
+            
+            if (workflow_type_id > 0) {
+                $.getJSON("{:U('FlowVersion/ajax_get_version')}", {type_id: workflow_type_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.version+"</option>";
+                        });
+                    }
+                    
+                    $("#workflow_version_id").html(html);
+                }   
+            } else {
+                $("#workflow_version_id option:gt(0)").remove();
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
