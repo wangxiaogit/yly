@@ -14,11 +14,10 @@ class MenuModel extends AdminModel
     
     public function checkAction($data) 
     {
-        $where['title'] = $data['title'];
+        $where['_string'] = "(title = '".$data['title']."') ";
         
         if ($data['url']) {
-            $where['url'] = $data['url'];
-            $where['_logic'] = 'OR';
+           $where['_string'] .= "or (url='".$data['url']."')";
         }
         
         $where['status'] = 1;
@@ -30,11 +29,10 @@ class MenuModel extends AdminModel
     
     public function checkActionUpdate($data) 
     {
-        $where['title'] = $data['title'];
+        $where['_string'] = "(title = ".$data['title'].") ";
         
         if ($data['url']) {
-            $where['url'] = $data['url'];
-            $where['_logic'] = 'OR';
+           $where['_string'] .= "or (url=".$data['url'].")";
         }
         
         $where['status'] = 1;
