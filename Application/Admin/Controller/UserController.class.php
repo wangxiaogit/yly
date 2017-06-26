@@ -25,8 +25,8 @@ class UserController extends AdminController
             $where['a.user_name|a.true_name|a.name_py|a.phone'] = array('like', '%'.$keywords); 
         }
         
-        $org_type_id = I('get.org_type', 1);
-        if ($org_type) {
+        $org_type_id = I('get.org_type', 1);    
+        if ($org_type_id) {
             $where['a.org_type'] = $org_type_id;
         }
         
@@ -35,10 +35,11 @@ class UserController extends AdminController
                       ->join('dept c on a.dept_id = c.id', 'LEFT')
                       ->join('position d on a.position_id = d.id', 'LEFT');
         
-        $user_lists = $this->lists($model, $where, "a.org_id asc, a.dept asc", 'a.*, b.name organize_name, c.name dept_name, d.name position_name');
+        $user_lists = $this->lists($model, $where, "a.org_id asc, a.dept_id asc", 'a.*, b.name organize_name, c.name dept_name, d.name position_name');
         
         $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
         $this->assign("user_lists", $user_lists);
+        $this->assign("type", $org_type_id);
         $this->assign("search", I('post.'));
         $this->assign("meta-title", "用户列表");
         $this->display();
@@ -51,9 +52,12 @@ class UserController extends AdminController
     {
         $position_lists = D('Common/Position')->where(array("status"=>1))->select();
         
+        $authGroup_lists = D('Common/AuthGroup')->where(array('status'=>1))->select();
+        
         $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
         $this->assign("position_lists", $position_lists);
-        $this->assign("org_type_id", I('get.org_type_id'));
+        $this->assign("authGroup_lists", $authGroup_lists);
+        $this->assign("type", I('get.org_type'));
         $this->assign("meta-title", "用户添加");
         $this->display();
     }
@@ -66,7 +70,7 @@ class UserController extends AdminController
         if (IS_POST) {
             if ($this->userModel->create()) {
                 if (false !== $this->userModel->add()) {
-                    $this->success('添加成功！', U('User/index'));
+                    $this->success('添加成功！', U('User/index', array('org_type'=>I('get.org_type'))));
                 } else {
                     $this->error('添加失败！');
                 }
@@ -85,6 +89,10 @@ class UserController extends AdminController
         
         $user = $this->userModel->find($user_id);
         
+        $authGroup_lists = D('Common/AuthGroup')->where(array("status"=>1))->select();
+        
+        $authUser_lists = M('AuthGroupUser')->where(array("status"=>1, "user_id"=>$user_id))->getField("group_id", true);
+        
         $position_lists = D('Common/Position')->where(array("status"=>1))->select();
         
         $organize_lists = $this->organizeModel->where(array('status'=>1, 'type'=>$user['org_type']))->select();
@@ -94,12 +102,32 @@ class UserController extends AdminController
         $this->assign("user", $user);
         $this->assign("position_lists", $position_lists);
         $this->assign("organize_lists", $organize_lists);
+        $this->assign("authGroup_lists", $authGroup_lists);
+        $this->assign("authUser_lists", $authUser_lists);
         $this->assign("dept_lists", $dept_lists);
         $this->assign("organize_types", $this->organizeModel->ORGANIZE_TYPE);
-        $this->assign("org_type_id", I('get.org_type_id'));
+        $this->assign("type", I('get.org_type'));
         $this->assign("meta-title", "用户编辑");
         $this->display();
     }
+    
+    /**
+     * 编辑提交
+     */
+    public function do_edit ()
+    {
+        if (IS_POST) {
+            if ($this->userModel->create()) {
+                if (false !== $this->userModel->save()) {
+                    $this->success('编辑成功！', U('User/index',array('org_type'=>I('get.org_type'))));
+                } else {
+                    $this->error('编辑失败！');
+                }
+            } else {
+                $this->error($this->userModel->getError());
+            }
+        } 
+    }        
     
     /**
      * 删除

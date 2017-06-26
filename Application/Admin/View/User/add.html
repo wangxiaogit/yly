@@ -1,0 +1,149 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <foreach name="organize_types" item="value">
+                <li ><a href="{:U('User/index',array('org_type'=>$key))}">{$value}</a></li>
+            </foreach> 
+            <li  class="active"><a href="{:U('User/add',array('org_type'=>$type))}">用户添加</a></li>
+        </ul>
+        
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('User/do_add',array('org_type'=>$type))}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 机构类型</label>
+                    <div class="controls">
+                        <select name="org_type" id="org_type">
+                            <option value="0">请选择</option>
+                            <foreach name="organize_types" item="val">
+                                <option value="{$key}">{$val}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 机构名称</label>
+                    <div class="controls">
+                        <select name="org_id" id="org_id">
+                            <option value="0">请选择</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 部门</label>
+                    <div class="controls">
+                        <select name="dept_id" id="dept_id">
+                            <option value="0">请选择</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 职位</label>
+                    <div class="controls">
+                        <select name="position_id">
+                            <option value="0">请选择</option>
+                            <foreach name="position_lists" item="list">
+                                <option value="{$list.id}">{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 账户</label>
+                    <div class="controls">
+                        <input type="text" name="user_name" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 密码</label>
+                    <div class="controls">
+                        <input type="password" name="password" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 真实姓名</label>
+                    <div class="controls">
+                        <input type="text" name="true_name" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 联系电话</label>
+                    <div class="controls">
+                        <input type="text" name="phone" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span> 权限</label>
+                    <div class="controls">
+                        <foreach name="authGroup_lists" item="list">
+                            <label class="checkbox inline"><input type="checkbox" name="group_id[]" value="{$list.id}"> {$list.name}</label>
+                        </foreach>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('User/index',array('org_type'=>$type))}">返回</a>
+            </div>
+        </form>    
+    </div> 
+<script src="__STATIC__/common.js"></script>
+<script>
+    $(function() {
+        $("#org_type").bind('change', function() {
+            var _this = $(this),
+                type_id = _this.val(),
+                html = "<option value='0'>请选择</option>";
+            
+            if (type_id > 0) {
+                $.getJSON("{:U('Organize/ajax_get_organize')}", {org_type: type_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#org_id").html(html);
+                }   
+            } else {
+                $("#org_id option:gt(0)").remove();
+            }
+        });
+        
+        $("#org_id").bind('change', function() {
+            var _this = $(this),
+                org_id = _this.val(),
+                html = "<option value='0'>请选择</option>";
+            
+            if (org_id > 0) {
+                $.getJSON("{:U('Dept/ajax_get_dept')}", {org_id: org_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        html += obJect.data;
+                    }
+                    
+                    $("#dept_id").html(html);
+                }   
+            } else {
+                $("#dept_id option:gt(0)").remove();
+            }
+        });
+    });
+</script>
+</body>
+</html>

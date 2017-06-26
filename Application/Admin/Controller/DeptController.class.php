@@ -185,14 +185,15 @@ class DeptController extends AdminController
      */
     public function ajax_get_dept ()
     {
-        $organize_id = I('request.org_id', 0, 'intval');
+        if (!$this->organize_id)  $this->error("参数错误！");
         
-        if (!$organize_id) {
-            $this->error("参数错误！");
-        }
+        $dept_lists = $this->deptModel->where(array('status'=>1, 'org_id'=>$this->organize_id))->order("sort asc")->select();
         
-        $dept_lists = $this->deptModel->field("id, name")->where(array("org_id"=> $organize_id, 'status'=>1))->select();
+        $str = "<option value='\$id'>\$spacer \$name</option>";
         
-        $this->ajaxReturn(['data'=>$dept_lists, 'status'=>1]);
+        $this->treeModel->init($dept_lists);
+        $select_categorys = $this->treeModel->get_tree(0, $str);
+        
+        $this->ajaxReturn(['data'=>$select_categorys, 'status'=>1]);
     }        
 }

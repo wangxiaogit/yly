@@ -9,7 +9,7 @@
             <li class="active"><a href="{:U('Organize/edit',array('id'=>$organize['id'], 'type'=>$type))}">机构编辑</a></li>
         </ul>
         
-        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Organize/do_edit')}">
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Organize/do_edit',array('type'=>$type))}">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label"><span class="form-required">*</span> 类型</label>

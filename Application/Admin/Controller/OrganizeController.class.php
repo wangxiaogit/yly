@@ -88,7 +88,7 @@ class OrganizeController extends AdminController
         if (IS_POST) {
             if ($this->organizeModel->create()) {
                 if (false !== $this->organizeModel->save()) {
-                    $this->success('编辑成功！', U('Organize/index'));
+                    $this->success('编辑成功！', U('Organize/index',array('type'=>I('get.type'))));
                 } else {
                     $this->error('编辑失败！');
                 }
@@ -97,7 +97,6 @@ class OrganizeController extends AdminController
             }
         } 
     }  
-    
     
     /**
      * 删除
@@ -111,6 +110,22 @@ class OrganizeController extends AdminController
         } else {
             $this->error("删除失败！");
         } 
-    }       
+    }
+    
+    /**
+     * ajax 机构
+     */
+    public function ajax_get_organize () 
+    {
+        $org_type = I('get.org_type', 1, 'intval');
+        
+        if (!$org_type) {
+            $this->error("参数错误！");
+        }
+        
+        $organize_lists = $this->organizeModel->field("id, name")->where(array("type"=> $org_type, 'status'=>1))->select();
+        
+        $this->ajaxReturn(['data'=>$organize_lists, 'status'=>1]);
+    }
 }
 
