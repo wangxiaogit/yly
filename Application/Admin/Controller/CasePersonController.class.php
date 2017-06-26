@@ -7,10 +7,6 @@ use Common\Controller\AdminController;
 
 class CasePersonController extends AdminController
 {
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
     
     /**
      * 交易人列表

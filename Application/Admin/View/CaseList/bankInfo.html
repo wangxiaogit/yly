@@ -1,0 +1,110 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <foreach name='tab_arr' key='k' item='vo'>
+                <li class="<php>if($k == $tab) echo 'active';</php>"><a href="{:U($k,array('case_id'=>$case_id))}">{$vo}</a></li>
+            </foreach>
+            <li><a href="javascript:history.go(-1);" title="后退"><i class="fa fa-mail-reply right_tool_icon"></i></a></li>
+        </ul>
+        <form class="form-horizontal js-ajax-form" action="{:U('CaseList/bankSet')}" method="post">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>总行</label>
+                    <div class="controls">
+                        <select name="bank_org_id" id="org_id">
+                            <option value="0">请选择总行</option>
+                            <foreach name="organize_lists" item="list">
+                                <option value="{$list.id}" <php>if($list['id'] == $bank_info['bank_org_id']) echo'selected';</php>>{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>支行</label>
+                    <div class="controls">
+                        <select name="bank_branch_id" id="dept_id">
+                            <if condition="$bank_info['bank_branch_id']">
+                                <option value="$bank_info['bank_branch_id']">{$bank_info['bank_branch_name']}</option>
+                                <else/>
+                                <option value="0">请选择支行</option>
+                            </if>    
+                        </select>
+                    </div>
+                    <input name='bank_branch_name' id='bank_branch_name' type='hidden'>
+                </div>
+                <div class="control-group">
+                    <label class="control-label"><span class="form-required">*</span>信贷员</label>
+                    <div class="controls">
+                        <select name="bank_uid" id="bank_uid">
+                            <if condition="$bank_info['bank_uid']">
+                                <option value="$bank_info['bank_uid']">{$bank_info['bank_uname']}</option>
+                            <else/>                            
+                                <option value="0">请选择信贷员</option>
+                            </if>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <input name='id' type='hidden' value='{$case_id}'>
+                <button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+<script>
+     $(function(){
+        $("#org_id").bind('change', function() {
+            var _this = $(this),
+                organize_id = _this.val(),
+                html = "<option value='0'>请选择支行</option>";
+            
+            if (organize_id > 0) {
+                $.getJSON("{:U('Dept/ajax_get_dept')}", {org_id: organize_id}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    
+                    $("#dept_id").html(html);
+                }   
+            } else {
+                $("#dept_id option:gt(0)").remove();
+            }
+        });
+        
+        $("#dept_id").bind('change', function() {
+            var _this = $(this),
+            dept_id = _this.val(),
+            dept_name = _this.find("option:selected").text(),
+            html = "<option value='0'>请选择信贷员</option>";
+            $('#bank_branch_name').val(dept_name);
+            if (dept_id > 0) {
+                $.getJSON("{:U('User/ajax_get_user')}", {dept_id: dept_id,org_type:2}, success);
+                return false;
+                
+                function success (obJect) {
+                    if (obJect.status == 1) { 
+                        $.each(obJect.data, function(key,value) {
+                            html += "<option value='"+value.id+"'>"+value.name+"</option>";
+                        });
+                    }
+                    $("#bank_uid").html(html);
+                }   
+            } else {
+                $("#bank_uid option:gt(0)").remove();
+            }
+        });
+        
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <foreach name='tab_arr' key='k' item='vo'>
+                <li class="<php>if($k == $tab) echo 'active';</php>"><a href="{:U($k,array('case_id'=>$case_id))}">{$vo}</a></li>
+            </foreach>
+            <li><a href="javascript:history.go(-1);" title="后退"><i class="fa fa-mail-reply right_tool_icon"></i></a></li>
+        </ul>
+        <ul class="nav nav-tabs">
+            <li class="<php>if($type==1) echo'active';</php>"><a href="{:U('CaseDocument/index',array('case_id'=>$case_id,'type'=>1))}" >买方</a></li>
+            <li class="<php>if($type==2) echo'active';</php>"><a href="{:U('CaseDocument/index',array('case_id'=>$case_id,'type'=>2))}" >卖方</a></li>
+        </ul>
+         <div class="table-actions">
+            <a class="btn btn-primary btn-small js-ajax-dialog-btn"  href="{:U('CaseDocument/add',array('case_id'=>$case_id,'type'=>$type))}" title="添加收件材料">添加收件材料</a>
+            <a class='btn btn-danger btn-small' onclick='edit()'>批量收件</a>
+        </div>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th width="50"></th>
+                    <th width="50">序号</th>
+                    <th>材料名称</th>
+                    <th>权属类型</th>
+                    <th>是否收缴</th>
+                    <th>收件人</th>
+                    <th>收件时间</th>
+                    <th width="120">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <if condition='$documnet_list'>
+                <volist name="documnet_list" id="vo"  key='k'>
+                <tr>
+                    <td><input type='checkbox' value='{$vo.id}' class='doc_list' name='doc_list'></td>
+                    <td>{$k}</td>
+                    <td>{$vo.file_name}</td>
+                    <td>{$type_arr[$vo['type_id']]}</td>
+                    <td>{$vo['getit']?'是':'否'}</td>
+                    <td>{$vo.accept_name}</td>
+                    <td><if condition="$vo['accept_time']">{$vo.accept_time|date="Y-m-d",###}</if></td>
+                    <td>    
+                        <a onclick="do_edit({$vo.id})">收件</a>
+                        <a class="js-ajax-delete" href='{:U("CaseDocument/del",array("id"=>$vo["id"]))}'>删除</a>
+                    </td>
+                </tr>
+                </volist>
+            <else/>
+                <tr>
+                    <td colspan='8' style='text-align: center;'>未添加收件资料</td>
+                </tr>
+            </if>
+            </tbody>
+        </table>
+        <input type="hidden" value="{:U('CaseDocument/do_edit')}" id='edit_url'>
+    </div>
+<script src="__STATIC__/common.js"></script>
+<script type='text/javascript'>
+    function edit()
+    {
+        var chk_value =''; 
+        $('input[name="doc_list"]:checked').each(function(){ 
+            chk_value = chk_value + $(this).val() + ',';
+        });
+        if (chk_value.length==0) {
+            layer.msg('你还没有选择任何内容！');
+        } else {
+          do_edit(chk_value);
+        }
+    }
+    
+    function do_edit(ids)
+    {
+        var href = $('#edit_url').val()+'&ids='+ids;
+        $.getJSON(href).done(function (data) {
+            if (data.state === 'success') {
+                layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
+                    if (data.referer) {
+                        location.href = data.referer;
+                    } else {
+                        reloadPage(window);
+                    }
+                });    
+            } else if (data.state === 'fail') {
+                layer.msg(data.info, {icon: 2, time: 1000});
+            }
+        });
+    }
+ </script>   
+</body>
+</html>

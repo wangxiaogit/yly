@@ -11,6 +11,12 @@ class FeeStandardModel extends AdminModel
         4 => '其他业务'
     );
     
+     private  $payMode = array(
+        1 => '现金',
+        2 => 'POS机',
+        3 => '银行转账'
+    );   
+     
      /**
      * 构造函数
      */
@@ -29,6 +35,16 @@ class FeeStandardModel extends AdminModel
     {
         return $this->feeType;
     }        
+    
+    
+    /*
+     * 获取收费类型
+     */
+    public function getPayMode()
+    {
+        return $this->payMode;
+    }  
+    
     
      //自动验证
     protected $_validate = array(

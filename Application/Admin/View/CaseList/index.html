@@ -58,7 +58,7 @@
         </form>
         <div class="table-actions">
             <if condition="$tab_type eq 'needToDo'">
-                <a class="btn btn-primary js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
+                <a class="btn btn-primary btn-small js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
             </if>
         </div>
         <table class="table table-hover table-bordered">
@@ -93,8 +93,8 @@
                             <td></td>
                             <td></td>
                             <td>{$confCaseStatus[$vo['status']]}</td>
-                            <td>{$loanType[$vo['loan_type']]}</td>
-                            <td>{$vo.loan_amount}</td>
+                            <td>{$confLoanType[$vo['loan_type']]}</td>
+                            <td>{:doubleval($vo['loan_amount'])}</td>
                             <td>{$vo.broker_dept_name}</td>
                             <td>{$vo.bank_branch_name}</td>
                             <td>{$deptList[$vo['accept_dept_id']]}</td>

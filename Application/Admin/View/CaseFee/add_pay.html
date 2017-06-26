@@ -1,0 +1,59 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('FeeStandard/do_add')}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label">费用名称</label>
+                    <div class="controls">
+                        <input type="text" name="fee_name">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">费用类型</label>
+                    <div class="controls">
+                        <select name='fee_type'>
+                            <foreach name='feeType' item='vo' key='k'>
+                                <option value='{$k}'>{$vo}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">费用标准</label>
+                    <div class="controls">
+                            <input type="text" name="fee">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否允许选择</label>
+                    <div class="controls">
+                        <label class="radio inline" for="allow_select_true"><input type="radio" name="is_allow_select" value="1" checked id="allow_select_true" />允许</label>
+                        <label class="radio inline" for="allow_select_false"><input type="radio" name="is_allow_select" value="0" id="allow_select_false">不允许</label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否自定义费用</label>
+                    <div class="controls">
+                        <label class="radio inline" for="is_custom_false"><input type="radio" name="is_custom" value="1" id="is_custom_false">是</label>
+                        <label class="radio inline" for="is_custom_true"><input type="radio" name="is_custom" value="0" checked id="is_custom_true" />否</label>  
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">是否有效</label>
+                    <div class="controls">
+                        <label class="radio inline" for="isvalid_true"><input type="radio" name="isvalid" value="1" checked id="isvalid_true" />有效</label>
+                        <label class="radio inline" for="isvalid_false"><input type="radio" name="isvalid" value="0" id="isvalid_false">无效</label>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <a class="btn" href="{:U('FeeStandard/index')}">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

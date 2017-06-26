@@ -1,0 +1,31 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <form method="post" class="form-horizontal js-ajax-form" id="form_data" action="{:U('CaseFee/do_add')}">
+            <table class = 'table table-bordered '>
+                <foreach name='type_arr' item='vo' key='k'>
+                    <tr>     
+                        <th width='90'>{$vo}</th>
+                        <td>
+                            <div class="control-group">
+                                <foreach name='fee_arr[$k]' item='vd'>
+                                    <label class="checkbox inline">
+                                        <input type="checkbox" name="fee_list[]" value="{$vd.id}"> {$vd.fee_name}
+                                    </label>
+                                </foreach>
+                            </div>
+                        </td>    
+                    </tr>
+                </foreach> 
+                <input type='hidden' value='{$case_id}' name='case_id'>
+            </table>         
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit" >添加</button>
+                <a class="btn" onclick="myclose()">返回</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@
             <li><a href="javascript:history.go(-1);" title="后退"><i class="fa fa-mail-reply right_tool_icon"></i></a></li>
         </ul>
          <div class="table-actions">
-            <a class="btn btn-primary js-ajax-dialog-btn"  href="{:U('CasePerson/add', array('case_id'=>$case_id))}" title="新增交易人">新增交易人</a>
+            <a class="btn btn-primary btn-small js-ajax-dialog-btn"  href="{:U('CasePerson/add', array('case_id'=>$case_id))}" title="新增交易人">新增交易人</a>
         </div>
         <table class="table table-hover table-bordered">
             <thead>
@@ -30,30 +30,34 @@
                 </tr>
             </thead>
             <tbody>
-                <foreach name="person_list" item="vo">
-                <tr>
-                    <td>{$vo.id}</td>
-                    <td>{$vo.name}</td>
-                    <td>{$vo['right_type']==1?'买方':'卖方'}</td>
-                    <td>{$vo.telno}</td>
-                    <td>{$vo.company}</td>
-                    <td>{$company_type[$vo['company_type']]}</td>
-                    <td>{$vo.company_telno}</td>
-                    <td>{$vo.birthday}</td>
-                    <td>{$vo['sex']?'男':'女'}</td>
-                    <td>{$vo.card_no}</td>
-                    <td>{$vo['is_main_loan']?'是':'否'}</td>
-                    <td>{$vo['is_local']?'是':'否'}</td>
-                    <td>
-                            <a class="js-ajax-dialog-btn" href='{:U("CasePerson/edit",array("id"=>$vo["id"]))}' title="编辑交易人">编辑</a>
-                            <a class="js-ajax-delete" href='{:U("CasePerson/del",array("id"=>$vo["id"]))}'>删除</a>
-                        </if>
-                    </td>
-                </tr>
-                </foreach>
+                <if condition='$person_list'>
+                    <foreach name="person_list" item="vo">
+                        <tr>
+                            <td>{$vo.id}</td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo['right_type']==1?'买方':'卖方'}</td>
+                            <td>{$vo.telno}</td>
+                            <td>{$vo.company}</td>
+                            <td>{$company_type[$vo['company_type']]}</td>
+                            <td>{$vo.company_telno}</td>
+                            <td>{$vo.birthday}</td>
+                            <td>{$vo['sex']?'男':'女'}</td>
+                            <td>{$vo.card_no}</td>
+                            <td>{$vo['is_main_loan']?'是':'否'}</td>
+                            <td>{$vo['is_local']?'是':'否'}</td>
+                            <td>
+                                    <a class="js-ajax-dialog-btn" href='{:U("CasePerson/edit",array("id"=>$vo["id"]))}' title="编辑交易人">编辑</a>
+                                    <a class="js-ajax-delete" href='{:U("CasePerson/del",array("id"=>$vo["id"]))}'>删除</a>
+                            </td>
+                        </tr>
+                    </foreach>
+                <else />
+                    <tr>
+                        <td colspan='13' style='text-align: center;'>未添加交易人信息</td>
+                    </tr>
+                </if>
             </tbody>
         </table>
-        {$_Page}
     </div>
 <script src="__STATIC__/common.js"></script>
 </body>

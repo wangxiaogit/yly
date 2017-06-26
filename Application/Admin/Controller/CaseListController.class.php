@@ -8,11 +8,13 @@ use Common\Controller\AdminController;
 class CaseListController extends AdminController
 {   
     protected  $caseListModel;
+    protected  $caseHouseModel;
     
     public function _initialize()
     {
         parent::_initialize();
         $this->caseListModel = D('Common/CaseList');
+        $this->caseHouseModel = D('Common/CaseHouse');
     }
     
     /**
@@ -360,7 +362,7 @@ class CaseListController extends AdminController
         //业务类型
         $confBusinessType = $this->caseListModel->getCaseType();
         //贷款类型
-        $confLoanType = $this->caseListModel->getLoanType();
+        $confLoanType = $this->caseHouseModel->getLoanType();
         //案例状态
         $confCaseStatus = $this->caseListModel->getConfCaseStatus();
         //部门
@@ -499,5 +501,44 @@ class CaseListController extends AdminController
             }
         }
     }
-         
+    
+    /*
+     * 银行信息
+     */
+    public function bankInfo($case_id)
+    {   
+        $bank_info = D('Common/CaseList')->find($case_id);
+        if ($bank_info['bank_uid']) {
+            $bank_info['bank_uname'] = M('user')->where('id='.$bank_info['bank_uid'])->getField('true_name');
+        }
+        $bank_list = M('Organize')->where('type = 2  and status = 1 ')->select();
+        
+        $this->assign('tab_arr', get_case_info_tabs());
+        $this->assign('tab','CaseList/bankInfo');
+        $this->assign('case_id',$case_id);
+        $this->assign('bank_info',$bank_info);
+        $this->assign('organize_lists', $bank_list);
+        $this->display();
+    }        
+     
+    
+    /*
+     * 设置银行
+     */
+    public function bankSet()
+    {
+        $model = D('Common/CaseList');
+        if (IS_POST) {
+            if ($model->create()) {
+                $res = $model->save();
+                    if ($res) {
+                        $this->success('保存成功！');
+                    } else {
+                        $this->error('保存失败！');
+                    }
+            } else {
+                $this->error($model->getError());
+            }
+        }
+    }
 }

@@ -923,6 +923,8 @@ class Model {
             'integer'   =>  '/^[-\+]?\d+$/',
             'double'    =>  '/^[-\+]?\d+(\.\d+)?$/',
             'english'   =>  '/^[A-Za-z]+$/',
+            'phone'     =>  '/^1\d{10}$/',
+            'cardno'     =>  '/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/'
         );
         // 检查是否有内置的正则表达式
         if(isset($validate[strtolower($rule)]))
