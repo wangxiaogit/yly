@@ -7,6 +7,45 @@ class AdminController extends BaseController
     public function _initialize() 
     {
         parent::_initialize();
+        
+//        define("UID", is_login());
+//        if (!$UID) { //登录
+//            $this->redirect(U('Admin/Login/index'));
+//        }
+//        
+//        define('IS_ADMIN', is_administrator());
+//        if (!IS_ADMIN) {
+//            $rule  = strtolower(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME);
+//            if (!$this->checkRule($rule, UID)) {
+//                $this->error("未授权访问");
+//            }
+//        }   
+    }
+    
+    /**
+     * 权限检测
+     * 
+     * @param string $rule 规则url
+     * @param int $uid 用户id
+     * @param string  $mode    check模式
+     */
+    public function  checkRule($rule, $uid, $mode='url') 
+    {    
+        $allowRules = array();
+        
+        if ($rule && in_array($rule, $allowRules) || substr(ACTION_NAME, 0, 4) == 'ajax') {
+            return true;
+        }
+        
+        static $Auth    =   null;
+        if (!$Auth) {
+            $Auth       =   new \Think\iAuth();
+        }
+        
+        if(!$Auth->check($rule, $uid, $mode)){
+            return false;
+        }
+        return true;
     }
     
     /**
