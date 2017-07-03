@@ -96,7 +96,7 @@ class MenuController extends AdminController
     /**
      * 编辑
      */
-    public function edit ($id)
+    public function edit($id)
     {   
         $menu = $this->menuModel->find($id);
         if (empty($menu)) {
@@ -122,7 +122,7 @@ class MenuController extends AdminController
     /**
      * 编辑提交
      */
-    public function do_edit ()
+    public function do_edit()
     {
         if (IS_POST) {
            if ($this->menuModel->create()) {

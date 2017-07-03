@@ -29,10 +29,10 @@ class MenuModel extends AdminModel
     
     public function checkActionUpdate($data) 
     {
-        $where['_string'] = "(title = ".$data['title'].") ";
+        $where['_string'] = "(title = '".$data['title']."') ";
         
         if ($data['url']) {
-           $where['_string'] .= "or (url=".$data['url'].")";
+           $where['_string'] .= "or (url='".$data['url']."')";
         }
         
         $where['status'] = 1;

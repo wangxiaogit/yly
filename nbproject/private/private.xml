@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Common/Model/UserModel.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Controller/UserController.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Common/Conf/config.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Common/Model/AuthGroupModel.class.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Admin/Common/function.php</file>
+            <file>file:/E:/phpStudy/WWW/yly/Application/Common/Common/function.php</file>
+        </group>
     </open-files>
 </project-private>
