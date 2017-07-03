@@ -1,0 +1,78 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <foreach name='tab_arr' key='k' item='vo'>
+                <li class="<php>if($k == $tab) echo 'active';</php>"><a href="{:U($k,array('case_id'=>$case_id))}">{$vo}</a></li>
+            </foreach>
+            <li><a href="javascript:history.go(-1);" title="后退"><i class="fa fa-mail-reply right_tool_icon"></i></a></li>
+        </ul>
+         <div class="table-actions row">
+            <div class="span7">
+                <a class="btn btn-primary btn-small" onclick="add_remark()"  title="添加备注">添加备注</a>
+                <input type="hidden" value="{$case_id}" name="case_id" id="case_id"/>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="30">序号</th>
+                            <th width="80">备注人</th>
+                            <th width="80">备注时间</th>
+                            <th>备注内容</th>
+                        <tr>
+                    </thead>
+                    <tbody>
+                        <if condition="$remark_list">
+                            <volist name="remark_list" key="k" id="vo">
+                                <tr>
+                                    <td>{$k}</td>
+                                    <td>{$vo.create_name}</td>
+                                    <td>{$vo.create_time|date="Y-m-d",###}</td>
+                                    <td>{$vo.remark}</td>
+                                </tr>   
+                            </volist>
+                        <else/>
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+                                    未发现备注内容
+                                </td>    
+                            </tr>
+                        </if>
+                    </tbody>    
+                </table>
+            </div>
+        </div>
+    </div>
+<script src="__STATIC__/common.js"></script> 
+<script type="text/javascript">
+    function add_remark()
+    {
+        layer.prompt({
+            formType: 2,
+            title: '请输入备注内容'
+        },   
+        function(value, index, elem){
+            var case_id = $("#case_id").val();
+            var href = "{:U('do_add')}"+"&case_id="+case_id+"&remark="+value;
+            $.getJSON(href).done(function (data) {
+                if (data.state === 'success') {
+                    layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
+                        if (data.referer) {
+                            location.href = data.referer;
+                        } else {
+                            reloadPage(window);
+                        }
+                    });    
+                } else if (data.state === 'fail') {
+                    layer.msg(data.info, {icon: 2, time: 1000});
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

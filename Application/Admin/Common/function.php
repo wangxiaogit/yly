@@ -89,7 +89,6 @@ function  get_case_info_tabs()
         'CaseList/bankInfo' => '银行匹配',
         'CaseDocument/index' => '收件列表',
         'CaseFee/index' => '收费记录',
-        'CaseList/dateInfo' => '节点日期',
         'CaseRemark/index' => '备注信息',
         'CaseAdvanceLoan/index' => '垫资信息'
     );

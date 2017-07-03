@@ -34,24 +34,28 @@
                             <th>实际收费标准</th>
                             <th width="120">操作</th>
                         </tr>
-                        <if condition='$case_fee_list'>
+                        <php>$fee_sum=0;$actual_fee_sum=0;</php>
                         <volist name="case_fee_list" id="vo"  key='k'>
                         <tr>
+                            <php>$fee_sum = $fee_sum + $vo['fee'];$actual_fee_sum = $actual_fee_sum + $vo['actual_fee'];</php>
                             <td>{$k}</td>
                             <td>{$vo.fee_name}</td>
                             <td>{:doubleval($vo['fee'])}</td>
                             <td>{:doubleval($vo['actual_fee'])}</td>
                             <td>    
-                                <a onclick="do_edit({$vo.id})">修改收费金额</a>&nbsp;&nbsp;|
-                                <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"]))}'>删除</a>
+                                 <a onclick='edit_fee({$vo.id})'>编辑</a>&nbsp;&nbsp;|
+                                <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"],"action"=>"payment"))}'>删除</a>
                             </td>
                         </tr>
                         </volist>
-                    <else/>
                         <tr>
-                            <td colspan='5' style='text-align: center;'>未添加收费项目</td>
-                        </tr>
-                    </if>
+                            <php></php>
+                            <td>{$k+1}</td>
+                            <td>合计</td>
+                            <td>{$fee_sum?$fee_sum:0}</td>
+                            <td>{$actual_fee_sum?$actual_fee_sum:0}</td>
+                            <td></td>
+                        </tr>    
                     </tbody>
                 </table>
             </div>
@@ -59,7 +63,7 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                        <tr>
-                            <th colspan="8" style="text-align: center;">
+                            <th colspan="9" style="text-align: center;">
                                 实际收费
                             </th>    
                         </tr>
@@ -68,32 +72,38 @@
                         <tr>
                             <th width="50">序号</th>
                             <th>收费金额</th>
+                            <th>缴款方式</th>
                             <th>收据编号</th>
                             <th>收费人</th>
                             <th>收费时间</th>
                             <th>是否确认</th>
-                            <th>确认时间</th>
+                            <th>备注</th>
                             <th width="120">操作</th>
                         </tr>
-                        <if condition='$documnet_list'>
-                        <volist name="documnet_list" id="vo"  key='k'>
+                        <if condition='$case_pay_list'>
+                        <volist name="case_pay_list" id="vo"  key='k'>
                         <tr>
-                            <td><input type='checkbox' value='{$vo.id}' class='doc_list' name='doc_list'></td>
                             <td>{$k}</td>
-                            <td>{$vo.file_name}</td>
-                            <td>{$type_arr[$vo['type_id']]}</td>
-                            <td>{$vo['getit']?'是':'否'}</td>
-                            <td>{$vo.accept_name}</td>
-                            <td><if condition="$vo['accept_time']">{$vo.accept_time|date="Y-m-d",###}</if></td>
-                            <td>    
-                                <a onclick="do_edit({$vo.id})">收件</a>
-                                <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"]))}'>删除</a>
+                            <td>{:doubleval($vo['fee'])}</td>
+                            <td>{$pay_mode[$vo['pay_mode']]}</td>
+                            <td>{$vo.receipt_no}</td>
+                            <td>{$user[$vo['clerk_uid']]}</td>
+                            <td>{$vo.pay_date|date="Y-m-d",###}</td>
+                            <td><if condition="$vo['status']"><span class="label label-info">
+                                    <else/><span class="label label-warning"></if>{$vo['status']==1?'是':'否'}</span></td>
+<!--                            <td><if condition="$vo['confirm_time']">{$vo.confirm_time|date="Y-m-d",###}</if></td>-->
+                            <td>{$vo.remark}</td>
+                            <td>
+                                <if condition="$vo['status'] neq 1">
+                                    <a class="js-ajax-dialog-btn" title="编辑缴费" href='{:U("CaseFee/edit_pay",array("id"=>$vo["id"]))}'>编辑</a>
+                                    <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"],"action"=>"pay"))}'>删除</a>
+                                </if>
                             </td>
                         </tr>
                         </volist>
                     <else/>
                         <tr>
-                            <td colspan='8' style='text-align: center;'>未添加收件资料</td>
+                            <td colspan='9' style='text-align: center;'>未添加实际缴费</td>
                         </tr>
                     </if>
                     </tbody>
@@ -112,33 +122,37 @@
                     <tbody>
                         <tr>
                             <th width="50">序号</th>
-                            <th>支出款项</th>
+                            <th>支出类别</th>
                             <th>支出金额</th>
                             <th>支出人</th>
                             <th>支出时间</th>
                             <th>是否确认</th>
-                            <th>确认时间</th>
+                            <th>备注</th>
                             <th width="120">操作</th>
                         </tr>
-                        <if condition='$documnet_list'>
-                        <volist name="documnet_list" id="vo"  key='k'>
+                        <if condition='$case_payment_list'>
+                        <volist name="case_payment_list" id="vo"  key='k'>
                         <tr>
-                            <td><input type='checkbox' value='{$vo.id}' class='doc_list' name='doc_list'></td>
                             <td>{$k}</td>
-                            <td>{$vo.file_name}</td>
-                            <td>{$type_arr[$vo['type_id']]}</td>
-                            <td>{$vo['getit']?'是':'否'}</td>
-                            <td>{$vo.accept_name}</td>
-                            <td><if condition="$vo['accept_time']">{$vo.accept_time|date="Y-m-d",###}</if></td>
-                            <td>    
-                                <a onclick="do_edit({$vo.id})">收件</a>
-                                <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"]))}'>删除</a>
+                            <td>{$payment_type[$vo['payment_type']]}</td>
+                            <td>{:doubleval($vo['fee'])}</td>
+                            <td>{$user[$vo['clerk_uid']]}</td>
+                            <td>{$vo.payment_date|date="Y-m-d",###}</td>
+                            <td><if condition="$vo['status']"><span class="label label-info">
+                                    <else/><span class="label label-warning"></if>{$vo['status']==1?'是':'否'}</span></td>
+<!--                            <td><if condition="$vo['confirm_time']">{$vo.confirm_time|date="Y-m-d",###}</if></td>-->
+                            <td>{$vo.remark}</td>
+                            <td>
+                                <if condition="$vo['status'] neq 1">
+                                    <a class="js-ajax-dialog-btn" title="编辑支出"  href='{:U("CaseFee/edit_payment",array("id"=>$vo["id"]))}'>编辑</a>
+                                    <a class="js-ajax-delete" href='{:U("CaseFee/del",array("id"=>$vo["id"],"action"=>"payment"))}'>删除</a>
+                                </if>
                             </td>
                         </tr>
                         </volist>
                     <else/>
                         <tr>
-                            <td colspan='8' style='text-align: center;'>未添加收件资料</td>
+                            <td colspan='8' style='text-align: center;'>未添加支出项目</td>
                         </tr>
                     </if>
                     </tbody>
@@ -147,38 +161,30 @@
         </div>
         <input type="hidden" value="{:U('CaseFee/do_edit')}" id='edit_url'>
     </div>
-<script src="__STATIC__/common.js"></script>
-<script type='text/javascript'>
-    function edit()
+<script src="__STATIC__/common.js"></script> 
+<script type="text/javascript">
+    function edit_fee(id)
     {
-        var chk_value =''; 
-        $('input[name="doc_list"]:checked').each(function(){ 
-            chk_value = chk_value + $(this).val() + ',';
-        });
-        if (chk_value.length==0) {
-            layer.msg('你还没有选择任何内容！');
-        } else {
-          do_edit(chk_value);
-        }
-    }
-    
-    function do_edit(ids)
-    {
-        var href = $('#edit_url').val()+'&ids='+ids;
-        $.getJSON(href).done(function (data) {
-            if (data.state === 'success') {
-                layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
-                    if (data.referer) {
-                        location.href = data.referer;
-                    } else {
-                        reloadPage(window);
-                    }
-                });    
-            } else if (data.state === 'fail') {
-                layer.msg(data.info, {icon: 2, time: 1000});
-            }
+        layer.prompt({
+           title: '请输入实际收费标准'
+        },   
+        function(value, index, elem){
+            var href = "{:U('do_edit_fee')}"+"&id="+id+"&actual_fee="+value;
+            $.getJSON(href).done(function (data) {
+                if (data.state === 'success') {
+                    layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
+                        if (data.referer) {
+                            location.href = data.referer;
+                        } else {
+                            reloadPage(window);
+                        }
+                    });    
+                } else if (data.state === 'fail') {
+                    layer.msg(data.info, {icon: 2, time: 1000});
+                }
+            });
         });
     }
- </script>   
+</script>
 </body>
 </html>

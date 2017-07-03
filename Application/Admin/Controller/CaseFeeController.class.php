@@ -19,10 +19,12 @@ class CaseFeeController extends AdminController
         $this->assign('tab','CaseFee/index');
         $this->assign('case_id', $case_id);
         $case_fee_list = M('CaseFee')->where('status = 0 and case_id = '.$case_id)->select();
-        $case_pay_list = M('CasePay')->where('case_id = '.$case_id)->select();
-        $case_payment_list = M('CasePaymentList')->where('case_id = '.$case_id)->select();
+        $case_pay_list = M('CasePay')->where('status >= 0 and case_id = '.$case_id)->select();
+        $case_payment_list = M('CasePayment')->where('case_id = '.$case_id)->select();
         
         $this->assign('case_pay_list',$case_pay_list);
+        $this->assign('pay_mode',D('Common/FeeStandard')->getPayMode());
+        $this->assign('payment_type',D('Common/FeeStandard')->getPaymentType());
         $this->assign('case_payment_list',$case_payment_list);
         $this->assign('case_fee_list',$case_fee_list);
         $this->display();
@@ -41,7 +43,6 @@ class CaseFeeController extends AdminController
         }
         $this->assign('case_id', $case_id);
         $this->assign('type_arr', D('Common/FeeStandard')->getFeeType());
-        $this->assign('fee_arr', $res);
         $this->display();
     }
     
@@ -55,6 +56,62 @@ class CaseFeeController extends AdminController
         $this->assign('pay_mode', D('Common/FeeStandard')->getPayMode());
         $this->display();
     }    
+    
+    
+    /*
+     * 增加支出
+     */
+    public function add_payment($case_id)
+    {
+        $this->assign('case_id', $case_id);
+        $this->assign('payment_type', D('Common/FeeStandard')->getPaymentType());
+        $this->display();
+    }   
+    
+    
+    /*
+     * 增加收费项
+     */
+    public function do_edit_fee($id)
+    {   
+        $id = I('get.id', 0, 'intval');
+        $actual_fee = I('get.actual_fee', 0, 'doubleval');
+        if (D('Common/CaseFee')->where('id = '.$id)->setField('actual_fee', $actual_fee)) {
+            $this->success('修改成功！');
+        } else {
+            $this->error('修改失败！');
+        };
+    }
+    
+    
+    /*
+     * 增加缴费
+     */
+    public function edit_pay($id)
+    {
+        if ($id) {
+            $pay_info = D('Common/CasePay')->find($id);
+        }
+        $this->assign('id', $id);
+        $this->assign('pay_info', $pay_info);
+        $this->assign('pay_mode', D('Common/FeeStandard')->getPayMode());
+        $this->display();
+    }    
+    
+    
+    /*
+     * 增加支出
+     */
+    public function edit_payment($id)
+    {
+        if ($id) {
+            $payment_info = D('Common/CasePayment')->find($id);
+        }
+        $this->assign('id', $id);
+        $this->assign('payment_info', $payment_info);
+        $this->assign('payment_type', D('Common/FeeStandard')->getPaymentType());
+        $this->display();
+    } 
     
     
     /*
@@ -95,28 +152,83 @@ class CaseFeeController extends AdminController
     /**
      * 提交编辑
      */
-    public function do_edit()
+    public function do_edit_pay()
     {
-        $model = D('Common/CaseFee');
-        $ids = I('get.ids');
-        $id_arr = array_filter(explode(',', $ids));
-        if (empty($id_arr)) {
-            $this->error('未获取到收件资料'); 
-        } else {
-            $where['id'] = array('IN', $id_arr);
-            $data['getit'] = 1;
-            $data['accept_uid'] = session(userInfo.uid);
-            $data['accept_name'] = session(userInfo.name);
-            $data['accept_time'] = time();
-            $res = $model->where($where)->setField($data);
-            if ($res) {
-                $this->success('收件成功'); 
+        if (IS_POST) {
+             $model = D('Common/CasePay');
+            if ($model->create()) {
+                if ($model->save() !== false) {
+                    $this->success('修改成功！');
+                } else {
+                    $this->error('修改失败！');
+                }
             } else {
-                $this->error('收件失败');
+                $this->error($model->getError());
+            }
+        }        
+    }
+    
+    
+    /**
+     * 提交编辑
+     */
+    public function do_edit_payment()
+    {
+        if (IS_POST) {
+             $model = D('Common/CasePayment');
+            if ($model->create()) {
+                if ($model->save() !== false) {
+                    $this->success('修改成功！');
+                } else {
+                    $this->error('修改失败！');
+                }
+            } else {
+                $this->error($model->getError());
+            }
+        } 
+    }
+    
+    /*提交缴费
+     * 
+     */
+    public function do_add_pay()
+    {   
+        $model = D('Common/CasePay');
+        
+        if (IS_POST) {
+            if ($model->create()) {
+                if ($model->add()!==false) {
+                    $this->success('添加成功');
+                } else {
+                    $this->error('添加失败');
+                }
+            } else {
+                $this->error($model->getError());
             }
         }
-    }
-
+    } 
+    
+    
+    /*提交支出
+     * 
+     */
+    public function do_add_payment()
+    {   
+        $model = D('Common/CasePayment');
+        
+        if (IS_POST) {
+            if ($model->create()) {
+                if ($model->add()!==false) {
+                    $this->success('添加成功');
+                } else {
+                    $this->error('添加失败');
+                }
+            } else {
+                $this->error($model->getError());
+            }
+        }
+    }    
+    
     
     /**
      * 删除
@@ -124,7 +236,18 @@ class CaseFeeController extends AdminController
     public function del ()
     {
         $id = I('get.id', 0, 'intval');
-        if (D('Common/CaseFee')->where(array("id"=>$id))->delete()) {
+        $action = I('get.action');
+        if (!$action) {
+            $this->error("未获取到参数删除失败！");
+        }
+        $model = '';
+        switch($action)
+        {
+            case 'fee':$model = D('Common/CaseFee'); break;
+            case 'pay':$model = D('Common/CasePay'); break;
+            case 'payment':$model = D('Common/CasePayment'); break;
+        }
+        if ($model->where(array("id"=>$id))->delete()) {
             $this->success("删除成功！");
         } else {
             $this->error("删除失败！");

@@ -11,12 +11,21 @@ class FeeStandardModel extends AdminModel
         4 => '其他业务'
     );
     
-     private  $payMode = array(
+    private  $payMode = array(
         1 => '现金',
         2 => 'POS机',
         3 => '银行转账'
     );   
      
+    
+    private  $paymentType = array(
+        1 => '中介返费',
+        2 => '经纪人返费',
+        3 => '材料费用',
+        4 => '营销费用',
+        5 => ''
+    ); 
+    
      /**
      * 构造函数
      */
@@ -43,7 +52,16 @@ class FeeStandardModel extends AdminModel
     public function getPayMode()
     {
         return $this->payMode;
-    }  
+    }
+    
+    
+    /*
+     * 获取收费类型
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
     
     
      //自动验证

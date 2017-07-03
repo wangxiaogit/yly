@@ -396,7 +396,7 @@ class CaseListController extends AdminController
         
         
         
-        if($total_num>$listRows){
+        if($total_num>$limit){
             $Page->setConfig('theme','%FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END% %HEADER%');
         }
         $show = $Page->show();

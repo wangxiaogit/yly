@@ -1,0 +1,88 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <foreach name='tab_arr' key='k' item='vo'>
+                <li class="<php>if($k == $tab) echo 'active';</php>"><a href="{:U($k,array('case_id'=>$case_id))}">{$vo}</a></li>
+            </foreach>
+            <li><a href="javascript:history.go(-1);" title="后退"><i class="fa fa-mail-reply right_tool_icon"></i></a></li>
+        </ul>
+        <form  class="form-horizontal js-ajax-form" method='post' id="form_data" action="{:U('do_edit')}">
+            <table class="table table-bordered ">
+                <tr>
+                    <th>案件编号</th>
+                    <td>
+                        {$info.case_no}
+                    </td>
+                    <th>地址</th>
+                    <td>
+                        {$info.location}
+                    </td>
+                </tr>
+                <tr>
+                    <th>丘权号</th>
+                    <td>{$info.housecode}</td>
+                    <th>贷款金额(万元)</th>
+                    <td>{$info.loan_amount}</td>
+                </tr>
+                <tr>
+                    <th><font style="color:red;">*</font>&nbsp;房屋实际成交价格（万元）</th>
+                    <td  >
+                        <input  name='house_total_price' id='house_total_price' type="text" value="{$advance_info.house_total_price}">
+                    </td>
+                    <th><font style="color:red;">*</font>&nbsp;首付金额（万元）</th>
+                    <td>
+                        <input  name='house_down_payment' id='house_down_payment' type="text" value="{$advance_info.house_down_payment}">
+                    </td>
+                </tr>
+                <tr>
+                    <th><font style="color:red;">*</font>&nbsp;尾款（万元）</th>
+                    <td  >
+                        <input  name='house_balance_due' id='house_balance_due' type="text" value="{$advance_info.house_balance_due}">
+                    </td>
+                    <th><font style="color:red;">*</font>&nbsp;垫资金额（万元）</th>
+                    <td>
+                        <input  name='advance_money' id='advance_money' type="text" value="{$advance_info.advance_money}">
+                    </td>
+                </tr>
+                <tr>                   
+                    <th><font style="color:red;">*</font>&nbsp;资金来源</th>
+                    <td>
+                        <select  id='cooperative_type' name='cooperative_type'>
+                            <volist name='cooperative_type' id = 'vo' key="k">
+                                <option value ="{$k}" {$k==$advance_info['cooperative_type']?'selected':''}>{$vo}</option>
+                            </volist>
+                        </select>
+                    </td>
+                    <th>是否网签</th>
+                    <td >                                    
+                        <input type="radio" name="is_online_signed" id="is_online_signed"
+                               value="1" {$advance_info['is_online_signed']==1?'checked="checked"':''}/>是
+                        <input type="radio" name="is_online_signed" id="is_online_signed"
+                               value="0" {$advance_info['is_online_signed']==0?'checked="checked"':''}/>否
+                    </td>
+                </tr>
+                <tr>
+                    <th>是否避税</th>
+                    <td >                                    
+                        <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
+                               value="1" {$advance_info['is_tax_avoidance']==1?'checked="checked"':''}/>是
+                        <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
+                               value="0" {$advance_info['is_tax_avoidance']==0?'checked="checked"':''}/>否
+                    </td>
+                    <th>预约还款日期</th>
+                    <td >                                    
+                <input class = "js-date" style = "width: 90px;" type="text"  value= "{$advance_info['order_pay_date']}" id = "order_pay_date"  name="order_pay_date">
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" value="{$case_id}" name="case_id">
+            <div class="form-actions">
+                <button type="submit"  class="btn btn-primary js-ajax-submit" data-isdialog="1" >保存</button>
+            </div>  
+        </form>
+    </div>
+    <script src="__STATIC__/common.js"></script>
+</body>
+</html>

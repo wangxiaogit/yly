@@ -2,12 +2,12 @@
 </head>
 <body>
     <div class="wrap">
-        <form method="post" class="form-horizontal js-ajax-form" action="{:U('CaseFee/do_add_pay')}">
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('CaseFee/do_edit_pay')}">
             <fieldset>
                 <div class="control-group">
                     <label class="control-label">缴费金额</label>
                     <div class="controls">
-                        <input type="text" name="fee">
+                        <input type="text" name="fee" value="{$pay_info.fee}">
                     </div>
                 </div>
                 <div class="control-group">
@@ -15,7 +15,7 @@
                     <div class="controls">
                         <select name='pay_mode'>
                             <foreach name='pay_mode' item='vo' key='k'>
-                                <option value='{$k}'>{$vo}</option>
+                                <option value='{$k}' <if condition="$k eq $pay_info['pay_mode']">selected</if>>{$vo}</option>
                             </foreach>
                         </select>
                     </div>
@@ -23,21 +23,21 @@
                 <div class="control-group">
                     <label class="control-label">收据编号</label>
                     <div class="controls">
-                            <input type="text" name="receipt_no">
+                        <input type="text" name="receipt_no" value="{$pay_info.receipt_no}">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label">备注</label>
                     <div class="controls">
-                        <textarea name="remark"></textarea>
+                        <textarea name="remark">{$pay_info.remark}</textarea>
                     </div>
                 </div>
             </fieldset>
             <div class="form-actions">
-                <input type="hidden" name="case_id" value="{$case_id}">
+                <input type="hidden" name="id" value="{$id}">
                 <input type="hidden" name="dept_id" value="{:session('userinfo.dept_id')}">
                 <input type="hidden" name="clerk_uid" value="{:session('userinfo.uid')}">
-                <button type="submit" class="btn btn-primary js-ajax-submit">添加</button>
+                <button type="submit" class="btn btn-primary js-ajax-submit">保存</button>
                 <a class="btn" onclick='myclose()'>返回</a>
             </div>
         </form>

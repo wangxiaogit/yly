@@ -1,0 +1,144 @@
+<include file = "Public/header" />
+</head>
+<body>
+    <div class="wrap js-check-wrap">
+        <ul class="nav nav-tabs">
+            <li <if condition="$action eq 1">class="active"</if>><a href="{:U('PayConfirm/index',array('action'=>1))}">未确认</a></li>
+            <li <if condition="$action eq 2">class="active"</if>><a href="{:U('PayConfirm/index',array('action'=>2))}">已确认</a></li>
+        </ul>
+        
+        <form class="well form-search" method="post" action="{:U('PayConfirm/index')}">
+            类别： 
+            <select class="select_2" name="group">
+                <option value='accept' <if condition="$_POST['group'] eq 'accept'">selected</if>>业务员</option>
+                <option value='debtor' <if condition="$_POST['group'] eq 'accept'">selected</if>>主贷人</option>
+                <option value='receive_no' <if condition="$_POST['group'] eq 'receive_no'">selected</if>>收据编号</option>
+            </select> 
+            &nbsp;&nbsp;
+            关键字： 
+            <input type="text" name="keywords" style="width: 200px;" value="{$_POST['keywords']}" placeholder="请输入姓名">
+            <input type="hidden" name="action" value="{$action}">
+            <input type="submit" class="btn btn-primary" value="搜索" />
+        </form>
+        
+        <form method="post">
+            <div class="table-actions">
+                <button class="btn btn-primary btn-small check-all" type="button" data-action="{:U('PayConfirm/confirm')}" onclick='confirm_all()' >批量确认</button>
+            </div>
+            <table class="table table-hover table-bordered table-list">
+                <thead>
+                    <tr>
+                        <th width="50"><input  type='checkbox' size='3'  id='checkAll'></th>
+                        <th >案件编号</th>
+                        <th>主贷人</th>
+                        <th>收费金额</th>
+                        <th >收据编号</th>
+                        <th >业务员</th>
+                        <th >收款时间</th>
+                        <if condition="$action eq 1">
+                            <th >操作</th>
+                        <else/>
+                            <th >状态</th>
+                        </if>
+                    </tr>
+                </thead>
+                <tbody>
+                    <if condition="$lists">
+                        <foreach name="lists" item="vo">
+                            <tr>
+                                <td><input name="ids[]" type='checkbox' size='3' value='{$vo.id}' class='pay_id'></td>
+                                <td>{$vo.case_no}</td>
+                                <td>{$vo.debtor}</td>
+                                <td>{$vo.fee}</td>
+                                <td>{$vo.receipt_no}</td>
+                                <td>{$vo.accept_name}</td>
+                                <td>{$vo.pay_date|date='Y-m-d',###}</td>
+                                <td>
+                                    <if condition="$action eq 1">
+                                        <a onclick='do_confirm({$vo.id})'>确认</a>
+                                    <else/>
+                                        <if condition="$vo['status'] eq 1">
+                                            <span class="label label-success">
+                                        <else/>
+                                            <span class="label label-warning">
+                                        </if>
+                                        {$vo['status']==1?'已确认':'驳回'}
+                                        </sapn>
+                                    </if>
+                                </td>
+                            </tr>
+                        </foreach>
+                    <else/>
+                        <tr>
+                            <td colspan="8" style="text-align: center;">未发现符合条件数据</td>
+                        </tr>
+                    </if>
+                </tbody>    
+            </table>
+            {$_Page}
+        </form>    
+    </div>  
+<script src="__STATIC__/common.js"></script>
+<script type='text/javascript'>
+    function confirm_all()
+    {
+        var ids = '';
+        $(".pay_id").each(function(i){
+            if($(this).attr("checked")){
+                ids += $(this).val() + ',';
+            }
+        });
+        if (ids != '') {
+            do_confirm(ids);
+        } else {
+            layer.msg('未选择任何缴费项！', {icon: 2});
+        }
+    }
+    function do_confirm(id){
+        var url = $('.check-all').attr('data-action');
+        layer.open({
+            content: '请确认该费用'
+            ,btn: ['确认', '驳回']
+            ,btn1: function(index, layero){
+                var href = url + '&status=1&ids='+id;
+                $.getJSON(href).done(function (data) {
+                    return_data(data);
+                });
+            },
+            btn2: function(index, layero){
+              //按钮【按钮二】的回调
+                var href = url + '&status=-1&ids='+id;
+                $.getJSON(href).done(function (data) {
+                    return_data(data);
+                });
+                return false
+            }
+        });
+    }
+    
+    function return_data(data)
+    {
+        if (data.state === 'success') {
+            layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
+                if (data.referer) {
+                    location.href = data.referer;
+                } else {
+                    reloadPage(window);
+                }
+            });    
+        } else if (data.state === 'fail') {
+            layer.msg(data.info, {icon: 2, time: 1000});
+        }
+    }
+    $(document).ready(function(){
+        $("#checkAll").on('click',function(){
+            if ($("#checkAll").prop('checked')===true){
+                $(".pay_id").prop('checked',true);
+            } else {
+                $(".pay_id").prop('checked',false);
+            }
+        });
+    });
+</script>
+</body>
+</html>
