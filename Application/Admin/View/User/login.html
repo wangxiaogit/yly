@@ -1,16 +1,122 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<!doctype html>
 <html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <title>{$meta_title}-{:L('WEBSITE_TITLE')}</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <meta name="robots" content="noindex,nofollow">
+    
+    <link rel="stylesheet" href="__STATIC__/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="__STATIC__/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="__CSS__/login.css" rel="stylesheet" />
+    
+    <script>
+        //判断是否同一框架
+        if (window.parent != window.self) {
+            window.parent.location.href = window.self.location.href;
+            setTimeout(function() {
+                document.body.innerHTML = '';
+            }, 0);
+        }
+    </script>
+</head>
+<body class="login-bg">
+    <div class="container">
+        <div class="span12">			
+            <form class="form-horizontal login-form" method="post" action="{:U('User/do_login')}">
+                <h1>益路盈. 欢迎你</h1>
+                
+                <div>
+                    <div class="control-group">	
+                        <label for="user_name" class="control-label">帐号</label>
+                        <div class="controls">
+                            <i class="fa fa-user"></i>
+                            <input type="text" class="form-control" name="user_name" id="username" >
+                        </div>          
+                    </div>
+
+                    <div class="control-group">
+                        <label for="password" class="control-label">密码</label>
+                        <div class="controls">
+                            <i class="fa fa-lock"></i>
+                            <input type="password" class="form-control" name="password" id="password">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="verify_code" class="control-label">验证码</label>
+                        <div class="controls">
+                            <i class="fa fa-keyboard-o"></i>
+                            <input type="text" class="form-control" name="verify_code" id="verify_code" style="width: 90px;">
+                            <img src="{:U('User/verify')}" class="verify_img" >
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="controls" style="height: 15px;" id="login-tips"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-danger btn-block js-ajax-submit">登 录</button>
+                    
+                </div>				 	
+            </form>
+        </div>
+    </div>
+    <div class="footer">
+        {:L('WEBSITE_COPYRIGHT')}
+    </div>
+    
+<script src="__STATIC__/jquery.js"></script>
+
+<script>
+    //匿名函数 并调用
+    (function(){
+        //验证码刷新
+        var verify_img = $(".verify_img").attr("src");
+        $(".verify_img").click(function(){
+            
+            if( verify_img.indexOf('?')>0){
+                $(".verify_img").attr("src", verify_img+'&random='+Math.random());
+            }else{
+                $(".verify_img").attr("src", verify_img.replace(/\?.*$/,'')+'?'+Math.random());
+            }
+        });
+        
+        $(document).ajaxStart(function(){
+            $("button.js-ajax-submit").text("登录中...").attr("disabled", true);
+
+            var $text_error = $('.text-error');
+            if ($text_error.length) $text_error.remove();
+        })
+        .ajaxStop(function(){
+            $("button.js-ajax-submit").text("登录").attr("disabled", false);
+        });
+        
+    	$("form").submit(function(){
+            var self = $(this),btn = $('.js-ajax-submit');
+            
+            $.post(self.attr("action"), self.serialize(), success, "json");
+            return false;
+
+            function success(data){
+                if(data.status){
+                    window.location.href = data.url;
+                } else {
+                    
+                    $('<span class="text-error">' + data.info + '</span>').appendTo($("#login-tips")).fadeIn('fast');
+
+                    btn.removeProp('disabled').removeClass('disabled');
+                    
+                    $("#verify_code").html('');
+                    
+                    //刷新验证码
+                    $(".verify_img").click();
+                }
+            }
+    	});
+        
+    })();
+</script>
+</body>
 </html>

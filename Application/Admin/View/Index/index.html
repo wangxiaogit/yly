@@ -6,6 +6,7 @@
 <meta name="renderer" content="webkit">
 <meta charset="utf-8">
 <title>{:L('WEBSITE_TITLE')}</title>
+<link rel="shortcut icon" href="__IMG__/favicon.ico">
 
 <meta name="keywords" content="{:L('WEBSITE_KEYWORDS')}">
 <meta name="description" content="{:L('WEBSITE_DESCRIPTION')}">
@@ -46,7 +47,7 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <a href="{:U('index/index')}" class="brand"> 
-                    <small><img src="__IMG__/logo-18.png">  {:L('COMPANY_NAME')}</small>
+                    <small><img src="__IMG__/logo-1.png">  {:L('COMPANY_NAME')}</small>
                 </a>
                 
                 <div class="pull-left nav_shortcuts" >		
@@ -60,12 +61,14 @@
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                             <img class="nav-user-photo" width="30" height="30" src="__IMG__/logo-18.png">
                             <span class="user-info">
-                                欢迎, 管理员
+                                <php>$nick_name = session('userInfo.true_name') ? session('userInfo.true_name'):session('user_name');</php>
+                                欢迎, {$nick_name}
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
-                            <li><a href="{:U('Login/out')}"><i class="fa fa-sign-out"></i> {:L('LOGOUT')}</a></li>
+                            <li><a href="javascript:openapp('{:U('User/password')}','index_password','{:L('RESET_PASSWORD')}');"><i class="fa fa-lock"></i> {:L('RESET_PASSWORD')}</a></li>
+                            <li><a href="{:U('User/loginout')}"><i class="fa fa-sign-out"></i> {:L('LOGOUT')}</a></li>
                         </ul>
                     </li>
                 </ul>

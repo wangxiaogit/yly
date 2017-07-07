@@ -162,7 +162,7 @@ class UserController extends AdminController
      */
     public function login () 
     {
-        $this->assign('meta-title', "登录");
+        $this->assign('meta_title', "登录");
         $this->display();
     }
     
@@ -186,17 +186,18 @@ class UserController extends AdminController
         
         $user_name = I('post.user_name', '', 'trim');
         
-        $useInfo = $this->userModel
+        $userInfo = $this->userModel
                         ->field('id, org_id, org_type, dept_id, user_name, password, true_name, phone, sex, card_no, avatar_url, is_admin')
                         ->where(array('user_name'=>$user_name))
                         ->find();
+        
         if (!$userInfo) {
             $this->error('帐号不存在或被禁用！');
         }
         
         $password = I('post.password', '', 'md5');
         
-        if ($userInfo['password'] == md5($password)) {
+        if ($userInfo['password'] == $password) {
             $this->userModel->afterLogin($userInfo);
             
             $this->success('登录成功！', U('Index/index'));
@@ -209,7 +210,7 @@ class UserController extends AdminController
     /**
      * 退出
      */
-    public function login_out() 
+    public function loginout() 
     {
         if(is_login()){
             session_destroy();
@@ -219,14 +220,52 @@ class UserController extends AdminController
     }
     
     /**
+     * 修改密码
+     */
+    public function password() 
+    {
+        $this->assign('meta_title', "修改密码");
+        $this->display();
+    }
+    
+    /**
+     * 提交修改
+     */
+    public function do_password() 
+    {
+        $rules = array(
+            //array(验证字段,验证规则,错误提示,验证条件,附加规则,验证时间)
+            array('old_password', 'require', '原密码不能为空！', 1 ),
+            array('new_password','require','新密码不能为空！',1),
+            array('confirm_password','require','确认密码不能为空！',1),
+            array('verify','require','验证码不能为空！',1),
+            
+            array('verify','check_verify','验证码错误！', 0, 'function'),
+            array('old_password', session('userInfo.password'), '原密码错误！',0,'equal'),
+            array('comfirm_password','new_password','确认密码不正确！',0,'confirm')
+        );
+        
+        if ($this->userModel->validate($rules)->create()===false) {
+            $this->error($this->userModel->getError());
+        }
+               
+        if ($this->userModel->where(array('id'=>session('userInfo.id')))->setField("password", md5(I('new_password', '', 'trim')))) {
+            $this->success("修改成功！", U('User/loginout'));
+        } else {
+            $this->error("修改失败！");
+        }
+    }
+    
+    /**
      * 验证码
      */
     public function verify() 
     {   
         $config =    array(
+            'codeSet'     => '0123456789', 
             'useImgBg'    => FALSE,
             'useCurve'    => FALSE,
-            'fontSize'    =>    45,    // 验证码字体大小
+            'fontSize'    =>    80,    // 验证码字体大小
             'length'      =>    4     // 验证码位数
         );
         ob_clean();

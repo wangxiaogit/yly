@@ -53,10 +53,19 @@ class AdminController extends BaseController
      */
     public function menus ()
     {
-        $menu_lists = D('Common/Menu')->where(array("status"=>1))->order("sort asc")->select();
+        $map = array('status'=>1, 'display'=>1);
         
-        foreach($menu_lists as &$list) {
-            $list['url'] = U("{$list['url']}", array('menuid'=>$list['id']));
+        $menu_lists = D('Common/Menu')->where($map)->order("sort asc")->select();
+        
+        foreach ($menu_lists as $key=>&$item) {
+            
+            if ( $item['type'] == 1 && !empty($item['url']) && !IS_ADMIN && !$this->checkRule(strtolower(['url']), UID) ) {
+                
+                unset($menu_lists[$key]);
+                continue;//继续循环
+            }
+            
+            $item['url'] = $item['url'] ? U($item['url']) : '';
         }
         
         $treeModel = new \Org\Util\Tree();  

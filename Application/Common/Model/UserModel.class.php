@@ -57,25 +57,23 @@ class UserModel extends AdminModel
     public function afterLogin($data) 
     {
         //权限组
-        $auth_group = M('Auth_group_user')->where(array('user_id'=>$data['id'], 'status'=>1))->getField("group_id", true); 
-        
-        $data['auth_group'] = $auth_group;
+        $auth_group = M('AuthGroupUser')->where(array('user_id'=>$data['id'], 'status'=>1))->getField("group_id", true); 
+        $data['auth_group'] = $auth_group ? $auth_group : array();
         
         //流程组
-        $flow_group = D('Common/WorkflowGroupUser')->where(array('user_id'=>$data['id'], 'status'=>1))->field("group_id", true);
-        
-        $data['flow_group'] = $flow_group;
+        $flow_group = D('Common/WorkflowGroupUser')->where(array('user_id'=>$data['id'], 'status'=>1))->getField("group_id", true);
+        $data['flow_group'] = $flow_group ? $flow_group : array();
         
         session('userInfo', $data, 24*3600);
         
         $this->where(array('id'=>$data['id']))->save(array('login_time'=>time() ,'login_ip'=> get_client_ip()));
     } 
     
-    public function _before_insert($data, $options) {
-        
-    }
+//    public function _before_insert($data, $options) {
+//        
+//    }
     
-    public function _after_update($data, $options) {
-        
-    }
+//    public function _after_update($data, $options) {
+//        
+//    }
 }

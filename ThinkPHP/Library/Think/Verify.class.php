@@ -94,7 +94,7 @@ class Verify {
             session($key, null);
             return false;
         }
-
+        
         if($this->authcode(strtoupper($code)) == $secode['verify_code']) {
             $this->reset && session($key, null);
             return true;

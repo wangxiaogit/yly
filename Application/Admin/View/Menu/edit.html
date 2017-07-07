@@ -4,7 +4,7 @@
     <div class="wrap">
         <ul class="nav nav-tabs">
             <li><a href="{:U('Menu/index')}">菜单管理</a></li>
-            <li class="active"><a href="{:U('Menu/edit',array('id'=>$data['id']))}">菜单编辑</a></li>
+            <li class="active"><a href="{:U('Menu/edit',array('id'=>$menu['id']))}">菜单编辑</a></li>
         </ul>
         <form method="post" class="form-horizontal js-ajax-form" action="{:U('Menu/do_edit')}">
             <fieldset>
@@ -63,7 +63,7 @@
                 </div>
             </fieldset>
             <div class="form-actions">
-                <input type="hidden" name="id" value="{$menu.id|default=0}">
+                <input type="hidden" name="id" value="{$menu.id}">
                 <button type="submit" class="btn btn-primary js-ajax-submit">编辑</button>
                 <a class="btn" href="{:U('Menu/index')}">返回</a>
             </div>
