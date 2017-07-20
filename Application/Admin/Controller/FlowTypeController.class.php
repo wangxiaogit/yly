@@ -83,7 +83,7 @@ class FlowTypeController extends AdminController
         if (IS_POST) {
             if ($this->flowTypeModel->create()) {
                 if (false !== $this->flowTypeModel->save()) {
-                    $this->success('编辑成功！');
+                    $this->success('编辑成功！', U('FlowType/index'));
                 } else {
                     $this->error('编辑失败！');
                 }

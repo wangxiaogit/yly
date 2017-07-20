@@ -73,7 +73,7 @@ class FlowNodeController extends AdminController
         if (IS_POST) {
             if ($this->flowNodeModel->create()) {
                 if (false !== $this->flowNodeModel->save()) {
-                    $this->success('编辑成功！');
+                    $this->success('编辑成功！', U('FlowNode/index'));
                 } else {
                     $this->error('编辑失败！');
                 }

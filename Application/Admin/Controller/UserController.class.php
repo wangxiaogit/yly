@@ -146,13 +146,15 @@ class UserController extends AdminController
     /**
      * ajax 用户
      */
-    public function ajax_get_user ($dept_id, $org_type=1)
+    public function ajax_get_user ($dept_id = 0, $org_type = 1)
     {   
         $where['org_type'] = $org_type;
         $where['status'] = 1;
-        if ($dept_id>0){
+        
+        if ($dept_id > 0){
             $where['dept_id'] = $dept_id; 
         }
+        
         $user_lists = $this->userModel->field("id, true_name as name")->where($where)->select();       
         $this->ajaxReturn(['data'=>$user_lists, 'status'=>1]);
     }

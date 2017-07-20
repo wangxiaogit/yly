@@ -1,16 +1,36 @@
-    <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        <form method="post" class="form-horizontal js-ajax-form" action="{:U('Flow/create', $data)}">
+            <fieldset>
+                <div class="control-group">
+                    <label class="control-label"> <span class="form-required">*</span> 流程类型</label>
+                    <div class="controls">
+                        <select name="flow_type_id">
+                            <option value="">请选择</option>
+                            <foreach name="flowType_lists" item="list">
+                                <option value="{$list.id}">{$list.name}</option>
+                            </foreach>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">办理意见</label>
+                    <div class="controls">
+                        <textarea rows="3" name="opinion" style="width:60%;"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary js-ajax-submit">提交</button>
+                <a class="btn" href="javascript:void(0);">关闭</a>
+            </div>
+        </form>
+    </div>
+<script src="__STATIC__/common.js"></script>
+</body>
 </html>
+

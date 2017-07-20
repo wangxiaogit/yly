@@ -59,6 +59,7 @@
         <div class="table-actions">
             <if condition="$tab_type eq 'needToDo'">
                 <a class="btn btn-primary btn-small js-ajax-dialog-btn"  href="{:U('CaseList/add')}" title="新增案件">新增案件</a>
+                <a class="btn btn-danger btn-small"  href="#" id="submitFlow" title="流程办理">流程办理</a>
             </if>
         </div>
         <table class="table table-hover table-bordered">
@@ -85,7 +86,9 @@
                 <if condition='caseList'>
                     <foreach name="caseList" item="vo">
                         <tr>
-                            <td><input type="checkbox" name="case" id="case" case_id="{$vo.id}" flow_id ={$vo.wfid} case_type="$vo.case_type_id"></td>
+                            <php>$case_data= array('case_id'=>$vo['id'], 'case_type'=>$vo['case_type_id'], 'case_type_id'=>$vo['type_id']);</php>
+                            <php>$flow_url= $vo['wf_id']?U('Flow/handle',array('flow_id'=>$vo['flow_id'])):U('Flow/type',$case_data);</php>
+                            <td><input type="radio" name="case" case_id="{$vo.id}" case_type="{$vo.case_type_id}" flow_id="{$vo.flow_id}" flow_url='{$flow_url}' /></td>
                             <td><a href="{:U('CasePerson/index',array('case_id'=>$vo['id']))}">{$vo.case_no}</a></td>
                             <td>{$vo.debtor}</td>
                             <td>{$vo.location}{:get_case_tag_text($vo['case_tag'])}</td>
@@ -115,5 +118,30 @@
     </div>
 <script src="__STATIC__/common.js"></script>
 
+<script>
+    $(function(){
+        
+        $("#submitFlow").bind('click', function(){
+            
+            var case_choice = $(":radio:checked");
+            if (!case_choice.length) {
+                layer.msg("请选择案例！", {icon: 2, time: 1000});
+            }
+            
+            var flow_url = case_choice.attr('flow_url'),
+                title = $(this).attr('title');
+            
+            layer.open({
+                type: 2,
+                area: ['800px', ($(window).height() - 50) + 'px'],
+                fix: false, //不固定
+                maxmin: true,
+                shade:0.4,
+                title: title ? title : false,
+                content: flow_url
+            });
+        });
+    });
+</script>
 </body>
 </html>

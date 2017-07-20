@@ -123,8 +123,8 @@ class CaseListController extends AdminController
                                 'type.wfnode',
                                 'type.step_id',
                                 'type.dept_id',
-                                'type.handle_user_type',
-                                'type.handle_roleid',
+                                'type.handle_str',
+                                'type.handle_group_id',
                                 'type.handle_uid',
                                 'type.handle_time',
                                 'type.creat_time',
@@ -191,9 +191,9 @@ class CaseListController extends AdminController
                     $uid_str = implode(',', $user_ids_arr);
                 }
 
-                $cond_where_child = "WHERE take_uid IN (".$uid_str.") AND handle_type = 0 AND status IN (3,4) AND isvalid = 1";
+                $cond_where_child = "WHERE take_uid IN (".$uid_str.")  AND status IN (3,4) AND isvalid = 1";
             } else {
-                $cond_where_child = "WHERE take_uid = '".$uid."' AND handle_type = 0 AND status IN (3,4) AND isvalid = 1";
+                $cond_where_child = "WHERE take_uid = '".$uid."'  AND status IN (3,4) AND isvalid = 1";
             }
 
             //查询符合条件的总数
@@ -217,14 +217,14 @@ class CaseListController extends AdminController
                             'type.wfnode',
                             'type.step_id',
                             'type.dept_id',
-                            'type.handle_user_type',
-                            'type.handle_roleid',
+                            'type.handle_str',
+                            'type.handle_group_id',
                             'type.handle_uid',
                             'type.handle_time',
-                            'type.creattime',
+                            'type.creat_time',
                             'type.status',
                         );
-            $cond_order = array( 'type.handle_time' => 'desc' , 'type.creattime' => 'desc');
+            $cond_order = array( 'type.handle_time' => 'desc' , 'type.creat_time' => 'desc');
             //查询列表数据
             $case_list_info = $this->caseListModel->field($search_field_arr)->join('case_type AS type ON case_list.id = type.case_id')
                             ->join("(SELECT DISTINCT(flow_id) FROM workflow_step WHERE "
@@ -305,8 +305,8 @@ class CaseListController extends AdminController
                             'type.wfnode',
                             'type.step_id',
                             'type.dept_id',
-                            'type.handle_user_type',
-                            'type.handle_roleid',
+                            'type.handle_str',
+                            'type.handle_group_id',
                             'type.handle_uid',
                             'type.handle_time',
                             'type.creattime',
@@ -342,8 +342,8 @@ class CaseListController extends AdminController
                             'type.wfnode',
                             'type.step_id',
                             'type.dept_id',
-                            'type.handle_user_type',
-                            'type.handle_roleid',
+                            'type.handle_str',
+                            'type.handle_group_id',
                             'type.handle_uid',
                             'type.handle_time',
                             'type.creattime',

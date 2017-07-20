@@ -1,0 +1,81 @@
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        
+        <table class="table table-bordered">
+            <caption><h4>案件信息</h4></caption>
+            <tr>
+                <td align="center">案例编号</td>
+                <td>{$caseInfo.order_id}</td>
+                <td align="center">主贷人</td>
+                <td>{$caseInfo.debtor}</td>
+                <td align="center">流程类型</td>
+                <td>{$flowTypeText}</td>
+            </tr>
+            <tr>
+                <td align="center">贷款银行</td>
+                <td>{$caseInfo.bank_branch_name}</td>
+                <td align="center">中介公司</td>
+                <td >{$caseInfo.broker_dept_name}</td>
+                <td align="center">借贷金额</td>
+                <td >{$caseInfo.loan_amount|default=0} 万</td>
+            </tr>
+        </table>
+        
+        <div class="well ">
+            <form method="post" class="form-horizontal js-ajax-form">
+                <fieldset>
+                    <notempty name="workflow_back_lists">
+                        <div class="control-group">
+                            <label class="control-label"> <span class="form-required">*</span> 回退</label>
+                            <div class="controls">
+                                <select name="flow_conf_id" id="flowConf_id">
+                                    <option value="">请选择</option>
+                                    <foreach name="workflow_back_lists" item="list">
+                                        <option value="{$list.conf_id}">{$list.node_name}</option>
+                                    </foreach>
+                                </select>
+                            </div>
+                        </div>
+                    </notempty> 
+
+                    <div class="control-group">
+                        <label class="control-label">办理意见</label>
+                        <div class="controls">
+                            <textarea rows="3" name="opinion" style="width:60%;"></textarea>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <foreach name="workflow_buttons" item="button">
+                        <php>$button_display = ($button['display']=='none')?"display:none":"";</php>
+                        <php>$submit_url = U('Flow/handle',array('action'=>$button['prop'],'flow_id'=>$flowInfo['id']));</php>
+                        <button class="btn btn-primary js-ajax-submit" data-action="{$submit_url}" props="{$button.prop}" style="margin-right: 10px;{$button_display}" >{$button.text}</button>
+                    </foreach>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function() {
+        
+        $("#flowConf_id").bind('change', function() {  
+            
+            var flowConf_id = $(this).val();
+            
+            if (flowConf_id) {
+                $(".form-actions").find("button[props!='back']").hide().end().find("button[props='back']").show();
+            } else {
+                $(".form-actions").find("button[props='back']").hide().end().find("button[props!='back']").show();
+            }
+        });
+    })
+</script>
+</body>
+</html>
+
+

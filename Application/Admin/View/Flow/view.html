@@ -1,16 +1,83 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<include file="Public/header" />
+</head>
+<body>
+    <div class="wrap">
+        
+        <table class="table table-bordered">
+            <caption><h4>案件信息</h4></caption>
+            <tr>
+                <td align="center">案例编号</td>
+                <td>{$caseInfo.order_id}</td>
+                <td align="center">主贷人</td>
+                <td>{$caseInfo.debtor}</td>
+                <td align="center">流程类型</td>
+                <td>{$flowTypeText}</td>
+            </tr>
+            <tr>
+                <td align="center">贷款银行</td>
+                <td>{$caseInfo.bank_branch_name}</td>
+                <td align="center">中介公司</td>
+                <td >{$caseInfo.broker_dept_name}</td>
+                <td align="center">借贷金额</td>
+                <td >{$caseInfo.loan_amount|default=0} 万</td>
+            </tr>
+        </table>
+        
+        <div class="well ">
+            <table class="table table-bordered">
+                <caption><h4>流程详细</h4></caption>
+                <thead>
+                    <tr>
+                        <th>节点</th>
+                        <th>状态</th>
+                        <th>经办人</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>办理意见</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <foreach name="workflow_step" item="step">
+                        <tr>
+                            <td>
+                                <span class="label label-success">{$step.node_name}</span>
+                            </td>
+                            <td>
+                                <php>$status_text= ($step['isback']==1)?"回退":(($step['status'] >=3)?"通过":"在办理");</php>
+                                <php>$status_class = $step['isback']==1? "label-important" : "label-primary";</php>
+                                <span class="label {$status_class}">{$status_text}</span>
+                            </td>
+                            <td>
+                                <php>$handler = get_flow_handle($step['handle_str'], $step['handle_group_id'], $step['take_uid']);</php> 
+                                <if condition="isset($handler['handle_lists'])">
+                                    <a href="javascript:void(0);"  class="handle_lists" data-handler="{$handler.handle_lists}">{$handler.handle_name}</a>
+                                <else/>
+                                    {$handler.handle_name}
+                                </if>
+                            </td>
+                            <td >
+                                {$step.accept_time|default=''|date='Y-m-d H:i:s',###}
+                            </td>
+                            <td>
+                                {$step.submit_time|default=''|date='Y-m-d H:i:s',###}
+                            </td>
+                            <td>{$step.opinion}</td>
+                        </tr>
+                    </foreach>    
+                </tbody>
+            </table>
+        </div>
+    </div>
+<script src="__STATIC__/common.js"></script>
+
+<script>
+    $(function() {
+        $(".handle_lists").bind('click', function(){
+            var handler= $(this).data('handler');
+            
+            layer.tips(handler, $(this), {tips: [2, '#18bc9c'],time: 4000});
+        });
+    })
+</script>
+</body>
 </html>

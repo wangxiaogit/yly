@@ -12,7 +12,7 @@
                     <label class="control-label"><span class="form-required">*</span>流程类型</label>
                     <div class="controls">
                         <select name="workflow_type_id" id="workflow_type_id">
-                            <option value="0">请选择流程类型</option>
+                            <option value="">请选择流程类型</option>
                             <foreach name="flowType_lists" item="list">
                                 <option value="{$list.id}">{$list.name}</option>
                             </foreach>
@@ -33,7 +33,7 @@
                     <label class="control-label"><span class="form-required">*</span>流程节点</label>
                     <div class="controls">
                         <select name="workflow_node_id" id="workflow_node_id">
-                            <option value="0">请选择流程节点</option>
+                            <option value="">请选择流程节点</option>
                             <foreach name="flowNode_lists" item="list">
                                 <option value="{$list.id}">{$list.name}</option>
                             </foreach>
@@ -52,7 +52,7 @@
                     <label class="control-label"><span class="form-required">*</span>对接类型</label>
                     <div class="controls">
                         <select name="handle_type" id="handle_type">
-                            <option value="0">请选择对接类型</option>
+                            <option value="">请选择对接类型</option>
                             <option value="1">个人</option>
                             <option value="2">流程组</option>
                             <option value="3">其它</option>
@@ -64,7 +64,7 @@
                     <label class="control-label">对接角色</label>
                     <div class="controls">
                         <select name="handle_id" id="handle_id">
-                            <option value="0">请选择对接角色</option>
+                            <option value="">请选择对接角色</option>
                         </select>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
         $("#workflow_type_id").bind('change', function() {
             var _this = $(this),
                 type_id = _this.val(),
-                html = "<option value='0'>请选择流程版本</option>";
+                html = "<option value=''>请选择流程版本</option>";
             
             if (type_id > 0) {
                 $.getJSON("{:U('FlowVersion/ajax_get_version')}", {type_id: type_id}, success);
@@ -115,7 +115,7 @@
             var apiUrl,
                 _this = $(this),
                 handle_type = _this.val(),
-                html = "<option value='0'>请选择角色</option>";
+                html = "<option value=''>请选择角色</option>";
                 
             if (handle_type == 1)  {
                 apiUrl = "{:U('User/ajax_get_user')}";

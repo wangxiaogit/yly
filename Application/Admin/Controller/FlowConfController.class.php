@@ -23,14 +23,14 @@ class FlowConfController extends AdminController
      */
     public function index() 
     {
-        $flowType_id = I('post.workflow_type_id', 0, 'intval');
+        $flowType_id = I('get.workflow_type_id', 0, 'intval');
         if ($flowType_id) {
             $where['a.workflow_type_id'] = $flowType_id;
             
             $this->assign("flowVersion_lists", $this->flowVersionModel->where(array('status'=>1, 'workflow_type_id'=>$flowType_id))->select());
         }
         
-        $flowVersion_id = I('post.workflow_version_id', 0, 'intval');
+        $flowVersion_id = I('get.workflow_version_id', 0, 'intval');
         if ($flowVersion_id) {
             $where['a.workflow_version_id'] = $flowVersion_id;
         }
@@ -47,7 +47,7 @@ class FlowConfController extends AdminController
         
         $this->assign("flowConf_lists", $flowConf_lists);
         $this->assign("flowType_lists", $this->flowTypeModel->where(array("status"=>1))->select());
-        $this->assign("search", I('post.'));
+        $this->assign("search", I('get.'));
         $this->assign("meta-title", "流程配置列表");
         $this->display();
     }

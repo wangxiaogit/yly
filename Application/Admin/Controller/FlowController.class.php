@@ -17,73 +17,38 @@ class FlowController extends AdminController
      */
     public function type () 
     {
-        $case_type_id = I('get.case_type_id', 0, 'intval'); //业务类型
-        $category = I('get.category', 1, 'intval'); //流程类别
+        $case_type_id = I('get.case_type', 1, 'intval'); //业务类型
         
-        $flowType_lists = D('FlowType')->where(array('category'=>$category, 'status'=>1, 'case_type_id'=>$case_type_id))->select();
+        $flowType_lists = D('Common/WorkflowType')->where(array('category'=>1, 'status'=>1, 'case_type_id'=>$case_type_id))->select();
         
-        $this->assign("data", I('.get'));
+        $this->assign("data", array_merge(I('get.'), array('category'=>1)));
         $this->assign("flowType_lists", $flowType_lists);
         $this->display();
     }
     
     /**
-     * 提交类型
-     */
-    public function do_type () 
-    {
-        $flowType_id = I('request.flow_type_id', 0, 'intval');
-        
-        $flowVersion = D('FlowVersion')->where(array('status'=>1, 'is_active'=>1, 'workflow_type_id'=>$flowType_id))->select();
-        
-        if (count($flowVersion) == 1) {
-            
-            $flowVersion_id = $flowVersion[0]['id']; 
-            $data = I('.get');
-            
-            $data['flowType_id'] = $flowType_id;
-            $data['flowVersion_id'] = $flowVersion_id;
-            
-            $this->create($data);
-        } else {
-            $this->error('流程版本出错, 请联系管理员！');
-        }
-    }
-    
-    /**
      * 流程新建
      */
-    public function create ($data) 
+    public function create () 
     {
-        $flowType_id = $data['flowType_id'];
-        $flowVersion_id = $data['flowVersion_id'];
-        
-        $flowConf = D('FlowConf')->where(array('status'=>1, 'workflow_type_id'=>$flowType_id, 'workflow_version_id'=>$flowVersion_id))->count();
-        if (!$flowConf) {
-            $this->error('流程配置出错, 请联系管理员！');           
-        }
-        
-        $this->assign("data", $data);
-        $this->display();
-    }
-    
-    /**
-     * 提交新建
-     */
-    public function do_create () 
-    {
-        $data = I('post.data');
-        
-        $flowType_id = $data['flowType_id'];
-        $flowVersion_id = $data['flowVersion_id'];
+        $data = I('request.');
         
         $case_id = $data['case_id'];
         $case_type_id = $data['case_type_id'];
         $record_id = $data['record_id'];
+
+        $flowType_id = $data['flow_type_id']; //流程类型
+        if (!$flowType_id) {
+            $this->error('请选择流程类型！');
+        }
         
-        $opinion = I('post.opinion', '', 'trim');
+        //检查流程版本. 流程配置
+        $auth = $this->flowModel->flowCreateAuth($flowType_id); 
+        if (!$auth['status']) {
+            $this->error($auth['msg']);
+        }
         
-        $data['opinion'] = $opinion;
+        $data['flow_version_id'] = $auth['flowVersion_id'];//流程版本
         
         //流程INFO
         $flowInfo = $this->flowModel->flowInfoBulid($flowType_id, $case_id, $case_type_id, $record_id);
@@ -92,17 +57,17 @@ class FlowController extends AdminController
         //节点限制
         $flowLimit =  $this->flowModel->flowNodeLimit('create', $flowType_id, $case_id, $case_type_id, $record_id); 
         if (!$flowLimit['status']) {
-            $this->error($flowLimit);
+            $this->error($flowLimit['msg']);
         }
         
         //流程CREATE
-        $create = $this->flowModel->create($data);
-        if ($create['status']) {
-            $this->success('新建成功！');
-        } else {
-            $this->error('新建失败！');
-        }
+        $create = $this->flowModel->createWorkflow($data);
         
+        if ($create['status']) {
+            $this->success($create['msg']);
+        } else {
+            $this->error($create['msg']);
+        }
     }
     
     /**
@@ -110,8 +75,8 @@ class FlowController extends AdminController
      */
     public function handle () 
     {
-        $flowId = I('get.flowId', 0, 'intval');
-        
+        $flowId = I('request.flow_id', 0, 'intval');
+       
         $flowInfo = $this->flowModel->find($flowId);
         
         $flowType_id = $flowInfo['type_id']; //流程类型
@@ -124,10 +89,10 @@ class FlowController extends AdminController
         
         $data = array(
             'opinion' => I('post.opinion', 0, 'trim'),
-            'flowId' => $flowId
+            'flow_id' => $flowId
         );
         
-        $action = I('get.action', 0, 'trim');
+        $action = I('get.action', '', 'trim');
         
         if ($action == 'pass') {
             
@@ -141,14 +106,17 @@ class FlowController extends AdminController
             $pass = $this->flowModel->passWorkflow($data);
             
             if ($pass['status']) {
-                $this->success('办理成功！');
+                $this->success($pass['msg']);
             } else {
-                $this->error('办理失败！');
+                $this->error($pass['msg']);
             }
             
-        } elseif ($action == 'back') {
+        } else if ($action == 'back') {
             
-            $data['flowConf_id'] = I('post.flowConf_id', 0, 'intval');
+            $data['flow_conf_id'] = I('post.flow_conf_id', 0, 'intval');
+            if (!$data['flow_conf_id']) {
+                $this->error('请选择回退节点！');
+            }
             
             //节点限制
             $flowLimit =  $this->flowModel->flowNodeLimit('back', $flowId, $case_id, $case_type_id, $record_id); 
@@ -160,12 +128,12 @@ class FlowController extends AdminController
             $back = $this->flowModel->backWorkflow($data);
             
             if ($back['status']) {
-                $this->success('回退成功！');
+                $this->success($back['msg']);
             } else {
-                $this->error('回退失败！');
+                $this->error($back['msg']);
             }
             
-        } elseif ($action == 'not') {
+        } else if ($action == 'not') {
             
             //节点限制
             $flowLimit =  $this->flowModel->flowNodeLimit('not', $flowId, $case_id, $case_type_id, $record_id); 
@@ -177,12 +145,12 @@ class FlowController extends AdminController
             $not = $this->flowModel->notWorkflow($data);
             
             if ($not['status']) {
-                $this->success('否决成功！');
+                $this->success($not['msg']);
             } else {
-                $this->error('否决失败！');
+                $this->error($not['msg']);
             }
             
-        } elseif ($action == 'finish') {
+        } else if ($action == 'finish') {
             
             //节点限制
             $flowLimit =  $this->flowModel->flowNodeLimit('finish', $flowId, $case_id, $case_type_id, $record_id); 
@@ -194,14 +162,42 @@ class FlowController extends AdminController
             $finish = $this->flowModel->finishWorkflow($data);
             
             if ($finish['status']) {
-                $this->success('办理成功！');
+                $this->success($finish['msg']);
             } else {
-                $this->error('办理失败！');
+                $this->error($finish['msg']);
             }
             
         } else {
             
+            $this->flowModel->handleWorkflow($data); //流程状态更新
+            
+            $workflow_buttons = $this->flowModel->WorkflowButton($flowId);
+            
+            if ($case_id) 
+            {    
+                $case_info = D('Common/CaseList')->alias('a')->join("case_type b on a.id=b.case_id");
+                
+                $this->assign("case_info", $case_info);
+            }
+            
+            if ($category) 
+            {    
+                $workflow_back_lists = M('WorkflowStep')
+                                       ->alias('a')
+                                       ->field("a.*, b.name node_name")
+                                       ->join("workflow_node b on a.node_id = b.id") 
+                                       ->where(array("a.flow_id"=>$flowId, "a.isvalid"=>1, "a.status"=> array('in', "3,4")))
+                                       ->select();
+                
+                if ($workflow_back_lists) {
+                    array_unshift($workflow_buttons, array('text'=>'回退', 'prop'=> 'back', 'display'=>'none'));
+                }
+                
+                $this->assign("workflow_back_lists", $workflow_back_lists);
+            }
+            
             $this->assign("flowInfo", $flowInfo);
+            $this->assign("workflow_buttons", $workflow_buttons);
             $this->display();
         }
         
@@ -212,7 +208,7 @@ class FlowController extends AdminController
      */
     public function view ()
     {
-        $flowId = I('get.flowId', 0, 'intval');
+        $flowId = I('get.flow_id', 0, 'intval');
         
         $flowInfo = $this->flowModel->find($flowId);
         
@@ -224,9 +220,20 @@ class FlowController extends AdminController
         $case_type_id = $flowInfo['case_type_id']; //案例类型
         $record_id = $flowInfo['record_id'];
         
-        $flowChart = $this->flowModel->chartWorkflow($flowId);
+        if ($case_id)
+        {
+            $case_info = D('Common/CaseList')->find($case_id);
+            
+            $this->assign("case_info", $case_info);
+        }
         
-        $this->assign("flowChart", $flowChart);
+        $workflow_step = D('Common/WorkflowStep')->alias('a')
+                                                 ->field('a.*, b.name node_name')   
+                                                 ->join('workflow_node b on a.node_id = b.id')
+                                                 ->where(array('a.flow_id'=>$flowId))
+                                                 ->select();   
+        //print_r($workflow_step);exit;
+        $this->assign("workflow_step", $workflow_step);
         $this->display();
-    }        
+    }       
 }
