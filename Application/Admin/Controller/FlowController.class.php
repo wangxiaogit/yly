@@ -235,5 +235,52 @@ class FlowController extends AdminController
         //print_r($workflow_step);exit;
         $this->assign("workflow_step", $workflow_step);
         $this->display();
-    }       
+    }
+    
+    /**
+     * 更换流程
+     */
+    public function change () 
+    {
+        $flow_id = I('get.flow_id', 0, 'intval');
+        if (!$flow_id) {
+            $this->error("该流程未走流程,暂无法更换！");
+        }
+        
+        $case_type_id = I('get.case_type', 1, 'intval'); //业务类型
+        $flow_type_id = I('get.flow_type_id', 0, 'intval'); //业务类型
+        
+        $flowType_lists = D('Common/WorkflowType')->where(array('category'=>1, 'status'=>1, 'case_type_id'=>$case_type_id, 'id'=>array('neq', $flow_type_id)))->select();
+        
+        $this->assign("flow_id", $flow_id);
+        $this->assign("flowType_lists", $flowType_lists);
+        $this->display();
+    }
+    
+    public function do_change ()
+    {
+        $data = I('post.');
+        
+        $flow_type_id = $data['flow_type_id'];
+        if (!$flow_type_id) {
+            $this->error('请选择流程类型！');
+        }
+        
+        //检查流程版本. 流程配置
+        $auth = $this->flowModel->flowCreateAuth($flowType_id); 
+        if (!$auth['status']) {
+            $this->error($auth['msg']);
+        }
+        
+        $data['flow_version_id'] = $auth['flowVersion_id'];//流程版本
+        
+        //流程CHANGE
+        $change = $this->flowModel->changeWorkflow($data);
+        
+        if ($change['status']) {
+            $this->success($change['msg']);
+        } else {
+            $this->error($change['msg']);
+        }
+    }        
 }

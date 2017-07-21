@@ -391,6 +391,79 @@ class WorkflowModel extends AdminModel
     }
     
     /**
+     * 流程CHANGE
+     */
+    public function changeWorkflow ($data)
+    {
+        $flow_id = $data['flow_id'];
+        
+        $workflow_first_conf = D('Common/WorkflowConf')->getFlowConf($data['flow_type_id'], $data['flow_version_id'], 1);
+        if (!$workflow_first_conf) {
+            return array('status'=> 0, 'msg'=> '流程配置出错,请联系管理员！');
+        }
+        
+        $flowInfo = $this->find($flow_id);
+        
+        $this->commonModel->startTrans();
+        
+        $workflow_update = array(
+            'type_id' => $data['flow_type_id'],
+            'version_id' => $data['flow_version_id'],
+            'step' => 1
+        );
+        $workflow_is_update = $this->where(array("id"=>$flow_id))->save($workflow_update);
+        
+        $workflow_step_update = array(
+            'status' => 3, 
+            'opinion' => $data['opinion'] ? $data['opinion'] : '更换流程', 
+            'submit_time' => $this->time,
+        );
+        $workflow_step_is_update = M('WorkflowStep')->where(array("flow_id"=>$flow_id, "status"=>2))->save($workflow_step_update);
+        
+        $workflow_step_isvalid = array(
+            'isvalid' => -1
+        );
+        $workflow_step_is_isvalid = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'isvalid'=> 1))->save($workflow_step_isvalid);
+    
+        $workflow_step_insert = array(
+            'flow_id' => $flow_id,
+            'node_id' => $workflow_first_conf['node_id'],
+            'conf_id' => $workflow_first_conf['id'],
+            'handle_str' => $flowInfo['create_uid'],
+            'take_uid' => $flowInfo['create_uid'],
+            'accept_time' => $this->time,
+            'status' => 1
+        );
+        $workflow_step_insert_id = M('WorkflowStep')->add($workflow_step_insert);
+        
+        $updateData = array(
+            'wftype' => $data['flow_type_id'],
+            'wfnode' => $workflow_first_conf['workflow_node_id'],
+            'step_id' => $workflow_step_insert_id,
+            'dept_id' => get_user_dept($flowInfo['create_uid']),
+            'handle_str' => $flowInfo['create_uid'],
+            'handle_group_id' => 0,
+            'handle_uid' =>  $flowInfo['create_uid'],
+            'handle_time' => $this->time 
+        );
+        $update = $this->updatedRelatedRecords('change', $flow_id, $updateData);
+        
+        if (!$workflow_is_update || !$workflow_step_is_update || !$workflow_step_is_isvalid || !$workflow_step_insert_id || !$update) {
+            
+            $this->commonModel->rollback();
+            
+            return array('status'=>0 , 'msg'=> '更换失败！');
+        } else {
+            
+            $this->commonModel->commit();
+            
+            $reponse = $this->flowResponse('change', $flowInfo['create_uid']);
+            
+            return array('status'=>0 , 'msg'=> $reponse);
+        }
+    }        
+    
+    /**
      * 流程办理时 状态更新
      */
     public function handleWorkflow ($data) 
@@ -484,6 +557,10 @@ class WorkflowModel extends AdminModel
         {
             $response = '流程完成！';
         } 
+        elseif ($method == 'change')
+        {
+            $response = '更换成功！'.$handle_info;; 
+        }    
         
         return $response;
     } 

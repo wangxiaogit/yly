@@ -32,7 +32,7 @@ class WorkflowConfModel extends AdminModel
     /**
      * 流程配置
      */
-    public function getFlowConf ($flowType_id, $flowVersion_id, $step, $case_id, $flow_id = 0) 
+    public function getFlowConf ($flowType_id, $flowVersion_id, $step, $case_id=0, $flow_id = 0) 
     {
         $map = array(
             'workflow_type_id' => $flowType_id,
@@ -65,14 +65,18 @@ class WorkflowConfModel extends AdminModel
             
             $flowGroup_id = $data['handle_id'];
             
-            $hanlde_array = D('Common/WorkflowGroupUser')->where(array('status'=>1, 'group_id'=>$flowGroup_id))->gerField("user_id", true);
+            if ($flowGroup_id) {
+                
+                $hanlde_array = D('Common/WorkflowGroupUser')->where(array('status'=>1, 'group_id'=>$flowGroup_id))->gerField("user_id", true);
             
-            if ($hanlde_array) {
-                
-                $data['handle_id'] = 0;
-                
-                $handle_str = implode(",", $hanlde_array);    
-            }    
+                if ($hanlde_array) {
+
+                    $data['handle_id'] = 0;
+
+                    $handle_str = implode(",", $hanlde_array);    
+                }   
+            }
+             
         }
         elseif ($handle_type ==3) {
             
@@ -94,16 +98,19 @@ class WorkflowConfModel extends AdminModel
                 $handle_sql = str_replace("%flow_id%", $flow_id, $handle_sql);
             }
             
-            $handle_array = M()->query($handle_sql);
-            
-            if (count($handle_array) == 1) {
-                    
-                $data['handle_id'] = $handle_str = $handle_array[0]['handle_id'];   
-            } 
-            elseif (count($handle_array > 1)) {
+            if ($handle_sql) {
                 
-                $handle_str = impode(",", array_column($handle_array, 'handle_id'));  
-            }  
+                $handle_array = M()->query($handle_sql);
+            
+                if (count($handle_array) == 1) {
+
+                    $data['handle_id'] = $handle_str = $handle_array[0]['handle_id'];   
+                } 
+                elseif (count($handle_array > 1)) {
+
+                    $handle_str = impode(",", array_column($handle_array, 'handle_id'));  
+                } 
+            }    
         }
         
         $data['handle_str'] = isset($handle_str) ? $handle_str : '';
