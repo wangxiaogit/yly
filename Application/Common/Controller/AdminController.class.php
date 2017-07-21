@@ -8,11 +8,16 @@ class AdminController extends BaseController
     {
         parent::_initialize();
         
-//        define("UID", is_login());
-//        if (!$UID) { //登录
-//            $this->redirect(U('Admin/Login/index'));
-//        }
-//        
+        define("UID", is_login());
+        if (!UID) { //登录
+            if (IS_AJAX) {
+                $this->error("您还没有登录！",U("Login/index"));
+            } else {
+                header("Location:".U("Login/index"));
+                exit();
+            }   
+        }
+        
 //        define('IS_ADMIN', is_administrator());
 //        if (!IS_ADMIN) {
 //            $rule  = strtolower(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME);

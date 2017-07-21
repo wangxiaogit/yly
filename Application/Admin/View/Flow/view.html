@@ -56,10 +56,10 @@
                                 </if>
                             </td>
                             <td >
-                                {$step.accept_time|default=''|date='Y-m-d H:i:s',###}
+                                {$step['accept_time']?($list['accept_time']|date='Y-m-d H:i:s',###):''}
                             </td>
                             <td>
-                                {$step.submit_time|default=''|date='Y-m-d H:i:s',###}
+                                {$step['submit_time']?($list['submit_time']|date='Y-m-d H:i:s',###):''}
                             </td>
                             <td>{$step.opinion}</td>
                         </tr>

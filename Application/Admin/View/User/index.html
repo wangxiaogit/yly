@@ -47,22 +47,13 @@
                             <php>$is_leave_text=($list['is_leave']==1)?'<span class="text-error">离职</span>':'<span class="text-warning">在职</span>';</php>
                             {$is_leave_text}    
                         </td>
-                        <td>{$list.create_time|date='Y-m-d H:i:s',###}</td>
+                        <td>{$list['create_time']?($list['create_time']|date='Y-m-d H:i:s',###):''}</td>
                         <td>
                             <php>$edit_url=U("User/edit",array("id"=>$list['id'], 'org_type'=>$type));</php>
                             <a href="{$edit_url}" title="编辑">编辑</a>
                             | 
                             <php>$delete_url=U("User/del",array("id"=>$list['id']));</php>
                             <a href="{$delete_url}" class="js-ajax-delete" title="删除">删除</a>
-                            | 
-                            <php>$test_url=U("Flow/type",array("case_type_id"=>1));</php>
-                            <a href="{$test_url}" class="js-ajax-dialog-btn" title="流程新建">流程新建</a>
-                            |
-                            <php>$test_url=U("Flow/handle",array("flow_id"=>7));</php>
-                            <a href="{$test_url}" class="js-ajax-dialog-btn" title="流程办理">流程办理</a>
-                            |
-                            <php>$test_url=U("Flow/view",array("flow_id"=>7));</php>
-                            <a href="{$test_url}" class="js-ajax-dialog-btn" title="流程查看">流程查看</a>
                         </td>
                     </tr>
                 </foreach>
