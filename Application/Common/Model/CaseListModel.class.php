@@ -110,6 +110,47 @@ class CaseListModel extends AdminModel
         return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
     }
     
+      /*
+     * 获取部门用户ID合集
+     * @param int 当前部门ID
+     * @return array 用户ID合集
+     */
+    public function getUserListByDeptId($deptId) {
+        $deptModel = D('Dept');
+        $userList = array();
+        $deptId = $deptId?$deptId:session('userInfo.dept_id');
+        $all_dept_arr = $deptModel->getChildDeptIdsByDeptid($deptId);
+        if (!empty($all_dept_arr)|| session('userInfo.manage_privilege')) {
+            $all_dept_arr[] = $deptId;
+            $where = array();
+            $where['dept_id'] = array('IN', $all_dept_arr);
+            $userList = M('User')->where($where)->getField('id',TRUE);
+        } else {
+            $userList[] = session('userInfo.id');
+        }
+        return $userList;
+    }
+    
+    
+    /*
+     * 获取所有部门合集
+     * @param int 当前部门ID
+     * @return array 部门合集
+     */
+    public function getDeptListByDeptId($deptId) {
+        $deptModel = D('Dept');
+        $deptList = array();
+        $deptId = $deptId?$deptId:session('userInfo.dept_id');
+        $all_dept_arr = $deptModel->getChildDeptIdsByDeptid($deptId);
+        $all_dept_arr[] = $deptId;
+        
+        $where = array(
+            'id' => array('IN', $all_dept_arr)
+        );
+        $deptList = $deptModel->where($where)->order('pid asc')->getField('id, dept_name');
+        return $deptList;
+    }
+    
     
      //自动验证
     protected $_validate = array(
@@ -127,9 +168,9 @@ class CaseListModel extends AdminModel
         }
         $data['creat_time'] = time();
         $data['case_no'] = $this->buildOrderNo();
-        $data['accept_uid'] = session('user_info.uid');
-        $data['accept_dept_id'] = session('user_info.dept_id');
-        $data['accept_name'] = session('user_info.name');
+        $data['accept_uid'] = session('userInfo.id');
+        $data['accept_dept_id'] = session('userInfo.dept_id');
+        $data['accept_name'] = session('userInfo.true_name');
     }
     
     function _before_update(&$data,$options){

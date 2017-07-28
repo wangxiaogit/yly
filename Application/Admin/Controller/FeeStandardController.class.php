@@ -21,7 +21,7 @@ class FeeStandardController extends AdminController
     public function index()
     {
         $where = array();
-        $where['org_id'] = $_SESSION['org_id']?$_SESSION['org_id']:1;
+        $where['org_id'] = session('userInfo.org_id')?session('userInfo.org_id'):1;
         $feeType = $this->feeStandardModel->getFeeType();
         $fees = $this->lists($this->feeStandardModel, $where, 'fee_type ASC');
         $this->assign('fees', $fees);

@@ -98,8 +98,8 @@ class CaseDocumentController extends AdminController
         } else {
             $where['id'] = array('IN', $id_arr);
             $data['getit'] = 1;
-            $data['accept_uid'] = session(userInfo.uid);
-            $data['accept_name'] = session(userInfo.name);
+            $data['accept_uid'] = session('userInfo.id');
+            $data['accept_name'] = session('userInfo.true_name');
             $data['accept_time'] = time();
             $res = $model->where($where)->setField($data);
             if ($res) {

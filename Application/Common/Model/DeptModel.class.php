@@ -35,11 +35,11 @@ class DeptModel extends AdminModel
     public function getChildDeptIdsByDeptid($deptId)
     {
         $childDeptIdarr = array();
-        $dept_info = $this->getInfoById($deptId);
+        $dept_info = $this->find($deptId);
         $this->dept_id = array();
         if(is_array($dept_info) && !empty($dept_info))
         {
-            $allDeptList = M('organize')->where('org_id='.$dept_info['org_id'])->field('id, pid')->select();
+            $allDeptList = M('dept')->where('org_id='.$dept_info['org_id'])->field('id,parentid')->select();
             $childDeptIdarr = self::getChildNode($allDeptList, $dept_info['id']);
         }
         return $childDeptIdarr;
@@ -49,7 +49,7 @@ class DeptModel extends AdminModel
     private function getChildNode(&$data, $pid)
     {    
         foreach ($data as $key => $value) {
-            if($value['pid'] == $pid) {
+            if($value['parentid'] == $pid) {
                 $this->dept_id[] = $value['id'];
                 //unset($data[$key]);
                 self::getChildNode($data, $value['id']);

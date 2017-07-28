@@ -42,8 +42,4 @@ class RequiredDocumentModel extends AdminModel
         array('create_time', 'time', AdminModel::MODEL_BOTH, 'function')
     );
     
-    public function return_org_id() {
-        return $_SESSION['org_id']?$_SESSION['org_id']:1;
-    }
-    
 }

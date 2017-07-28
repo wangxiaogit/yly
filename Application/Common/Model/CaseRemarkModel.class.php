@@ -28,7 +28,7 @@ class CaseRemarkModel extends AdminModel
     
     function _before_insert(&$data, $options) {
         $data['create_time'] = time();
-        $data['create_uid'] = session('userInfo.uid');
-        $data['create_name'] = session('userInfo.name');
+        $data['create_uid'] = session('userInfo.id');
+        $data['create_name'] = session('userInfo.true_name');
     }
 }

@@ -79,7 +79,7 @@ class FeeStandardModel extends AdminModel
     );
     
     public function return_org_id() {
-        return $_SESSION['org_id']?$_SESSION['org_id']:1;
+        return $_SESSION['userInfo']['org_id']?$_SESSION['userInfo']['org_id']:1;
     }
     
 }

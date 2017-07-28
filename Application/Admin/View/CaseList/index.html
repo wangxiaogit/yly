@@ -42,11 +42,6 @@
                     </volist>
                 </select>
                 &nbsp;&nbsp;
-                <select name = 'search_node_time_type' class="select_2" style="width: 120px;">
-                    <option value='submit_time' <if condition = "$_POST.search_node_time_type eq 'submit_time'"> selected </if> >节点结束时间</option>
-                    <option value='start_time' <if condition = "$_POST.search_node_time_type eq 'start_time'"> selected </if> >节点开始时间</option>
-                </select>
-                &nbsp;&nbsp;
                 <input class = "js-date" style = "width: 90px;" type="text" value= "{$_POST.fromdate}" id = "date_min"  name="fromdate">
                 至
                 <input class = "js-date" style = "width: 90px;" type="text" value= "{$_POST.enddate}" id = "date_max"  name="enddate">
@@ -83,7 +78,7 @@
                 </tr>
             </thead>
             <tbody>
-                <if condition='caseList'>
+                <if condition='!empty($caseList)'>
                     <foreach name="caseList" item="vo">
                         <tr>
                             <php>$case_data= array('case_id'=>$vo['id'], 'case_type'=>$vo['case_type_id'], 'case_type_id'=>$vo['type_id']);</php>
@@ -93,8 +88,8 @@
                             <td>{$vo.debtor}</td>
                             <td>{$vo.location}{:get_case_tag_text($vo['case_tag'])}</td>
                             <td>{$caseType[$vo['case_type_id']]}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{$confFlowType[$vo['wftype']]}</td>
+                            <td>{confNodeList[$vo['wfnode']]}</td>
                             <td>{$confCaseStatus[$vo['status']]}</td>
                             <td>{$confLoanType[$vo['loan_type']]}</td>
                             <td>{:doubleval($vo['loan_amount'])}</td>

@@ -72,7 +72,7 @@ class PayConfirmController extends AdminController
             $where['id'] = array('IN', $ids_arr);
             $data['status'] = $status;
             $data['confirm_time'] = time();
-            $data['confirm_uid'] = session('userInfo.uid');
+            $data['confirm_uid'] = session('userInfo.id');
             $res = M('CasePay')->where($where)->save($data);
             if($res) {
                 $this->success('操作成功！');
