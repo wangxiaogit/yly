@@ -26,5 +26,6 @@ class CasePaymentModel extends AdminModel
     
     function _before_insert(&$data, $options) {
         $data['payment_date'] = time();
+        $data['clerk_uid'] =session('userInfo.id');
     }
 }

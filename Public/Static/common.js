@@ -310,20 +310,18 @@ function send_form(from_id, post_url, return_url, callback) {
                                     if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
                                         //iframe弹出页
                                         var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
-
-                                        if (isdialog) {
+                                        if (isdialog>0) {
                                             window.location.href = data.referer;
                                         } else {
-                                            window.parent.location.href = data.referer;
+                                            window.parent.location.href=data.referer;
                                         }
-
                                     }else{
                                         window.location.href = data.referer;
                                     }
                                 } else {
                                         if(parent.layer != null && parent.layer.getFrameIndex(window.name)){
                                             var isdialog = btn.data('isdialog') ? btn.data('isdialog') : btn.attr('isdialog');
-                                            if (isdialog) {
+                                            if (isdialog>0) { 
                                                 reloadPage(window);
                                             } else {
                                                 reloadPage(window.parent);
