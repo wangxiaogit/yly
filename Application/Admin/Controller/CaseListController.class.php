@@ -82,13 +82,13 @@ class CaseListController extends AdminController
                 } break;
         }
         //每页显示条数
-        $limit =  C('LIST_ROWS');
-        $total_num = $this->caseListModel->join('case_type AS type ON case_list.id = type.case_id')->where($map)->count();      
+        $limit =  C('LIST_ROWS')?C('LIST_ROWS'):10;
+        $total_num = $this->caseListModel->join('case_type AS type ON case_list.id = type.case_id')->where($map)->count();
         $Page = new \Think\Page($total_num, $limit);
         //查询列表数据
         $search_field_arr = array('case_list.*','type.id AS type_id','type.case_id','type.case_type_id','type.wfid','type.wftype', 'type.wfnode','type.step_id','type.dept_id','type.handle_str',
             'type.handle_group_id', 'type.handle_uid', 'type.handle_time','type.creat_time','type.status',);
-        $cond_order = array('type.handle_time' => 'desc');
+        $cond_order = array('case_list.id'=>'desc','type.handle_time' => 'desc');
         $case_list_info = $this->caseListModel->field($search_field_arr)->join('case_type AS type ON case_list.id = type.case_id')
         ->where($map)->order($cond_order)->limit($Page->firstRow, $Page->listRows)->select();
 
@@ -156,7 +156,7 @@ class CaseListController extends AdminController
                         $data['status'] = 1;
                         $model->add($data);
                     }
-                    $this->ajaxReturn(array('status'=>1, 'info'=>'添加成功'));
+                    $this->ajaxReturn(array('status'=>1, 'info'=>'添加成功','url'=>U('CaseList/index',array('tab_type'=>'needToDo'))));
                 } else {
                     $this->ajaxReturn(array('status'=>0, 'info'=>'添加失败'));
                 }

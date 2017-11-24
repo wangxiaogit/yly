@@ -57,7 +57,7 @@
         },   
         function(value, index, elem){
             var case_id = $("#case_id").val();
-            var href = "{:U('do_add')}"+"&case_id="+case_id+"&remark="+value;
+            var href = "{:U('do_add')}"+"?case_id="+case_id+"&remark="+value;
             $.getJSON(href).done(function (data) {
                 if (data.state === 'success') {
                     layer.msg(data.info, {icon: 1, time: 1000}, function(index) {

@@ -72,7 +72,7 @@
     
     function do_edit(ids)
     {
-        var href = $('#edit_url').val()+'&ids='+ids;
+        var href = $('#edit_url').val()+'/ids/'+ids;
         $.getJSON(href).done(function (data) {
             if (data.state === 'success') {
                 layer.msg(data.info, {icon: 1, time: 1000}, function(index) {

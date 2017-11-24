@@ -21,7 +21,9 @@ class CaseFeeController extends AdminController
         $case_fee_list = M('CaseFee')->where('status = 0 and case_id = '.$case_id)->select();
         $case_pay_list = M('CasePay')->where('status >= 0 and case_id = '.$case_id)->select();
         $case_payment_list = M('CasePayment')->where('case_id = '.$case_id)->select();
+        $user = M('User')->where('org_id =1 ')->getField('id,true_name');
         
+        $this->assign('user',$user);
         $this->assign('case_pay_list',$case_pay_list);
         $this->assign('pay_mode',D('Common/FeeStandard')->getPayMode());
         $this->assign('payment_type',D('Common/FeeStandard')->getPaymentType());
@@ -42,6 +44,7 @@ class CaseFeeController extends AdminController
             $res[$value['fee_type']][] = $value;
         }
         $this->assign('case_id', $case_id);
+        $this->assign('fee_arr', $res);
         $this->assign('type_arr', D('Common/FeeStandard')->getFeeType());
         $this->display();
     }
@@ -233,7 +236,7 @@ class CaseFeeController extends AdminController
     /**
      * 删除
      */
-    public function del ()
+    public function del()
     {
         $id = I('get.id', 0, 'intval');
         $action = I('get.action');
@@ -247,7 +250,7 @@ class CaseFeeController extends AdminController
             case 'pay':$model = D('Common/CasePay'); break;
             case 'payment':$model = D('Common/CasePayment'); break;
         }
-        if ($model->where(array("id"=>$id))->delete()) {
+        if ($model->where(array("id"=>$id,"status"=>0))->delete()) {
             $this->success("删除成功！");
         } else {
             $this->error("删除失败！");

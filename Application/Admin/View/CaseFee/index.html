@@ -169,7 +169,7 @@
            title: '请输入实际收费标准'
         },   
         function(value, index, elem){
-            var href = "{:U('do_edit_fee')}"+"&id="+id+"&actual_fee="+value;
+            var href = "{:U('do_edit_fee')}"+"?id="+id+"&actual_fee="+value;
             $.getJSON(href).done(function (data) {
                 if (data.state === 'success') {
                     layer.msg(data.info, {icon: 1, time: 1000}, function(index) {
