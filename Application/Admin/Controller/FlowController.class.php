@@ -266,6 +266,20 @@ class FlowController extends AdminController
             $this->error('请选择流程类型！');
         }
         
+        //流程Info
+        $flow_id = $data['flow_id'];
+        if (!$flow_id) {
+            $this->error('缺少流程参数！');
+        }
+        
+        $flowInfo = $this->flowModel->find($flow_id);
+        
+        $info = $this->flowModel->flowInfoBulid($flow_type_id, $flowInfo['case_id'], $flowInfo['case_type_id'], $flowInfo['record_id']);
+        if ($info) {
+            $data['info'] = $info;
+        }
+        
+        
         //检查流程版本. 流程配置
         $auth = $this->flowModel->flowCreateAuth($flowType_id); 
         if (!$auth['status']) {

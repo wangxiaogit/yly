@@ -133,6 +133,7 @@ class WorkflowModel extends AdminModel
             'wftype' => $data['flow_type_id'],
             'wfnode' => $workflow_conf_second['workflow_node_id'],
             'step_id' => $workflow_step_second_id,
+            'handle_already_str' => $this->user,
             'handle_str' => $workflow_conf_second['handle_str'],
             'handle_group_id' => ($workflow_conf_second['handle_type'] == 2) ? $workflow_conf_second['handle_id'] : 0,
             'handle_uid' => $workflow_conf_second['handle_id'] ? $workflow_conf_second['handle_id'] : 0,
@@ -186,6 +187,14 @@ class WorkflowModel extends AdminModel
             'opinion' => trim($data['opinion']),
             'status' => 3
         );
+        
+        $workflow_current_step_handle = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'status'=>2))->getField('take_uid');
+        
+        if (!$workflow_current_step_handle) {
+            
+            $workflow_step_update['take_uid'] = $this->user;
+        }
+        
         $workflow_step_is_update = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'status'=>2))->save($workflow_step_update);
         
         $workflow_step_insert = array(
@@ -204,6 +213,7 @@ class WorkflowModel extends AdminModel
             'wfnode' => $workflow_conf_next['workflow_node_id'],
             'step_id' => $workflow_step_insert_id,
             'handle_str' => $workflow_conf_next['handle_str'],
+            'handle_already_str' => get_already_handle($flow_id),
             'handle_group_id' => ($workflow_conf_next['handle_type'] == 2) ? $workflow_conf_next['handle_id'] : 0,
             'handle_uid' => $workflow_conf_next['handle_id'] ? $workflow_conf_next['handle_id'] : 0,
             'dept_id' => $workflow_conf_next['handle_id'] ? get_user_dept($workflow_conf_next['handle_id']): 0,
@@ -278,6 +288,7 @@ class WorkflowModel extends AdminModel
             'wfnode' => $workflow_step_back['node_id'],
             'step_id' => $workflow_step_insert_id,
             'handle_str' => $workflow_step_back['take_uid'],
+            'handle_already_str' => get_already_handle($flow_id),
             'handle_group_id' => 0,
             'handle_uid' => $workflow_step_back['take_uid'],
             'dept_id' => get_user_dept($workflow_step_back['take_uid']),
@@ -320,11 +331,20 @@ class WorkflowModel extends AdminModel
             'status' => 4,
             'opinion' => trim($data['opinion']) 
         );
+        
+        $workflow_current_step_handle = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'status'=>2))->getField('take_uid');
+        
+        if (!$workflow_current_step_handle) {
+            
+            $workflow_step_update['take_uid'] = $this->user;
+        }
+        
         $workflow_step_is_update = M('WorkflowStep')->where(array('flow_id'=>$flow_id, 'status'=>2))->save($workflow_step_update);
         
         $updateData = array(
             'status' => 5,
-            'handle_time' => $this->time
+            'handle_time' => $this->time,
+            'handle_already_str' => get_already_handle($flow_id),
         );
         $update = $this->updatedRelatedRecords('back', $flow_id, $updateData);
         
@@ -366,11 +386,20 @@ class WorkflowModel extends AdminModel
             'status' => 4,
             'opinion' => trim($data['opinion']) 
         );
+        
+        $workflow_current_step_handle = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'status'=>2))->getField('take_uid');
+        
+        if (!$workflow_current_step_handle) {
+            
+            $workflow_step_update['take_uid'] = $this->user;
+        }
+        
         $workflow_step_is_update = M('WorkflowStep')->where(array('flow_id'=>$flow_id, 'status'=>2))->save($workflow_step_update);
         
         $updateData = array(
             'status' => '6',
-            'handle_time' => $this->time
+            'handle_time' => $this->time,
+            'handle_already_str' => get_already_handle($flow_id),
         );
         $update = $this->updatedRelatedRecords('back', $flow_id, $updateData);
         
@@ -409,6 +438,7 @@ class WorkflowModel extends AdminModel
         $workflow_update = array(
             'type_id' => $data['flow_type_id'],
             'version_id' => $data['flow_version_id'],
+            'info' => $data['info'],
             'step' => 1
         );
         $workflow_is_update = $this->where(array("id"=>$flow_id))->save($workflow_update);
@@ -418,6 +448,14 @@ class WorkflowModel extends AdminModel
             'opinion' => $data['opinion'] ? $data['opinion'] : '更换流程', 
             'submit_time' => $this->time,
         );
+        
+        $workflow_current_step_handle = M('WorkflowStep')->where(array("flow_id"=>$flow_id, 'status'=>2))->getField('take_uid');
+        
+        if (!$workflow_current_step_handle) {
+            
+            $workflow_step_update['take_uid'] = $this->user;
+        }
+        
         $workflow_step_is_update = M('WorkflowStep')->where(array("flow_id"=>$flow_id, "status"=>2))->save($workflow_step_update);
         
         $workflow_step_isvalid = array(
@@ -442,6 +480,7 @@ class WorkflowModel extends AdminModel
             'step_id' => $workflow_step_insert_id,
             'dept_id' => get_user_dept($flowInfo['create_uid']),
             'handle_str' => $flowInfo['create_uid'],
+            'handle_already_str' => get_already_handle($flow_id),
             'handle_group_id' => 0,
             'handle_uid' =>  $flowInfo['create_uid'],
             'handle_time' => $this->time 

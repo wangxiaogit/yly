@@ -56,20 +56,28 @@
                         </select>
                     </td>
                     <th>是否网签</th>
-                    <td >                                    
-                        <input type="radio" name="is_online_signed" id="is_online_signed"
-                               value="1" {$advance_info['is_online_signed']==1?'checked="checked"':''}/>是
-                        <input type="radio" name="is_online_signed" id="is_online_signed"
+                    <td >  
+                        <label class="radio inline">
+                            <input type="radio" name="is_online_signed" id="is_online_signed"
+                                   value="1" {$advance_info['is_online_signed']==1?'checked="checked"':''}/>是
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="is_online_signed" id="is_online_signed"
                                value="0" {$advance_info['is_online_signed']==0?'checked="checked"':''}/>否
+                        </label>
                     </td>
                 </tr>
                 <tr>
                     <th>是否避税</th>
-                    <td >                                    
-                        <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
+                    <td >   
+                        <label class="radio inline">
+                            <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
                                value="1" {$advance_info['is_tax_avoidance']==1?'checked="checked"':''}/>是
-                        <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="is_tax_avoidance" id="is_tax_avoidance"
                                value="0" {$advance_info['is_tax_avoidance']==0?'checked="checked"':''}/>否
+                        </label>
                     </td>
                     <th>预约还款日期</th>
                     <td >                                    

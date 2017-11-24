@@ -75,7 +75,18 @@ function get_flow_handle($handle_str, $handle_group_id, $handle_id)
     }
     
     return array("handle_name"=>"多用户", 'handle_lists'=> implode(',', $handle_lists));
-}        
+} 
+
+/**
+ * 流程经办人（已办）
+ */
+function get_already_handle ($flow_id)
+{
+    $handle_lists = D('Common/WorkflowStep')->where(array('flow_id'=>$flow_id, 'status'=>array('egt', 3)))->getField('take_uid', true);
+    
+    return $handle_lists ? implode(',', $handle_lists) : '';
+            
+}
 
 /**
  * 用户部门
